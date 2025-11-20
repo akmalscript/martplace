@@ -58,8 +58,8 @@ class Seller extends Model
             'pic_city' => 'required|string|max:100',
             'pic_province' => 'required|string|max:100',
             'pic_ktp_number' => 'required|string|max:20|unique:sellers,pic_ktp_number',
-            'pic_photo_path' => 'nullable|string',
-            'pic_ktp_file_path' => 'nullable|string',
+            'pic_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'pic_ktp_file' => 'nullable|mimes:jpeg,png,jpg,pdf|max:5120',
         ];
     }
 
