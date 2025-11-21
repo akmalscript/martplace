@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Enums\SellerStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class Seller extends Model
 {
@@ -15,6 +18,7 @@ class Seller extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'user_id',
         'store_name',
         'store_description',
         'pic_name',
@@ -50,7 +54,8 @@ class Seller extends Model
             'store_description' => 'nullable|string',
             'pic_name' => 'required|string|max:255',
             'pic_phone' => 'required|string|max:20',
-            'pic_email' => 'required|email|max:255',
+            // Ensure email is unique in users table to avoid creation errors
+            'pic_email' => 'required|email|max:255|unique:users,email',
             'pic_street' => 'required|string|max:255',
             'pic_rt' => 'required|string|max:10',
             'pic_rw' => 'required|string|max:10',
@@ -63,13 +68,31 @@ class Seller extends Model
         ];
     }
 
-    // Register new seller
+    // Register new seller with a corresponding User account
     public static function register(array $data): bool
     {
+        DB::beginTransaction();
         try {
+            // 1. Create new User for login
+            $user = User::create([
+                'name' => $data['pic_name'],
+                'email' => $data['pic_email'],
+                'password' => Hash::make($data['password']),
+                // 'role' => 'seller', // Uncomment if you use a role column
+            ]);
+
+            // 2. Add user_id to seller data for relationship
+            $data['user_id'] = $user->id;
+
+            // 3. Create Seller record
             $seller = self::create($data);
+
+            DB::commit();
             return $seller !== null;
         } catch (\Exception $e) {
+            DB::rollBack();
+            // Optional: Log error for debugging
+            // \Illuminate\Support\Facades\Log::error('Seller Register Error: ' . $e->getMessage());
             return false;
         }
     }
@@ -117,7 +140,7 @@ class Seller extends Model
     // Custom validation method
     public function validate(): bool
     {
-        return !empty($this->store_name) 
+        return !empty($this->store_name)
             && !empty($this->pic_name)
             && !empty($this->pic_email)
             && filter_var($this->pic_email, FILTER_VALIDATE_EMAIL) !== false;
@@ -127,5 +150,11 @@ class Seller extends Model
     public function toArray(): array
     {
         return parent::toArray();
+    }
+
+    // Relationship to User model
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
