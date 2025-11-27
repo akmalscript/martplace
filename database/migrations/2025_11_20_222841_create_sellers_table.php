@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('pic_rt');
             $table->string('pic_rw');
             $table->string('pic_village');
+            $table->string('pic_district');
             $table->string('pic_city');
             $table->string('pic_province');
             $table->string('pic_ktp_number')->unique();

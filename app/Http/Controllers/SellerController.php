@@ -40,6 +40,7 @@ class SellerController extends Controller
             'pic_rt',
             'pic_rw',
             'pic_village',
+            'pic_district',
             'pic_city',
             'pic_province',
             'pic_ktp_number',

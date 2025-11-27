@@ -95,28 +95,55 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-cyan-400 to-green-300 py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl font-bold text-white mb-3">Daftar Sebagai Seller</h1>
+            <p class="text-lg text-white">Bergabunglah dengan ribuan seller sukses di MartPlace</p>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="bg-white rounded-xl shadow-lg p-8 -mt-8 relative z-10">
             <!-- Header -->
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Formulir Registrasi Data Penjual (Toko)</h1>
-                <div class="border-t-4 border-gray-800 w-full my-4"></div>
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Formulir Registrasi Data Penjual</h2>
+                <p class="text-gray-600">Lengkapi data berikut untuk mendaftar sebagai seller</p>
             </div>
 
             @if ($errors->any())
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">Terdapat beberapa kesalahan:</h3>
+                            <ul class="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             @endif
 
             @if (session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                    {{ session('success') }}
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-r-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                        </div>
+                    </div>
                 </div>
             @endif
 
@@ -125,7 +152,12 @@
 
                 <!-- Data Toko Section -->
                 <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-300">Data Toko</h2>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
+                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        Data Toko
+                    </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -135,8 +167,9 @@
                             <input type="text" 
                                    name="store_name" 
                                    value="{{ old('store_name') }}"
+                                   placeholder="Contoh: Toko Elektronik Jaya"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div>
@@ -146,14 +179,20 @@
                             <input type="text" 
                                    name="store_description" 
                                    value="{{ old('store_description') }}"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   placeholder="Deskripsi toko Anda"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
                     </div>
                 </div>
 
                 <!-- Data PIC Section -->
                 <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-300">Data PIC</h2>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
+                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Data PIC
+                    </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -163,8 +202,9 @@
                             <input type="text" 
                                    name="pic_name" 
                                    value="{{ old('pic_name') }}"
+                                   placeholder="Nama lengkap penanggung jawab"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div>
@@ -174,8 +214,9 @@
                             <input type="text" 
                                    name="pic_phone" 
                                    value="{{ old('pic_phone') }}"
+                                   placeholder="08123456789"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div class="md:col-span-2">
@@ -185,15 +226,22 @@
                             <input type="email" 
                                    name="pic_email" 
                                    value="{{ old('pic_email') }}"
+                                   placeholder="email@example.com"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
                     </div>
                 </div>
 
                 <!-- Alamat PIC Section -->
                 <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-300">Alamat PIC</h2>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
+                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Alamat PIC
+                    </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
@@ -203,30 +251,128 @@
                             <input type="text" 
                                    name="pic_street" 
                                    value="{{ old('pic_street') }}"
+                                   placeholder="Nama jalan dan nomor rumah"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
+                        </div>
+
+                        <div class="md:col-span-2" x-data="{
+                            open: false,
+                            search: '{{ old('pic_province') }}',
+                            selected: '{{ old('pic_province') }}',
+                            provinces: [
+                                'Nanggroe Aceh Darussalam',
+                                'Sumatera Utara',
+                                'Sumatera Selatan',
+                                'Sumatera Barat',
+                                'Bengkulu',
+                                'Riau',
+                                'Kepulauan Riau',
+                                'Jambi',
+                                'Lampung',
+                                'Bangka Belitung',
+                                'Kalimantan Barat',
+                                'Kalimantan Timur',
+                                'Kalimantan Selatan',
+                                'Kalimantan Tengah',
+                                'Kalimantan Utara',
+                                'Banten',
+                                'DKI Jakarta',
+                                'Jawa Barat',
+                                'Jawa Tengah',
+                                'Daerah Istimewa Yogyakarta',
+                                'Jawa Timur',
+                                'Bali',
+                                'Nusa Tenggara Timur',
+                                'Nusa Tenggara Barat',
+                                'Gorontalo',
+                                'Sulawesi Barat',
+                                'Sulawesi Tengah',
+                                'Sulawesi Utara',
+                                'Sulawesi Tenggara',
+                                'Sulawesi Selatan',
+                                'Maluku Utara',
+                                'Maluku',
+                                'Papua Barat',
+                                'Papua',
+                                'Papua Tengah',
+                                'Papua Pegunungan',
+                                'Papua Selatan',
+                                'Papua Barat Daya'
+                            ],
+                            get filteredProvinces() {
+                                if (this.search === '') {
+                                    return this.provinces;
+                                }
+                                return this.provinces.filter(province => 
+                                    province.toLowerCase().includes(this.search.toLowerCase())
+                                );
+                            },
+                            selectProvince(province) {
+                                this.selected = province;
+                                this.search = province;
+                                this.open = false;
+                            }
+                        }" @click.away="open = false" class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Provinsi <span class="text-red-500">*</span>
+                            </label>
+                            <input type="hidden" name="pic_province" :value="selected" required>
+                            <div class="relative">
+                                <input type="text" 
+                                       x-model="search"
+                                       @focus="open = true"
+                                       @input="open = true"
+                                       placeholder="Nama provinsi"
+                                       autocomplete="off"
+                                       required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div x-show="open" 
+                                 x-transition
+                                 class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+                                <template x-if="filteredProvinces.length === 0">
+                                    <div class="px-4 py-3 text-sm text-gray-500">
+                                        Provinsi tidak ditemukan
+                                    </div>
+                                </template>
+                                <template x-for="province in filteredProvinces" :key="province">
+                                    <div @click="selectProvince(province)"
+                                         class="px-4 py-3 cursor-pointer hover:bg-green-50 text-sm"
+                                         :class="{'bg-green-100': selected === province}"
+                                         x-text="province">
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Kab/Kota <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" 
+                                   name="pic_city" 
+                                   value="{{ old('pic_city') }}"
+                                   placeholder="Nama kabupaten/kota"
+                                   required
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                RT <span class="text-red-500">*</span>
+                                Kecamatan <span class="text-red-500">*</span>
                             </label>
                             <input type="text" 
-                                   name="pic_rt" 
-                                   value="{{ old('pic_rt') }}"
+                                   name="pic_district" 
+                                   value="{{ old('pic_district') }}"
+                                   placeholder="Nama kecamatan"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                RW <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" 
-                                   name="pic_rw" 
-                                   value="{{ old('pic_rw') }}"
-                                   required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div>
@@ -236,37 +382,45 @@
                             <input type="text" 
                                    name="pic_village" 
                                    value="{{ old('pic_village') }}"
+                                   placeholder="Nama kelurahan"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Kab/Kota <span class="text-red-500">*</span>
+                                RT <span class="text-red-500">*</span>
                             </label>
                             <input type="text" 
-                                   name="pic_city" 
-                                   value="{{ old('pic_city') }}"
+                                   name="pic_rt" 
+                                   value="{{ old('pic_rt') }}"
+                                   placeholder="001"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
-                        <div class="md:col-span-2">
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Provinsi <span class="text-red-500">*</span>
+                                RW <span class="text-red-500">*</span>
                             </label>
                             <input type="text" 
-                                   name="pic_province" 
-                                   value="{{ old('pic_province') }}"
+                                   name="pic_rw" 
+                                   value="{{ old('pic_rw') }}"
+                                   placeholder="002"
                                    required
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
                     </div>
                 </div>
 
                 <!-- Dokumen Identitas PIC Section -->
                 <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-gray-300">Dokumen Identitas PIC</h2>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
+                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
+                        </svg>
+                        Dokumen Identitas PIC
+                    </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
@@ -276,9 +430,10 @@
                             <input type="text" 
                                    name="pic_ktp_number" 
                                    value="{{ old('pic_ktp_number') }}"
+                                   placeholder="16 digit nomor KTP"
                                    required
                                    maxlength="16"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
                         <div>
@@ -288,8 +443,13 @@
                             <input type="file" 
                                    name="pic_photo" 
                                    accept="image/jpeg,image/png"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Maksimal 2MB</p>
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                            <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Format: JPG, PNG. Maksimal 2MB
+                            </p>
                         </div>
 
                         <div>
@@ -299,20 +459,31 @@
                             <input type="file" 
                                    name="pic_ktp_file" 
                                    accept="image/jpeg,image/png,application/pdf"
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, PDF. Maksimal 5MB</p>
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
+                            <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Format: JPG, PNG, PDF. Maksimal 5MB
+                            </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex justify-start space-x-4 pt-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
                     <button type="submit" 
-                            class="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+                            class="bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition shadow-md hover:shadow-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                         Registrasi Penjual
                     </button>
                     <a href="{{ route('home') }}" 
-                       class="bg-gray-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-600 transition">
+                       class="bg-gray-100 text-gray-700 px-10 py-3 rounded-lg font-semibold hover:bg-gray-200 transition border border-gray-300 flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                         Batal
                     </a>
                 </div>
