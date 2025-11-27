@@ -39,6 +39,7 @@ class SellerController extends Controller
             'pic_name',
             'pic_phone',
             'pic_email',
+            'password',
             'pic_street',
             'pic_rt',
             'pic_rw',
@@ -49,11 +50,7 @@ class SellerController extends Controller
             'pic_ktp_number',
         ]);
 
-        // 1. Generate Password Otomatis (10 karakter)
-        $generatedPassword = Str::password(10);
-
-        // Masukkan password ke array data agar bisa diproses oleh Model Seller saat membuat User
-        $data['password'] = $generatedPassword;
+        // Password already included from request
 
         // Handle photo upload
         if ($request->hasFile('pic_photo')) {
@@ -69,23 +66,8 @@ class SellerController extends Controller
         $registered = Seller::register($data);
 
         if ($registered) {
-            // 2. Kirim Email Notifikasi berisi Password
-            // Kita buat objek user sementara untuk passing data ke Mailable
-            $userObj = (object) [
-                'name' => $data['pic_name'],
-                'email' => $data['pic_email']
-            ];
-
-            try {
-                Mail::to($data['pic_email'])->send(new SellerCredentials($userObj, $generatedPassword));
-            } catch (\Exception $e) {
-                // Jika email gagal dikirim (misal koneksi internet mati),
-                // kita biarkan proses lanjut agar user tetap terdaftar.
-                // Anda bisa menambahkan log error di sini jika perlu: \Log::error($e->getMessage());
-            }
-
             return redirect()->route('sellers.success')
-                ->with('success', 'Pendaftaran seller berhasil! Silakan cek email Anda untuk informasi login.');
+                ->with('success', 'Pendaftaran seller berhasil! Silakan simpan password Anda untuk login.');
         }
 
         return redirect()->back()

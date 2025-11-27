@@ -24,6 +24,7 @@ class Seller extends Model
         'pic_name',
         'pic_phone',
         'pic_email',
+        'password',
         'pic_street',
         'pic_rt',
         'pic_rw',
@@ -57,6 +58,7 @@ class Seller extends Model
             'pic_phone' => 'required|string|max:20',
             // Ensure email is unique in users table to avoid creation errors
             'pic_email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|regex:/[0-9]/',
             'pic_street' => 'required|string|max:255',
             'pic_rt' => 'required|string|max:10',
             'pic_rw' => 'required|string|max:10',
