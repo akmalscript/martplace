@@ -109,7 +109,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::active()->findOrFail($id);
+        $product = Product::active()
+            ->with(['reviews.user']) // load all reviews + the user who wrote them
+            ->findOrFail($id);
 
         // Get related products
         $relatedProducts = Product::active()

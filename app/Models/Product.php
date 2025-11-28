@@ -83,6 +83,14 @@ class Product extends Model
     }
 
     /**
+     * Reviews Relationship
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
      * Accessor formatted price
      */
     public function getFormattedPriceAttribute()
