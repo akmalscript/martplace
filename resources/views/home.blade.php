@@ -322,14 +322,25 @@
                     <p class="text-gray-600">Menampilkan {{ $products->count() }} produk</p>
                 @else
                     <div class="flex space-x-6">
-                        <button class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">For You</button>
-                        <button class="text-gray-500 hover:text-gray-700 pb-2">Mall</button>
-                        <button class="text-gray-500 hover:text-gray-700 pb-2">Produk Terbanyak</button>
+                        <a href="{{ route('home', ['filter' => 'untuk_anda']) }}"
+                            class="pb-2 {{ !isset($selectedFilter) || $selectedFilter == 'untuk_anda' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
+                            Untuk Anda
+                        </a>
+                        <a href="{{ route('home', ['filter' => 'mall']) }}"
+                            class="pb-2 {{ isset($selectedFilter) && $selectedFilter == 'mall' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
+                            Mall
+                        </a>
+                        <a href="{{ route('home', ['filter' => 'terlaris']) }}"
+                            class="pb-2 {{ isset($selectedFilter) && $selectedFilter == 'terlaris' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
+                            Produk Terlaris
+                        </a>
                     </div>
                 @endif
             </div>
-            <a href="{{ route('products.index') }}" class="text-green-600 hover:text-green-700 font-medium">Lihat
-                Semua</a>
+            @if (isset($selectedCategory) || (isset($selectedFilter) && $selectedFilter != 'semua'))
+                <a href="{{ route('home', ['filter' => 'semua']) }}"
+                    class="text-green-600 hover:text-green-700 font-medium">Lihat Semua</a>
+            @endif
         </div>
 
         @if ($products->isEmpty())

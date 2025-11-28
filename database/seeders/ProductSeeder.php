@@ -55,7 +55,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 715,
                 'location' => 'Kab. Bandung',
                 'discount_percentage' => 20,
-                'badge' => 'Best Seller',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -70,7 +70,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 781,
                 'location' => 'Jakarta Pusat',
                 'discount_percentage' => 40,
-                'badge' => 'Best Seller',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -85,7 +85,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 284,
                 'location' => 'Kota Surabaya',
                 'discount_percentage' => 30,
-                'badge' => 'Ekslusif',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -100,7 +100,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 523,
                 'location' => 'Jakarta Selatan',
                 'discount_percentage' => 35,
-                'badge' => 'Ekslusif',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -115,7 +115,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 1050,
                 'location' => 'Kota Bandung',
                 'discount_percentage' => 40,
-                'badge' => 'Best Seller',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -145,7 +145,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 2100,
                 'location' => 'Kota Surabaya',
                 'discount_percentage' => 42,
-                'badge' => 'Best Seller',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -175,7 +175,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 1850,
                 'location' => 'Kab. Tangerang',
                 'discount_percentage' => 50,
-                'badge' => 'Best Seller',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -205,7 +205,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 156,
                 'location' => 'Jakarta Pusat',
                 'discount_percentage' => 31,
-                'badge' => 'Ekslusif',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
@@ -251,7 +251,7 @@ class ProductSeeder extends Seeder
                 'sold_count' => 765,
                 'location' => 'Solo',
                 'discount_percentage' => 37,
-                'badge' => 'Best Seller',
+                'badge' => 'Mall',
                 'is_active' => true,
             ],
             [
