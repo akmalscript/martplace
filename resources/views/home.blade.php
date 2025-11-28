@@ -196,12 +196,19 @@
 
     <!-- Category Section -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Kategori Pilihan</h2>
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Kategori Pilihan</h2>
+            @if (isset($selectedCategory))
+                <a href="{{ route('home') }}" class="text-green-600 hover:text-green-700 font-medium">
+                    ← Lihat Semua Kategori
+                </a>
+            @endif
+        </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
             <!-- Category Item -->
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Makanan Kering']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Makanan Kering' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
                     <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
@@ -213,8 +220,8 @@
                 <span class="text-sm text-gray-700 text-center">Makanan Kering</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Figure']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Figure' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-blue-200 transition">
                     <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
@@ -226,8 +233,8 @@
                 <span class="text-sm text-gray-700 text-center">Figure</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Tas Selempang Pria']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Tas Selempang Pria' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-amber-200 transition">
                     <svg class="w-8 h-8 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
@@ -239,8 +246,8 @@
                 <span class="text-sm text-gray-700 text-center">Tas Selempang Pria</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Flat Shoes Wanita']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Flat Shoes Wanita' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-purple-200 transition">
                     <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
@@ -252,8 +259,8 @@
                 <span class="text-sm text-gray-700 text-center">Flat Shoes Wanita</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Handphone']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Handphone' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-indigo-200 transition">
                     <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
@@ -265,8 +272,8 @@
                 <span class="text-sm text-gray-700 text-center">Handphone</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Fashion Pria']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Fashion Pria' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 transition">
                     <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -278,8 +285,8 @@
                 <span class="text-sm text-gray-700 text-center">Fashion Pria</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Kecantikan']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Kecantikan' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
                     <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
@@ -291,8 +298,8 @@
                 <span class="text-sm text-gray-700 text-center">Kecantikan</span>
             </a>
 
-            <a href="#"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group">
+            <a href="{{ route('home', ['category' => 'Rumah Tangga']) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Rumah Tangga' ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-orange-200 transition">
                     <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
@@ -309,10 +316,17 @@
     <!-- Products Section -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="flex items-center justify-between mb-6">
-            <div class="flex space-x-6">
-                <button class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">For You</button>
-                <button class="text-gray-500 hover:text-gray-700 pb-2">Mall</button>
-                <button class="text-gray-500 hover:text-gray-700 pb-2">Produk Terbanyak</button>
+            <div>
+                @if (isset($selectedCategory))
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Produk {{ $selectedCategory }}</h2>
+                    <p class="text-gray-600">Menampilkan {{ $products->count() }} produk</p>
+                @else
+                    <div class="flex space-x-6">
+                        <button class="text-green-600 font-semibold border-b-2 border-green-600 pb-2">For You</button>
+                        <button class="text-gray-500 hover:text-gray-700 pb-2">Mall</button>
+                        <button class="text-gray-500 hover:text-gray-700 pb-2">Produk Terbanyak</button>
+                    </div>
+                @endif
             </div>
             <a href="{{ route('products.index') }}" class="text-green-600 hover:text-green-700 font-medium">Lihat
                 Semua</a>
@@ -327,8 +341,20 @@
                         d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
                     </path>
                 </svg>
-                <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk</h3>
-                <p class="mt-2 text-gray-500">Produk akan segera tersedia.</p>
+                @if (isset($selectedCategory))
+                    <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk di kategori
+                        {{ $selectedCategory }}</h3>
+                    <p class="mt-2 text-gray-500">Silakan pilih kategori lain atau lihat semua produk.</p>
+                    <div class="mt-6">
+                        <a href="{{ route('home') }}"
+                            class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+                            Lihat Semua Kategori
+                        </a>
+                    </div>
+                @else
+                    <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk</h3>
+                    <p class="mt-2 text-gray-500">Produk akan segera tersedia.</p>
+                @endif
             </div>
         @else
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
