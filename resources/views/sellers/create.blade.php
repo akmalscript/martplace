@@ -505,6 +505,9 @@
                                        @input="openProvince = true"
                                        placeholder="Ketik atau pilih provinsi"
                                        autocomplete="off"
+                                       autocorrect="off"
+                                       autocapitalize="off"
+                                       spellcheck="false"
                                        required
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -547,6 +550,9 @@
                                        placeholder="Pilih provinsi terlebih dahulu"
                                        :disabled="!selectedProvinceCode"
                                        autocomplete="off"
+                                       autocorrect="off"
+                                       autocapitalize="off"
+                                       spellcheck="false"
                                        required
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -589,6 +595,9 @@
                                        placeholder="Pilih kab/kota terlebih dahulu"
                                        :disabled="!selectedCityCode"
                                        autocomplete="off"
+                                       autocorrect="off"
+                                       autocapitalize="off"
+                                       spellcheck="false"
                                        required
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -631,6 +640,9 @@
                                        placeholder="Pilih kecamatan terlebih dahulu"
                                        :disabled="!selectedDistrictCode"
                                        autocomplete="off"
+                                       autocorrect="off"
+                                       autocapitalize="off"
+                                       spellcheck="false"
                                        required
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
