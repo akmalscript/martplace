@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\WilayahController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,6 +17,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Wilayah API Proxy Routes
+Route::prefix('api/wilayah')->group(function () {
+    Route::get('/provinces', [WilayahController::class, 'provinces']);
+    Route::get('/regencies/{provinceCode}', [WilayahController::class, 'regencies']);
+    Route::get('/districts/{regencyCode}', [WilayahController::class, 'districts']);
+    Route::get('/villages/{districtCode}', [WilayahController::class, 'villages']);
 });
 
 // Seller Routes

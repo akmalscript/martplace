@@ -329,7 +329,148 @@
                 </div>
 
                 <!-- Alamat PIC Section -->
-                <div class="mb-8">
+                <div class="mb-8" x-data="{
+                    openProvince: false,
+                    openCity: false,
+                    openDistrict: false,
+                    openVillage: false,
+                    searchProvince: '{{ old('pic_province') }}',
+                    searchCity: '{{ old('pic_city') }}',
+                    searchDistrict: '{{ old('pic_district') }}',
+                    searchVillage: '{{ old('pic_village') }}',
+                    selectedProvince: '{{ old('pic_province') }}',
+                    selectedProvinceCode: '',
+                    selectedCity: '{{ old('pic_city') }}',
+                    selectedCityCode: '',
+                    selectedDistrict: '{{ old('pic_district') }}',
+                    selectedDistrictCode: '',
+                    selectedVillage: '{{ old('pic_village') }}',
+                    provinces: [],
+                    cities: [],
+                    districts: [],
+                    villages: [],
+                    loading: false,
+                    init() {
+                        this.loadProvinces();
+                    },
+                    async loadProvinces() {
+                        try {
+                            const response = await fetch('/api/wilayah/provinces');
+                            const data = await response.json();
+                            this.provinces = data.data || [];
+                        } catch (error) {
+                            console.error('Error loading provinces:', error);
+                            this.provinces = [];
+                        }
+                    },
+                    async loadCities(provinceCode) {
+                        this.loading = true;
+                        try {
+                            const response = await fetch(`/api/wilayah/regencies/${provinceCode}`);
+                            const data = await response.json();
+                            this.cities = data.data || [];
+                        } catch (error) {
+                            console.error('Error loading cities:', error);
+                            this.cities = [];
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+                    async loadDistricts(cityCode) {
+                        this.loading = true;
+                        try {
+                            const response = await fetch(`/api/wilayah/districts/${cityCode}`);
+                            const data = await response.json();
+                            this.districts = data.data || [];
+                        } catch (error) {
+                            console.error('Error loading districts:', error);
+                            this.districts = [];
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+                    async loadVillages(districtCode) {
+                        this.loading = true;
+                        try {
+                            const response = await fetch(`/api/wilayah/villages/${districtCode}`);
+                            const data = await response.json();
+                            this.villages = data.data || [];
+                        } catch (error) {
+                            console.error('Error loading villages:', error);
+                            this.villages = [];
+                        } finally {
+                            this.loading = false;
+                        }
+                    },
+                    get filteredProvinces() {
+                        if (!this.searchProvince) return this.provinces;
+                        return this.provinces.filter(p => 
+                            p.name && p.name.toLowerCase().includes(this.searchProvince.toLowerCase())
+                        );
+                    },
+                    get filteredCities() {
+                        if (!this.searchCity) return this.cities;
+                        return this.cities.filter(c => 
+                            c.name.toLowerCase().includes(this.searchCity.toLowerCase())
+                        );
+                    },
+                    get filteredDistricts() {
+                        if (!this.searchDistrict) return this.districts;
+                        return this.districts.filter(d => 
+                            d.name.toLowerCase().includes(this.searchDistrict.toLowerCase())
+                        );
+                    },
+                    get filteredVillages() {
+                        if (!this.searchVillage) return this.villages;
+                        return this.villages.filter(v => 
+                            v.name.toLowerCase().includes(this.searchVillage.toLowerCase())
+                        );
+                    },
+                    async selectProvince(province) {
+                        this.selectedProvince = province.name;
+                        this.selectedProvinceCode = province.code;
+                        this.searchProvince = province.name;
+                        this.openProvince = false;
+                        this.selectedCity = '';
+                        this.searchCity = '';
+                        this.cities = [];
+                        this.selectedDistrict = '';
+                        this.searchDistrict = '';
+                        this.districts = [];
+                        this.selectedVillage = '';
+                        this.searchVillage = '';
+                        this.villages = [];
+                        await this.loadCities(province.code);
+                    },
+                    async selectCity(city) {
+                        this.selectedCity = city.name;
+                        this.selectedCityCode = city.code;
+                        this.searchCity = city.name;
+                        this.openCity = false;
+                        this.selectedDistrict = '';
+                        this.searchDistrict = '';
+                        this.districts = [];
+                        this.selectedVillage = '';
+                        this.searchVillage = '';
+                        this.villages = [];
+                        await this.loadDistricts(city.code);
+                    },
+                    async selectDistrict(district) {
+                        this.selectedDistrict = district.name;
+                        this.selectedDistrictCode = district.code;
+                        this.searchDistrict = district.name;
+                        this.openDistrict = false;
+                        this.selectedVillage = '';
+                        this.searchVillage = '';
+                        this.villages = [];
+                        await this.loadVillages(district.code);
+                    },
+                    selectVillage(village) {
+                        this.selectedVillage = village.name;
+                        this.searchVillage = village.name;
+                        this.openVillage = false;
+                    }
+                }" @click.away="openProvince = false; openCity = false; openDistrict = false; openVillage = false">
                     <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
                         <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -351,135 +492,171 @@
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                         </div>
 
-                        <div class="md:col-span-2" x-data="{
-                            open: false,
-                            search: '{{ old('pic_province') }}',
-                            selected: '{{ old('pic_province') }}',
-                            provinces: [
-                                'Nanggroe Aceh Darussalam',
-                                'Sumatera Utara',
-                                'Sumatera Selatan',
-                                'Sumatera Barat',
-                                'Bengkulu',
-                                'Riau',
-                                'Kepulauan Riau',
-                                'Jambi',
-                                'Lampung',
-                                'Bangka Belitung',
-                                'Kalimantan Barat',
-                                'Kalimantan Timur',
-                                'Kalimantan Selatan',
-                                'Kalimantan Tengah',
-                                'Kalimantan Utara',
-                                'Banten',
-                                'DKI Jakarta',
-                                'Jawa Barat',
-                                'Jawa Tengah',
-                                'Daerah Istimewa Yogyakarta',
-                                'Jawa Timur',
-                                'Bali',
-                                'Nusa Tenggara Timur',
-                                'Nusa Tenggara Barat',
-                                'Gorontalo',
-                                'Sulawesi Barat',
-                                'Sulawesi Tengah',
-                                'Sulawesi Utara',
-                                'Sulawesi Tenggara',
-                                'Sulawesi Selatan',
-                                'Maluku Utara',
-                                'Maluku',
-                                'Papua Barat',
-                                'Papua',
-                                'Papua Tengah',
-                                'Papua Pegunungan',
-                                'Papua Selatan',
-                                'Papua Barat Daya'
-                            ],
-                            get filteredProvinces() {
-                                if (this.search === '') {
-                                    return this.provinces;
-                                }
-                                return this.provinces.filter(province => 
-                                    province.toLowerCase().includes(this.search.toLowerCase())
-                                );
-                            },
-                            selectProvince(province) {
-                                this.selected = province;
-                                this.search = province;
-                                this.open = false;
-                            }
-                        }" @click.away="open = false" class="relative">
+                        <!-- Provinsi Dropdown -->
+                        <div class="md:col-span-2 relative">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Provinsi <span class="text-red-500">*</span>
                             </label>
-                            <input type="hidden" name="pic_province" :value="selected" required>
+                            <input type="hidden" name="pic_province" :value="selectedProvince" required>
                             <div class="relative">
                                 <input type="text" 
-                                       x-model="search"
-                                       @focus="open = true"
-                                       @input="open = true"
-                                       placeholder="Nama provinsi"
+                                       x-model="searchProvince"
+                                       @focus="openProvince = true"
+                                       @input="openProvince = true"
+                                       placeholder="Ketik atau pilih provinsi"
                                        autocomplete="off"
                                        required
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg x-show="!loading" class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    <svg x-show="loading" class="animate-spin h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" style="display: none;">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
                                 </div>
                             </div>
-                            <div x-show="open" 
+                            <div x-show="openProvince" 
                                  x-transition
                                  class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
-                                <template x-if="filteredProvinces.length === 0">
-                                    <div class="px-4 py-3 text-sm text-gray-500">
-                                        Provinsi tidak ditemukan
-                                    </div>
-                                </template>
-                                <template x-for="province in filteredProvinces" :key="province">
+                                <div x-show="filteredProvinces.length === 0" class="px-4 py-3 text-sm text-gray-500">
+                                    Provinsi tidak ditemukan
+                                </div>
+                                <template x-for="province in filteredProvinces" :key="province.code">
                                     <div @click="selectProvince(province)"
                                          class="px-4 py-3 cursor-pointer hover:bg-green-50 text-sm"
-                                         :class="{'bg-green-100': selected === province}"
-                                         x-text="province">
+                                         :class="{'bg-green-100': selectedProvince === province.name}"
+                                         x-text="province.name">
                                     </div>
                                 </template>
                             </div>
                         </div>
 
-                        <div class="md:col-span-2">
+                        <!-- Kab/Kota Dropdown -->
+                        <div class="md:col-span-2 relative">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Kab/Kota <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" 
-                                   name="pic_city" 
-                                   value="{{ old('pic_city') }}"
-                                   placeholder="Nama kabupaten/kota"
-                                   required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
+                            <input type="hidden" name="pic_city" :value="selectedCity" required>
+                            <div class="relative">
+                                <input type="text" 
+                                       x-model="searchCity"
+                                       @focus="openCity = true"
+                                       @input="openCity = true"
+                                       placeholder="Pilih provinsi terlebih dahulu"
+                                       :disabled="!selectedProvinceCode"
+                                       autocomplete="off"
+                                       required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg x-show="!loading" class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    <svg x-show="loading" class="animate-spin h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" style="display: none;">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div x-show="openCity" 
+                                 x-transition
+                                 class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+                                <div x-show="filteredCities.length === 0" class="px-4 py-3 text-sm text-gray-500">
+                                    Kab/Kota tidak ditemukan
+                                </div>
+                                <template x-for="city in filteredCities" :key="city.code">
+                                    <div @click="selectCity(city)"
+                                         class="px-4 py-3 cursor-pointer hover:bg-green-50 text-sm"
+                                         :class="{'bg-green-100': selectedCity === city.name}"
+                                         x-text="city.name">
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
-                        <div>
+                        <!-- Kecamatan Dropdown -->
+                        <div class="relative">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Kecamatan <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" 
-                                   name="pic_district" 
-                                   value="{{ old('pic_district') }}"
-                                   placeholder="Nama kecamatan"
-                                   required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
+                            <input type="hidden" name="pic_district" :value="selectedDistrict" required>
+                            <div class="relative">
+                                <input type="text" 
+                                       x-model="searchDistrict"
+                                       @focus="openDistrict = true"
+                                       @input="openDistrict = true"
+                                       placeholder="Pilih kab/kota terlebih dahulu"
+                                       :disabled="!selectedCityCode"
+                                       autocomplete="off"
+                                       required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg x-show="!loading" class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    <svg x-show="loading" class="animate-spin h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" style="display: none;">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div x-show="openDistrict" 
+                                 x-transition
+                                 class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+                                <div x-show="filteredDistricts.length === 0" class="px-4 py-3 text-sm text-gray-500">
+                                    Kecamatan tidak ditemukan
+                                </div>
+                                <template x-for="district in filteredDistricts" :key="district.code">
+                                    <div @click="selectDistrict(district)"
+                                         class="px-4 py-3 cursor-pointer hover:bg-green-50 text-sm"
+                                         :class="{'bg-green-100': selectedDistrict === district.name}"
+                                         x-text="district.name">
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
-                        <div>
+                        <!-- Kelurahan Dropdown -->
+                        <div class="relative">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Kelurahan <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" 
-                                   name="pic_village" 
-                                   value="{{ old('pic_village') }}"
-                                   placeholder="Nama kelurahan"
-                                   required
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition">
+                            <input type="hidden" name="pic_village" :value="selectedVillage" required>
+                            <div class="relative">
+                                <input type="text" 
+                                       x-model="searchVillage"
+                                       @focus="openVillage = true"
+                                       @input="openVillage = true"
+                                       placeholder="Pilih kecamatan terlebih dahulu"
+                                       :disabled="!selectedDistrictCode"
+                                       autocomplete="off"
+                                       required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 hover:border-gray-400 transition disabled:bg-gray-100 disabled:cursor-not-allowed">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg x-show="!loading" class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                    <svg x-show="loading" class="animate-spin h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" style="display: none;">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div x-show="openVillage" 
+                                 x-transition
+                                 class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+                                <div x-show="filteredVillages.length === 0" class="px-4 py-3 text-sm text-gray-500">
+                                    Kelurahan tidak ditemukan
+                                </div>
+                                <template x-for="village in filteredVillages" :key="village.code">
+                                    <div @click="selectVillage(village)"
+                                         class="px-4 py-3 cursor-pointer hover:bg-green-50 text-sm"
+                                         :class="{'bg-green-100': selectedVillage === village.name}"
+                                         x-text="village.name">
+                                    </div>
+                                </template>
+                            </div>
                         </div>
 
                         <div>
