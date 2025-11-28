@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,13 @@ Route::prefix('sellers')->name('sellers.')->group(function () {
         Route::post('/{id}/approve', [SellerController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [SellerController::class, 'reject'])->name('reject');
     });
+
+    Route::middleware(['auth'])
+        ->prefix('seller')
+        ->name('seller.')
+        ->group(function () {
+            Route::resource('products', ProductController::class);
+        });
 });
 
 require __DIR__.'/auth.php';
