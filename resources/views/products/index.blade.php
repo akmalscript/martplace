@@ -114,15 +114,16 @@
                 @foreach ($products as $product)
                     <a href="{{ route('products.show', $product->id) }}"
                         class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
-                        <div class="relative">
+                        <div class="relative bg-gray-200">
                             @if ($product->discount_percentage > 0)
-                                <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                                <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
                                     {{ $product->discount_percentage }}%
                                 </span>
                             @endif
                             <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                 class="w-full h-48 object-cover"
-                                onerror="this.src='https://via.placeholder.com/200x200/E5E5E5/999999?text=No+Image'">
+                                onerror="this.src='https://via.placeholder.com/200x200/E5E5E5/999999?text=No+Image'"
+                                loading="lazy">
                             @if ($product->badge)
                                 <span
                                     class="absolute bottom-2 left-2 {{ $product->badge == 'Terkirim cepat' ? 'bg-orange-500' : ($product->badge == 'Best Seller' ? 'bg-yellow-500' : 'bg-purple-500') }} text-white text-xs px-2 py-1 rounded">

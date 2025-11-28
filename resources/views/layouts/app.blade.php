@@ -17,8 +17,8 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen {{ $backgroundClass }}">
-        @if ($showNavigation)
+    <div class="min-h-screen {{ $backgroundClass ?? 'bg-gray-100' }}">
+        @if (isset($showNavigation) ? $showNavigation : true)
             @include('layouts.navigation')
         @endif
 
@@ -33,7 +33,8 @@
 
         <!-- Page Content -->
         <main>
-            {{ $slot }}
+            @yield('content')
+            {{ $slot ?? '' }}
         </main>
     </div>
 </body>

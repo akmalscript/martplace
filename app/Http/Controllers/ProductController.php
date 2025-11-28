@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -57,50 +58,70 @@ class ProductController extends Controller
     }
 
     /**
-     * Search suggestions (API endpoint)
+     * Search suggestions (API endpoint) - Enhanced with sellers and locations
      */
     public function search(Request $request)
     {
         $search = $request->input('q', '');
 
         if (strlen($search) < 2) {
-            return response()->json(['suggestions' => []]);
+            return response()->json([
+                'products' => [],
+                'sellers' => [],
+                'locations' => []
+            ]);
         }
 
-        // Get unique keywords from product names and descriptions
+        // Search Products - get top 5
         $products = Product::active()
             ->search($search)
-            ->limit(50)
-            ->get(['name', 'description', 'category']);
+            ->limit(5)
+            ->get(['id', 'name', 'price', 'image_url', 'category', 'location']);
 
-        // Extract keywords
-        $keywords = [];
+        // Search Sellers (Toko) - get top 3
+        $sellers = Seller::active()
+            ->search($search)
+            ->limit(3)
+            ->get(['id', 'store_name', 'city', 'province', 'rating', 'total_products']);
 
-        foreach ($products as $product) {
-            // Split product name into words
-            $words = preg_split('/\s+/', strtolower($product->name));
-            foreach ($words as $word) {
-                // Only include words that start with or contain the search term
-                if (strlen($word) > 2 && stripos($word, strtolower($search)) !== false) {
-                    $keywords[$word] = ($keywords[$word] ?? 0) + 1;
-                }
-            }
+        // Search Locations - aggregate unique cities and provinces
+        $locations = [];
 
-            // Add category if it matches
-            if ($product->category && stripos(strtolower($product->category), strtolower($search)) !== false) {
-                $category = strtolower($product->category);
-                $keywords[$category] = ($keywords[$category] ?? 0) + 2;
-            }
+        // Get unique provinces from sellers
+        $provinces = Seller::active()
+            ->where('province', 'like', "%{$search}%")
+            ->select('province')
+            ->distinct()
+            ->limit(2)
+            ->pluck('province');
+
+        foreach ($provinces as $province) {
+            $locations[] = [
+                'name' => $province,
+                'type' => 'province'
+            ];
         }
 
-        // Sort by frequency and get top 5
-        arsort($keywords);
-        $suggestions = array_slice(array_keys($keywords), 0, 5);
+        // Get unique cities from sellers
+        $cities = Seller::active()
+            ->where('city', 'like', "%{$search}%")
+            ->select('city', 'province')
+            ->distinct()
+            ->limit(3 - count($locations))
+            ->get();
+
+        foreach ($cities as $city) {
+            $locations[] = [
+                'name' => $city->city,
+                'province' => $city->province,
+                'type' => 'city'
+            ];
+        }
 
         return response()->json([
-            'suggestions' => array_map(function($keyword) {
-                return ucfirst($keyword);
-            }, $suggestions)
+            'products' => $products,
+            'sellers' => $sellers,
+            'locations' => $locations
         ]);
     }
 

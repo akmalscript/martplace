@@ -37,14 +37,14 @@ Route::prefix('products')->name('products.')->group(function () {
 // Seller Routes
 Route::prefix('sellers')->name('sellers.')->group(function () {
     // Public routes
+    Route::get('/', [SellerController::class, 'index'])->name('index');
     Route::get('/register', [SellerController::class, 'create'])->name('create');
     Route::post('/register', [SellerController::class, 'store'])->name('store');
     Route::get('/success', [SellerController::class, 'success'])->name('success');
+    Route::get('/{id}', [SellerController::class, 'show'])->name('show');
 
-    // Protected routes (requires authentication)
+    // Protected routes (requires authentication - admin only)
     Route::middleware('auth')->group(function () {
-        Route::get('/', [SellerController::class, 'index'])->name('index');
-        Route::get('/{id}', [SellerController::class, 'show'])->name('show');
         Route::post('/{id}/approve', [SellerController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [SellerController::class, 'reject'])->name('reject');
     });
