@@ -37,7 +37,7 @@ Route::prefix('products')->name('products.')->group(function () {
 
 // Review Routes
 Route::prefix('reviews')->name('reviews.')->group(function () {
-    Route::post('/reviews/{id}', [ReviewController::class, 'store'])->name('store');
+    Route::post('/{id}', [ReviewController::class, 'store'])->name('store');
 });
 
 // Seller Routes
