@@ -66,7 +66,7 @@ class HomeController extends Controller
             'totalReviews' => Comment::count(),
         ];
 
-        return view('home-refactored', compact(
+        return view('home', compact(
             'products', 
             'categories',
             'stats', 

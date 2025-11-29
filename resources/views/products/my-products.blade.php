@@ -8,22 +8,15 @@
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
-                <nav class="flex items-center gap-2 text-sm text-forest/60 mb-2">
-                    <a href="{{ route('seller.dashboard') }}" class="hover:text-sage">Dashboard</a>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                    <span class="text-forest">Produk Saya</span>
-                </nav>
                 <h1 class="text-2xl md:text-3xl font-bold text-forest">Produk Saya</h1>
-                <p class="text-forest/60 mt-1">Kelola semua produk yang Anda jual</p>
+                <p class="text-forest/60 mt-1">Kelola semua produk yang Anda upload</p>
             </div>
-            <a href="{{ route('seller.products.create') }}" 
+            <a href="{{ route('my-products.create') }}" 
                class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sage to-forest text-cream rounded-xl font-semibold hover:shadow-lg hover:shadow-sage/30 transition transform hover:-translate-y-0.5">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
-                Tambah Produk
+                Upload Produk Baru
             </a>
         </div>
 
@@ -63,7 +56,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-forest">{{ $products->where('stock', '<', 5)->count() }}</p>
+                        <p class="text-2xl font-bold text-forest">{{ $products->where('stock', '<', 5)->where('stock', '>', 0)->count() }}</p>
                         <p class="text-xs text-forest/60">Stok Menipis</p>
                     </div>
                 </div>
@@ -136,14 +129,14 @@
                                     </svg>
                                     Lihat
                                 </a>
-                                <a href="{{ route('seller.products.edit', $product->id) }}" 
+                                <a href="{{ route('my-products.edit', $product->id) }}" 
                                    class="flex-1 py-2 text-center text-sm font-medium text-sage bg-sage/10 rounded-lg hover:bg-sage/20 transition">
                                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                     Edit
                                 </a>
-                                <form action="{{ route('seller.products.delete', $product->id) }}" method="POST" 
+                                <form action="{{ route('my-products.delete', $product->id) }}" method="POST" 
                                       onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
                                     @csrf
                                     @method('DELETE')
@@ -173,13 +166,13 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-semibold text-forest mb-2">Belum Ada Produk</h3>
-                <p class="text-forest/60 mb-6">Mulai tambahkan produk pertama Anda untuk dijual</p>
-                <a href="{{ route('seller.products.create') }}" 
+                <p class="text-forest/60 mb-6">Mulai upload produk pertama Anda sekarang</p>
+                <a href="{{ route('my-products.create') }}" 
                    class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-sage to-forest text-cream rounded-xl font-semibold hover:shadow-lg transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
-                    Tambah Produk Pertama
+                    Upload Produk Pertama
                 </a>
             </div>
         @endif

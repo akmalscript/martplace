@@ -13,6 +13,7 @@ class Product extends Model
 
     protected $fillable = [
         'seller_id',
+        'user_id',
         'name',
         'category_id',
         'price',
@@ -39,7 +40,44 @@ class Product extends Model
         'is_active' => 'boolean',
     ];
 
-    protected $appends = ['rating', 'sold_count'];
+    protected $appends = ['rating', 'sold_count', 'image_url', 'all_photos'];
+
+    /**
+     * Get the main image URL
+     */
+    public function getImageUrlAttribute()
+    {
+        if ($this->main_photo) {
+            return asset('storage/' . $this->main_photo);
+        }
+        
+        // Fallback to first photo in gallery
+        if ($this->photos && count($this->photos) > 0) {
+            return asset('storage/' . $this->photos[0]);
+        }
+        
+        return 'https://placehold.co/300x300/D2DCB6/778873?text=No+Image';
+    }
+
+    /**
+     * Get all product photos (main + gallery)
+     */
+    public function getAllPhotosAttribute()
+    {
+        $allPhotos = [];
+        
+        if ($this->main_photo) {
+            $allPhotos[] = asset('storage/' . $this->main_photo);
+        }
+        
+        if ($this->photos && is_array($this->photos)) {
+            foreach ($this->photos as $photo) {
+                $allPhotos[] = asset('storage/' . $photo);
+            }
+        }
+        
+        return $allPhotos;
+    }
 
     /**
      * Relationship: Product belongs to a Seller
@@ -47,6 +85,14 @@ class Product extends Model
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class);
+    }
+
+    /**
+     * Relationship: Product belongs to a User
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**

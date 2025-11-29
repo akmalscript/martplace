@@ -1,608 +1,631 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.master')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MartPlace - Marketplace Terpercaya</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    </style>
-</head>
+@section('title', 'Beranda')
 
-<body class="bg-gray-50">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-bold text-green-600">
-                        MartPlace
-                    </a>
-                </div>
+@push('styles')
+<style>
+    /* Hero Section Gradient */
+    .hero-gradient {
+        background: linear-gradient(135deg, #F1F3E0 0%, #D2DCB6 30%, #A1BC98 60%, #778873 100%);
+    }
+    
+    /* Floating Animation */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .animate-float-delayed {
+        animation: float 6s ease-in-out infinite;
+        animation-delay: 2s;
+    }
+    
+    /* Pulse glow animation */
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(161, 188, 152, 0.3); }
+        50% { box-shadow: 0 0 40px rgba(161, 188, 152, 0.6); }
+    }
+    
+    .animate-pulse-glow {
+        animation: pulse-glow 3s ease-in-out infinite;
+    }
+    
+    /* Product Card Hover Effect */
+    .product-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .product-card:hover {
+        transform: scale(1.03) translateY(-8px);
+        box-shadow: 0 25px 50px -12px rgba(119, 136, 115, 0.25);
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+    
+    .product-card .product-image {
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Category Card Hover */
+    .category-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px -10px rgba(119, 136, 115, 0.2);
+    }
+    
+    .category-card:hover .category-icon {
+        transform: scale(1.1);
+        animation: bounce-soft 0.5s ease-in-out;
+    }
+    
+    .category-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    @keyframes bounce-soft {
+        0%, 100% { transform: scale(1.1) translateY(0); }
+        50% { transform: scale(1.1) translateY(-5px); }
+    }
+    
+    /* Button Gradient Hover */
+    .btn-gradient {
+        background: linear-gradient(135deg, #A1BC98 0%, #778873 100%);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #778873 0%, #A1BC98 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px -5px rgba(119, 136, 115, 0.4);
+    }
+    
+    /* Stagger Animation with Custom Delays */
+    .stagger-grid > *:nth-child(1) { animation-delay: 0s; }
+    .stagger-grid > *:nth-child(2) { animation-delay: 0.1s; }
+    .stagger-grid > *:nth-child(3) { animation-delay: 0.2s; }
+    .stagger-grid > *:nth-child(4) { animation-delay: 0.3s; }
+    .stagger-grid > *:nth-child(5) { animation-delay: 0.4s; }
+    .stagger-grid > *:nth-child(6) { animation-delay: 0.5s; }
+    .stagger-grid > *:nth-child(7) { animation-delay: 0.6s; }
+    .stagger-grid > *:nth-child(8) { animation-delay: 0.7s; }
+    .stagger-grid > *:nth-child(9) { animation-delay: 0.8s; }
+    .stagger-grid > *:nth-child(10) { animation-delay: 0.9s; }
+    .stagger-grid > *:nth-child(11) { animation-delay: 1.0s; }
+    .stagger-grid > *:nth-child(12) { animation-delay: 1.1s; }
+    .stagger-grid > *:nth-child(n+13) { animation-delay: 1.2s; }
+    
+    /* Filter Tab Active State */
+    .filter-tab {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-tab::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #A1BC98, #778873);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+    
+    .filter-tab:hover::after,
+    .filter-tab.active::after {
+        width: 100%;
+    }
+    
+    /* Stats Counter Animation */
+    .stat-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+    
+    .stat-card:hover .stat-icon {
+        animation: bounce-soft 0.6s ease-in-out;
+    }
+    
+    /* Badge Shimmer Effect */
+    .badge-shimmer {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .badge-shimmer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+        100% { left: 100%; }
+    }
+    
+    /* Section Reveal */
+    .section-reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .section-reveal.revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+@endpush
 
-                <!-- Search Bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-8" x-data="{
-                    search: '',
-                    products: [],
-                    sellers: [],
-                    locations: [],
-                    activeTab: 'products',
-                    showSuggestions: false,
-                    loading: false,
-                    getSuggestions() {
-                        if (this.search.length < 2) {
-                            this.products = [];
-                            this.sellers = [];
-                            this.locations = [];
-                            this.showSuggestions = false;
-                            return;
-                        }
-
-                        this.loading = true;
-                        fetch(`/products/search?q=${encodeURIComponent(this.search)}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                this.products = data.products || [];
-                                this.sellers = data.sellers || [];
-                                this.locations = data.locations || [];
-                                this.showSuggestions = (this.products.length > 0 || this.sellers.length > 0 || this.locations.length > 0);
-                                this.loading = false;
-                            });
-                    },
-                    selectProduct(productId) {
-                        window.location.href = `/products/${productId}`;
-                    },
-                    selectSeller(sellerId) {
-                        window.location.href = `/sellers/${sellerId}`;
-                    },
-                    selectLocation(location) {
-                        window.location.href = `/products?search=${encodeURIComponent(location)}`;
-                    },
-                    submitSearch() {
-                        if (this.search.trim()) {
-                            window.location.href = `/products?search=${encodeURIComponent(this.search)}`;
-                        }
-                    },
-                    formatPrice(price) {
-                        return 'Rp' + Number(price).toLocaleString('id-ID');
-                    }
-                }">
-                    <form @submit.prevent="submitSearch" class="relative w-full" @click.away="showSuggestions = false">
-                        <input type="text" x-model="search" @input.debounce.300ms="getSuggestions"
-                            @focus="showSuggestions = (products.length > 0 || sellers.length > 0 || locations.length > 0)"
-                            placeholder="Cari produk, toko, atau lokasi..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-
-                        <!-- Search Suggestions Dropdown with Tabs -->
-                        <div x-show="showSuggestions || loading" x-transition @click.stop
-                            class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden">
-                            <template x-if="loading">
-                                <div class="p-6 text-center text-gray-500">
-                                    <svg class="animate-spin h-5 w-5 mx-auto mb-2 text-green-600"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10"
-                                            stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    Mencari...
-                                </div>
-                            </template>
-                            <template
-                                x-if="!loading && (products.length > 0 || sellers.length > 0 || locations.length > 0)">
-                                <div>
-                                    <!-- Tabs -->
-                                    <div class="flex border-b bg-gray-50">
-                                        <button type="button" @click="activeTab = 'products'"
-                                            :class="activeTab === 'products' ? 'border-b-2 border-green-600 text-green-600' :
-                                                'text-gray-600'"
-                                            class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
-                                            Produk (<span x-text="products.length"></span>)
-                                        </button>
-                                        <button type="button" @click="activeTab = 'sellers'"
-                                            :class="activeTab === 'sellers' ? 'border-b-2 border-green-600 text-green-600' :
-                                                'text-gray-600'"
-                                            class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
-                                            Toko (<span x-text="sellers.length"></span>)
-                                        </button>
-                                        <button type="button" @click="activeTab = 'locations'"
-                                            :class="activeTab === 'locations' ? 'border-b-2 border-green-600 text-green-600' :
-                                                'text-gray-600'"
-                                            class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
-                                            Lokasi (<span x-text="locations.length"></span>)
-                                        </button>
-                                    </div>
-
-                                    <!-- Tab Content -->
-                                    <div class="max-h-80 overflow-y-auto">
-                                        <!-- Products Tab -->
-                                        <div x-show="activeTab === 'products'" class="divide-y">
-                                            <template x-for="product in products" :key="product.id">
-                                                <button type="button" @click="selectProduct(product.id)"
-                                                    class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
-                                                    <img :src="product.image_url" :alt="product.name"
-                                                        class="w-12 h-12 object-cover rounded">
-                                                    <div class="flex-1 min-w-0">
-                                                        <p class="text-sm font-medium text-gray-900 truncate"
-                                                            x-text="product.name"></p>
-                                                        <p class="text-sm text-green-600 font-semibold"
-                                                            x-text="formatPrice(product.price)"></p>
-                                                    </div>
-                                                    <svg class="w-5 h-5 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </button>
-                                            </template>
-                                        </div>
-
-                                        <!-- Sellers Tab -->
-                                        <div x-show="activeTab === 'sellers'" class="divide-y">
-                                            <template x-for="seller in sellers" :key="seller.id">
-                                                <button type="button" @click="selectSeller(seller.id)"
-                                                    class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
-                                                    <div
-                                                        class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                                        <svg class="w-6 h-6 text-green-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <p class="text-sm font-medium text-gray-900 truncate"
-                                                            x-text="seller.store_name"></p>
-                                                        <p class="text-xs text-gray-500"
-                                                            x-text="`${seller.city}, ${seller.province}`"></p>
-                                                        <div class="flex items-center gap-2 mt-1">
-                                                            <span class="text-xs text-yellow-600">★ <span
-                                                                    x-text="seller.rating"></span></span>
-                                                            <span class="text-xs text-gray-400">•</span>
-                                                            <span class="text-xs text-gray-500"
-                                                                x-text="`${seller.total_products} produk`"></span>
-                                                        </div>
-                                                    </div>
-                                                    <svg class="w-5 h-5 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </button>
-                                            </template>
-                                        </div>
-
-                                        <!-- Locations Tab -->
-                                        <div x-show="activeTab === 'locations'" class="divide-y">
-                                            <template x-for="location in locations" :key="location.name">
-                                                <button type="button" @click="selectLocation(location.name)"
-                                                    class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
-                                                    <div
-                                                        class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="flex-1">
-                                                        <p class="text-sm font-medium text-gray-900"
-                                                            x-text="location.name"></p>
-                                                        <p class="text-xs text-gray-500"
-                                                            x-text="location.type === 'city' ? 'Kota/Kabupaten' : 'Provinsi'">
-                                                        </p>
-                                                    </div>
-                                                    <svg class="w-5 h-5 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </button>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Right Side Icons & Buttons -->
-                <div class="flex items-center space-x-4">
-                    <!-- Direktori Toko Link -->
-                    <a href="{{ route('sellers.index') }}"
-                        class="text-gray-700 hover:text-green-600 transition flex items-center gap-1">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="text-sm font-medium hidden lg:inline">Toko</span>
-                    </a>
-
-                    <!-- Cart Icon -->
-                    <a href="#" class="text-gray-700 hover:text-green-600 transition">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                            </path>
-                        </svg>
-                    </a>
-
-                    <!-- Notification Icon -->
-                    <a href="#" class="text-gray-700 hover:text-green-600 transition">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                            </path>
-                        </svg>
-                    </a>
-
-                    @guest
-                        <!-- Login Button -->
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-green-600 transition">
-                            Masuk
+@section('content')
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-cream via-olive/30 to-sage/20 py-16 lg:py-24">
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-sage/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-10 right-10 w-96 h-96 bg-olive/20 rounded-full blur-3xl animate-float-delayed"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-sage/5 to-transparent rounded-full"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <!-- Hero Content -->
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/70 backdrop-blur-sm rounded-full text-forest/80 text-sm font-medium mb-6 animate-fade-in-up">
+                        <span class="w-2 h-2 bg-sage rounded-full animate-pulse"></span>
+                        Marketplace Terpercaya #1 di Indonesia
+                    </div>
+                    
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-forest leading-tight mb-6 animate-fade-in-up" style="animation-delay: 0.1s">
+                        Temukan Produk
+                        <span class="bg-gradient-to-r from-sage to-forest bg-clip-text text-transparent">
+                            Berkualitas
+                        </span>
+                        Terbaik
+                    </h1>
+                    
+                    <p class="text-lg text-forest/70 mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in-up" style="animation-delay: 0.2s">
+                        Belanja lebih mudah, hemat, dan aman di MartPlace. Ribuan produk dari penjual terpercaya di seluruh Indonesia.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up" style="animation-delay: 0.3s">
+                        <a href="{{ route('products.index') }}" 
+                           class="btn-gradient text-cream px-8 py-4 rounded-xl font-semibold text-center inline-flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                            Mulai Belanja
                         </a>
-
-                        <!-- Register Seller Button -->
-                        <a href="{{ route('sellers.create') }}"
-                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                            Daftar Toko
+                        <a href="{{ route('sellers.create') }}" 
+                           class="bg-white text-forest px-8 py-4 rounded-xl font-semibold border-2 border-olive hover:border-sage hover:bg-olive/10 transition-all duration-300 text-center inline-flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            Buka Toko Gratis
                         </a>
-                    @else
-                        <!-- User Dropdown -->
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open"
-                                class="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition">
-                                <span>Hai, {{ Auth::user()->name }}</span>
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7"></path>
+                    </div>
+                </div>
+                
+                <!-- Hero Stats -->
+                <div class="lg:w-1/2">
+                    <div class="grid grid-cols-2 gap-4 max-w-md mx-auto lg:max-w-none">
+                        <div class="stat-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-olive/30 animate-fade-in-up" style="animation-delay: 0.2s">
+                            <div class="stat-icon w-12 h-12 bg-sage/20 rounded-xl flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                                 </svg>
-                            </button>
-
-                            <div x-show="open" @click.away="open = false" x-transition
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                                <a href="{{ route('dashboard') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
-                                <a href="{{ route('profile.edit') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profil</a>
-                                <hr class="my-2">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                        class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                        Keluar
-                                    </button>
-                                </form>
                             </div>
+                            <p class="text-3xl font-bold text-forest">{{ number_format($stats['totalProducts'] ?? 0) }}+</p>
+                            <p class="text-forest/60 text-sm">Produk Tersedia</p>
                         </div>
-                    @endguest
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Banner -->
-    <section class="bg-gradient-to-r from-cyan-400 to-green-300 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="md:w-1/2 text-white mb-8 md:mb-0">
-                    <h1 class="text-4xl font-bold mb-4">Mau transaksi lebih hemat?</h1>
-                    <p class="text-lg mb-6">Cek promo asyik MartPlace!</p>
-                    <a href="#promo"
-                        class="inline-block bg-white text-cyan-500 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                        Cek Sekarang
-                    </a>
-                </div>
-                <div class="md:w-1/2">
-                    <img src="{{ asset('images/hero-illustration.png') }}" alt="Hero Illustration"
-                        class="w-full h-auto" onerror="this.style.display='none'">
+                        
+                        <div class="stat-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-olive/30 animate-fade-in-up" style="animation-delay: 0.3s">
+                            <div class="stat-icon w-12 h-12 bg-olive/30 rounded-xl flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-forest" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
+                            <p class="text-3xl font-bold text-forest">{{ number_format($stats['totalSellers'] ?? 0) }}+</p>
+                            <p class="text-forest/60 text-sm">Penjual Aktif</p>
+                        </div>
+                        
+                        <div class="stat-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-olive/30 animate-fade-in-up" style="animation-delay: 0.4s">
+                            <div class="stat-icon w-12 h-12 bg-forest/10 rounded-xl flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-forest" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-3xl font-bold text-forest">{{ $stats['totalProvinces'] ?? 0 }}+</p>
+                            <p class="text-forest/60 text-sm">Provinsi Terjangkau</p>
+                        </div>
+                        
+                        <div class="stat-card bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-olive/30 animate-fade-in-up" style="animation-delay: 0.5s">
+                            <div class="stat-icon w-12 h-12 bg-cream rounded-xl flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-sage" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                            </div>
+                            <p class="text-3xl font-bold text-forest">{{ number_format($stats['totalReviews'] ?? 0) }}+</p>
+                            <p class="text-forest/60 text-sm">Ulasan Pelanggan</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Category Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Kategori Pilihan</h2>
-            @if (isset($selectedCategory))
-                <a href="{{ route('home') }}" class="text-green-600 hover:text-green-700 font-medium">
-                    ← Lihat Semua Kategori
-                </a>
+    <section class="py-16 bg-cream section-reveal" id="categories">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-forest mb-2">Kategori Pilihan</h2>
+                    <p class="text-forest/60">Temukan produk berdasarkan kategori favoritmu</p>
+                </div>
+                @if (isset($selectedCategory))
+                    <a href="{{ route('home') }}" 
+                       class="inline-flex items-center gap-2 text-sage hover:text-forest font-medium transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Semua Kategori
+                    </a>
+                @endif
+            </div>
+
+            @if(isset($categories) && $categories->count() > 0)
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4 stagger-grid">
+                    @php
+                        $categoryIcons = [
+                            'bg-sage/20 text-sage',
+                            'bg-olive/30 text-forest',
+                            'bg-forest/10 text-forest',
+                            'bg-cream text-sage',
+                            'bg-sage/30 text-forest',
+                            'bg-olive/20 text-forest',
+                            'bg-forest/20 text-forest',
+                            'bg-sage/10 text-sage',
+                        ];
+                    @endphp
+                    @foreach($categories->take(8) as $index => $category)
+                        @php
+                            $colorClass = $categoryIcons[$index % count($categoryIcons)];
+                        @endphp
+                        <a href="{{ route('home', ['category' => $category->name]) }}"
+                           class="category-card flex flex-col items-center p-5 bg-white rounded-2xl border border-olive/20 hover:border-sage group stagger-item {{ isset($selectedCategory) && $selectedCategory == $category->name ? 'ring-2 ring-sage bg-sage/5' : '' }}">
+                            <div class="category-icon w-14 h-14 {{ $colorClass }} rounded-xl flex items-center justify-center mb-3">
+                                @if($category->icon)
+                                    <span class="text-2xl">{{ $category->icon }}</span>
+                                @else
+                                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                                    </svg>
+                                @endif
+                            </div>
+                            <span class="text-sm font-medium text-forest text-center line-clamp-2 group-hover:text-sage transition-colors">
+                                {{ $category->name }}
+                            </span>
+                            @if($category->products_count > 0)
+                                <span class="text-xs text-forest/50 mt-1">{{ $category->products_count }} produk</span>
+                            @endif
+                        </a>
+                    @endforeach
+                </div>
+                
+                @if($categories->count() > 8)
+                    <div class="text-center mt-8" x-data="{ showAll: false }">
+                        <button type="button" 
+                                @click="showAll = !showAll"
+                                class="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-olive hover:border-sage text-forest rounded-xl font-medium transition-all duration-300 hover:shadow-md">
+                            <span x-text="showAll ? 'Sembunyikan' : 'Lihat Semua Kategori ({{ $categories->count() }})'"></span>
+                            <svg class="w-4 h-4 transition-transform duration-300" :class="showAll ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        
+                        <div x-show="showAll" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 transform -translate-y-4"
+                             x-transition:enter-end="opacity-100 transform translate-y-0"
+                             class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                            @foreach($categories->skip(8) as $index => $category)
+                                @php
+                                    $colorClass = $categoryIcons[($index + 8) % count($categoryIcons)];
+                                @endphp
+                                <a href="{{ route('home', ['category' => $category->name]) }}"
+                                   class="category-card flex items-center gap-3 p-4 bg-white rounded-xl border border-olive/20 hover:border-sage group {{ isset($selectedCategory) && $selectedCategory == $category->name ? 'ring-2 ring-sage' : '' }}">
+                                    <div class="category-icon w-10 h-10 {{ $colorClass }} rounded-lg flex items-center justify-center flex-shrink-0">
+                                        @if($category->icon)
+                                            <span class="text-lg">{{ $category->icon }}</span>
+                                        @else
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                                            </svg>
+                                        @endif
+                                    </div>
+                                    <div class="min-w-0">
+                                        <span class="text-sm font-medium text-forest block truncate group-hover:text-sage transition-colors">
+                                            {{ $category->name }}
+                                        </span>
+                                        @if($category->products_count > 0)
+                                            <span class="text-xs text-forest/50">{{ $category->products_count }} produk</span>
+                                        @endif
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @else
+                <div class="text-center py-12 bg-white rounded-2xl border border-olive/20">
+                    <div class="w-16 h-16 bg-olive/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-forest/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <p class="text-forest/60">Belum ada kategori tersedia</p>
+                </div>
             @endif
-        </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            <!-- Category Item -->
-            <a href="{{ route('home', ['category' => 'Makanan Kering']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Makanan Kering' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
-                    <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Makanan Kering</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Figure']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Figure' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-blue-200 transition">
-                    <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Figure</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Tas Selempang Pria']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Tas Selempang Pria' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-amber-200 transition">
-                    <svg class="w-8 h-8 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Tas Selempang Pria</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Flat Shoes Wanita']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Flat Shoes Wanita' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-purple-200 transition">
-                    <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Flat Shoes Wanita</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Handphone']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Handphone' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-indigo-200 transition">
-                    <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Handphone</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Fashion Pria']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Fashion Pria' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 transition">
-                    <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Fashion Pria</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Kecantikan']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Kecantikan' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
-                    <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Kecantikan</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Rumah Tangga']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Rumah Tangga' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-orange-200 transition">
-                    <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Rumah Tangga</span>
-            </a>
         </div>
     </section>
 
     <!-- Products Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                @if (isset($selectedCategory))
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Produk {{ $selectedCategory }}</h2>
-                    <p class="text-gray-600">Menampilkan {{ $products->count() }} produk</p>
-                @else
-                    <div class="flex space-x-6">
+    <section class="py-16 bg-olive/10 section-reveal" id="products">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header with Filter Tabs -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
+                <div>
+                    @if (isset($selectedCategory))
+                        <h2 class="text-2xl md:text-3xl font-bold text-forest mb-2">Produk {{ $selectedCategory }}</h2>
+                        <p class="text-forest/60">Menampilkan {{ $products->count() }} produk dalam kategori ini</p>
+                    @else
+                        <h2 class="text-2xl md:text-3xl font-bold text-forest mb-2">Produk Pilihan</h2>
+                        <p class="text-forest/60">Produk terbaik yang kami rekomendasikan untukmu</p>
+                    @endif
+                </div>
+                
+                @if (!isset($selectedCategory))
+                    <div class="flex items-center gap-1 bg-white p-1.5 rounded-xl border border-olive/20">
                         <a href="{{ route('home', ['filter' => 'untuk_anda']) }}"
-                            class="pb-2 {{ !isset($selectedFilter) || $selectedFilter == 'untuk_anda' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
+                           class="filter-tab px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 {{ !isset($selectedFilter) || $selectedFilter == 'untuk_anda' ? 'active bg-sage text-cream' : 'text-forest/70 hover:text-forest hover:bg-olive/10' }}">
                             Untuk Anda
                         </a>
-                        <a href="{{ route('home', ['filter' => 'mall']) }}"
-                            class="pb-2 {{ isset($selectedFilter) && $selectedFilter == 'mall' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
-                            Mall
-                        </a>
                         <a href="{{ route('home', ['filter' => 'terlaris']) }}"
-                            class="pb-2 {{ isset($selectedFilter) && $selectedFilter == 'terlaris' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
-                            Produk Terlaris
+                           class="filter-tab px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 {{ isset($selectedFilter) && $selectedFilter == 'terlaris' ? 'active bg-sage text-cream' : 'text-forest/70 hover:text-forest hover:bg-olive/10' }}">
+                            Terlaris
+                        </a>
+                        <a href="{{ route('home', ['filter' => 'terbaru']) }}"
+                           class="filter-tab px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 {{ isset($selectedFilter) && $selectedFilter == 'terbaru' ? 'active bg-sage text-cream' : 'text-forest/70 hover:text-forest hover:bg-olive/10' }}">
+                            Terbaru
                         </a>
                     </div>
                 @endif
             </div>
-            @if (isset($selectedCategory) || (isset($selectedFilter) && $selectedFilter != 'semua'))
-                <a href="{{ route('home', ['filter' => 'semua']) }}"
-                    class="text-green-600 hover:text-green-700 font-medium">Lihat Semua</a>
-            @endif
-        </div>
 
-        @if ($products->isEmpty())
-            <!-- Empty State -->
-            <div class="text-center py-12">
-                <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
-                    </path>
-                </svg>
-                @if (isset($selectedCategory))
-                    <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk di kategori
-                        {{ $selectedCategory }}</h3>
-                    <p class="mt-2 text-gray-500">Silakan pilih kategori lain atau lihat semua produk.</p>
-                    <div class="mt-6">
-                        <a href="{{ route('home') }}"
-                            class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+            @if ($products->isEmpty())
+                <!-- Empty State -->
+                <div class="text-center py-16 bg-white rounded-3xl border border-olive/20">
+                    <div class="w-24 h-24 bg-olive/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-12 h-12 text-forest/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                        </svg>
+                    </div>
+                    @if (isset($selectedCategory))
+                        <h3 class="text-xl font-semibold text-forest mb-2">Belum ada produk di kategori {{ $selectedCategory }}</h3>
+                        <p class="text-forest/60 mb-6">Silakan pilih kategori lain atau lihat semua produk.</p>
+                        <a href="{{ route('home') }}" class="btn-gradient text-cream px-8 py-3 rounded-xl font-semibold inline-block">
                             Lihat Semua Kategori
                         </a>
-                    </div>
-                @else
-                    <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk</h3>
-                    <p class="mt-2 text-gray-500">Produk akan segera tersedia.</p>
-                @endif
-            </div>
-        @else
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                @foreach ($products as $product)
-                    <a href="{{ route('products.show', $product->id) }}"
-                        class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
-                        <div class="relative bg-gray-200">
-                            @if ($product->discount_percentage > 0)
-                                <span
-                                    class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
-                                    {{ $product->discount_percentage }}%
-                                </span>
-                            @endif
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                class="w-full h-48 object-cover"
-                                onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
-                                loading="lazy">
-                            @if ($product->badge)
-                                <span
-                                    class="absolute bottom-2 left-2 {{ $product->badge == 'Terkirim cepat' ? 'bg-orange-500' : ($product->badge == 'Best Seller' ? 'bg-yellow-500' : 'bg-purple-500') }} text-white text-xs px-2 py-1 rounded">
-                                    {{ $product->badge }}
-                                </span>
-                            @endif
-                        </div>
-                        <div class="p-3">
-                            <h3 class="text-sm text-gray-800 mb-2 line-clamp-2">{{ $product->name }}</h3>
-                            <div class="flex items-baseline space-x-2 mb-2">
-                                <span class="text-lg font-bold text-gray-900">{{ $product->formatted_price }}</span>
-                                @if ($product->original_price)
-                                    <span
-                                        class="text-xs text-gray-400 line-through">{{ $product->formatted_original_price }}</span>
+                    @else
+                        <h3 class="text-xl font-semibold text-forest mb-2">Belum ada produk</h3>
+                        <p class="text-forest/60">Produk akan segera tersedia.</p>
+                    @endif
+                </div>
+            @else
+                <!-- Products Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 stagger-grid">
+                    @foreach ($products as $product)
+                        <a href="{{ route('products.show', $product->id) }}"
+                           class="product-card bg-white rounded-2xl overflow-hidden border border-olive/10 stagger-item group">
+                            <!-- Product Image -->
+                            <div class="relative aspect-square overflow-hidden bg-olive/5">
+                                @if ($product->discount_percentage > 0)
+                                    <span class="badge-shimmer absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-semibold px-2.5 py-1 rounded-lg z-10">
+                                        -{{ $product->discount_percentage }}%
+                                    </span>
                                 @endif
+                                <img src="{{ $product->image_url }}" 
+                                     alt="{{ $product->name }}"
+                                     class="product-image w-full h-full object-cover"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/300x300/D2DCB6/778873?text=No+Image'"
+                                     loading="lazy">
+                                @if ($product->badge)
+                                    <span class="absolute bottom-3 left-3 bg-forest/90 backdrop-blur-sm text-cream text-xs font-medium px-2.5 py-1 rounded-lg">
+                                        {{ $product->badge }}
+                                    </span>
+                                @endif
+                                
+                                <!-- Hover Overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-forest/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                                    <span class="text-cream text-sm font-medium flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                        Lihat Detail
+                                    </span>
+                                </div>
                             </div>
-                            <div class="flex items-center space-x-1 mb-2">
-                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                    </path>
-                                </svg>
-                                <span class="text-xs text-gray-600">{{ number_format($product->rating / 10, 1) }} •
-                                    {{ number_format($product->sold_count) }}+ terjual</span>
+                            
+                            <!-- Product Info -->
+                            <div class="p-4">
+                                <h3 class="text-sm font-medium text-forest mb-2 line-clamp-2 group-hover:text-sage transition-colors min-h-[40px]">
+                                    {{ $product->name }}
+                                </h3>
+                                
+                                <div class="flex items-baseline gap-2 mb-3">
+                                    <span class="text-lg font-bold text-forest">{{ $product->formatted_price }}</span>
+                                    @if ($product->original_price)
+                                        <span class="text-xs text-forest/40 line-through">{{ $product->formatted_original_price }}</span>
+                                    @endif
+                                </div>
+                                
+                                <div class="flex items-center justify-between text-xs">
+                                    <div class="flex items-center gap-1 text-forest/60">
+                                        <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                        </svg>
+                                        <span>{{ number_format($product->rating / 10, 1) }}</span>
+                                        <span class="text-forest/30">|</span>
+                                        <span>{{ number_format($product->sold_count) }}+ terjual</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3 pt-3 border-t border-olive/10">
+                                    <p class="text-xs text-forest/50 flex items-center gap-1 truncate">
+                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                        {{ $product->location }}
+                                    </p>
+                                </div>
                             </div>
-                            <p class="text-xs text-gray-500">{{ $product->location }}</p>
-                        </div>
+                        </a>
+                    @endforeach
+                </div>
+                
+                <!-- View All Products -->
+                <div class="text-center mt-12">
+                    <p class="text-forest/60 mb-4">Menampilkan {{ $products->count() }} produk</p>
+                    <a href="{{ route('products.index') }}" 
+                       class="inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-sage text-sage hover:bg-sage hover:text-cream rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-sage/20">
+                        Lihat Semua Produk
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
                     </a>
-                @endforeach
-            </div>
-        @endif
-
-        <!-- Load More -->
-        <div class="text-center mt-8">
-            <p class="text-gray-600">Menampilkan {{ $products->count() }} produk</p>
+                </div>
+            @endif
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-lg font-bold mb-4">MartPlace</h3>
-                    <p class="text-gray-400 text-sm">Marketplace terpercaya untuk belanja online dengan berbagai
-                        pilihan produk berkualitas.</p>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Tentang</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-white">Karir</a></li>
-                        <li><a href="#" class="hover:text-white">Blog</a></li>
-                        <li><a href="{{ route('sellers.create') }}" class="hover:text-white">Daftar Jadi Seller</a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Bantuan</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Pusat Bantuan</a></li>
-                        <li><a href="#" class="hover:text-white">Cara Belanja</a></li>
-                        <li><a href="#" class="hover:text-white">Pengiriman</a></li>
-                        <li><a href="#" class="hover:text-white">Pengembalian</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-semibold mb-4">Ikuti Kami</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-br from-sage via-forest to-forest relative overflow-hidden section-reveal">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-olive/10 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-cream/90 text-sm font-medium mb-6">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                Bergabung Bersama Ribuan Penjual Sukses
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-                <p>&copy; 2025 MartPlace. All rights reserved.</p>
+            
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-cream mb-6">
+                Mulai Jual Produkmu <br class="hidden sm:block"/>di MartPlace
+            </h2>
+            
+            <p class="text-lg text-cream/80 mb-10 max-w-2xl mx-auto">
+                Gratis daftar, mudah kelola, dan jangkau jutaan pelanggan di seluruh Indonesia. 
+                Wujudkan impian bisnis onlinemu bersama MartPlace.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ route('sellers.create') }}" 
+                   class="group bg-cream text-forest px-8 py-4 rounded-xl font-semibold hover:bg-white transition-all duration-300 inline-flex items-center justify-center gap-2 hover:shadow-xl">
+                    Daftar Sekarang - Gratis!
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                </a>
+                <a href="{{ route('sellers.index') }}" 
+                   class="bg-transparent border-2 border-cream/50 text-cream px-8 py-4 rounded-xl font-semibold hover:bg-cream/10 hover:border-cream transition-all duration-300 inline-flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Lihat Direktori Toko
+                </a>
             </div>
         </div>
-    </footer>
-</body>
+    </section>
+@endsection
 
-</html>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer for scroll reveal animations
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                
+                // Trigger stagger animation for grid items
+                if (entry.target.querySelector('.stagger-grid')) {
+                    const items = entry.target.querySelectorAll('.stagger-item');
+                    items.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
+                }
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all sections with reveal animation
+    document.querySelectorAll('.section-reveal').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Initialize stagger items
+    document.querySelectorAll('.stagger-item').forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateY(20px)';
+        item.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+@endpush

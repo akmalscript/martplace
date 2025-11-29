@@ -84,14 +84,14 @@
 
             <div class="stagger-item bg-white rounded-2xl p-6 border border-olive/20 hover:shadow-lg transition-all duration-300">
                 <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center">
+                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                         </svg>
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-forest">{{ $products->where('stock', '<', 2)->count() }}</p>
-                        <p class="text-sm text-forest/60">Stok Menipis</p>
+                        <p class="text-2xl font-bold text-forest">{{ $totalComments }}</p>
+                        <p class="text-sm text-forest/60">Total Ulasan</p>
                     </div>
                 </div>
             </div>
@@ -162,6 +162,64 @@
                     </div>
                 </a>
             </div>
+        </div>
+
+        {{-- Recent Comments Section --}}
+        <div class="mt-8 bg-white rounded-2xl p-6 border border-olive/20 scroll-reveal">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-forest flex items-center gap-2">
+                    <svg class="w-5 h-5 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    Ulasan Terbaru
+                    <span class="text-sm font-normal text-forest/60">({{ $totalComments }} total)</span>
+                </h3>
+            </div>
+
+            @if($recentComments->count() > 0)
+                <div class="space-y-4">
+                    @foreach($recentComments as $comment)
+                        <div class="flex items-start gap-4 p-4 bg-cream/50 rounded-xl border border-olive/10">
+                            <div class="w-10 h-10 bg-sage/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-sage font-semibold">{{ strtoupper(substr($comment->name, 0, 1)) }}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <span class="font-medium text-forest">{{ $comment->name }}</span>
+                                    <span class="text-forest/40">•</span>
+                                    <span class="text-sm text-forest/60">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                <div class="flex items-center gap-1 mb-2">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <span class="text-sm {{ $i <= $comment->rating ? 'text-amber-400' : 'text-olive/30' }}">★</span>
+                                    @endfor
+                                    <span class="text-sm text-forest/60 ml-1">({{ $comment->rating }}/5)</span>
+                                </div>
+                                <p class="text-sm text-forest/80 line-clamp-2">{{ $comment->comment }}</p>
+                                <div class="mt-2 flex items-center gap-2">
+                                    <span class="text-xs text-forest/50">Produk:</span>
+                                    <a href="{{ route('products.show', $comment->product_id) }}" class="text-xs text-sage hover:text-forest transition">
+                                        {{ $comment->product->name ?? 'Unknown' }}
+                                    </a>
+                                </div>
+                                <div class="mt-1 flex items-center gap-4 text-xs text-forest/50">
+                                    <span>📧 {{ $comment->email }}</span>
+                                    <span>📱 {{ $comment->phone }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-olive/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-forest/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                    </div>
+                    <p class="text-forest/60">Belum ada ulasan untuk produk Anda</p>
+                </div>
+            @endif
         </div>
 
         {{-- Low Stock Products Alert --}}

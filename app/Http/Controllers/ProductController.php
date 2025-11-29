@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -130,7 +133,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with(['seller', 'category', 'comments' => function($q) {
+        $product = Product::with(['seller', 'user', 'category', 'comments' => function($q) {
             $q->latest();
         }])->findOrFail($id);
 
@@ -142,6 +145,142 @@ class ProductController extends Controller
             ->limit(6)
             ->get();
 
-        return view('products.show-refactored', compact('product', 'relatedProducts'));
+        return view('products.show', compact('product', 'relatedProducts'));
+    }
+
+    /**
+     * Display user's products
+     */
+    public function myProducts()
+    {
+        $products = Auth::user()->products()->with('category')->latest()->paginate(12);
+        return view('products.my-products', compact('products'));
+    }
+
+    /**
+     * Show product creation form
+     */
+    public function create()
+    {
+        $categories = ProductCategory::whereNull('parent_id')->with('children')->get();
+        return view('products.create', compact('categories'));
+    }
+
+    /**
+     * Store a new product
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:product_categories,id',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'weight' => 'nullable|numeric',
+            'condition' => 'nullable|string',
+            'location' => 'required|string|max:255',
+            'main_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $validated['user_id'] = Auth::id();
+        $validated['is_active'] = true;
+
+        // Handle main photo upload
+        if ($request->hasFile('main_photo')) {
+            $validated['main_photo'] = $request->file('main_photo')->store('products/main', 'public');
+        }
+
+        // Handle additional photos (max 2)
+        if ($request->hasFile('photos')) {
+            $photos = [];
+            $photoFiles = array_slice($request->file('photos'), 0, 2); // Max 2 additional
+            foreach ($photoFiles as $photo) {
+                $photos[] = $photo->store('products/gallery', 'public');
+            }
+            $validated['photos'] = $photos;
+        }
+
+        Product::create($validated);
+
+        return redirect()->route('my-products')->with('success', 'Produk berhasil ditambahkan!');
+    }
+
+    /**
+     * Show product edit form
+     */
+    public function edit($id)
+    {
+        $product = Product::where('user_id', Auth::id())->findOrFail($id);
+        $categories = ProductCategory::whereNull('parent_id')->with('children')->get();
+        return view('products.edit', compact('product', 'categories'));
+    }
+
+    /**
+     * Update product
+     */
+    public function update(Request $request, $id)
+    {
+        $product = Product::where('user_id', Auth::id())->findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:product_categories,id',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'weight' => 'nullable|numeric',
+            'condition' => 'nullable|string',
+            'location' => 'required|string|max:255',
+            'main_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'photos.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Handle main photo upload
+        if ($request->hasFile('main_photo')) {
+            if ($product->main_photo) {
+                Storage::disk('public')->delete($product->main_photo);
+            }
+            $validated['main_photo'] = $request->file('main_photo')->store('products/main', 'public');
+        }
+
+        // Handle additional photos
+        if ($request->hasFile('photos')) {
+            $photos = $product->photos ?? [];
+            foreach ($request->file('photos') as $photo) {
+                if (count($photos) < 2) { // Max 2 additional
+                    $photos[] = $photo->store('products/gallery', 'public');
+                }
+            }
+            $validated['photos'] = $photos;
+        }
+
+        $product->update($validated);
+
+        return redirect()->route('my-products')->with('success', 'Produk berhasil diperbarui!');
+    }
+
+    /**
+     * Delete product
+     */
+    public function destroy($id)
+    {
+        $product = Product::where('user_id', Auth::id())->findOrFail($id);
+        
+        // Delete photos
+        if ($product->main_photo) {
+            Storage::disk('public')->delete($product->main_photo);
+        }
+        
+        if ($product->photos) {
+            foreach ($product->photos as $photo) {
+                Storage::disk('public')->delete($photo);
+            }
+        }
+        
+        $product->delete();
+
+        return redirect()->route('my-products')->with('success', 'Produk berhasil dihapus!');
     }
 }

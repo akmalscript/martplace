@@ -44,19 +44,30 @@ class SellerDashboardController extends Controller
             ->groupBy('email')
             ->get()
             ->groupBy(function($comment) {
-                // This is simplified - you may want to track province in comments table
                 return 'Various'; 
             })
             ->map(function($group) {
                 return $group->count();
             });
 
+        // Recent comments for seller's products
+        $recentComments = Comment::whereIn('product_id', $products->pluck('id'))
+            ->with('product')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        // Total comments count
+        $totalComments = Comment::whereIn('product_id', $products->pluck('id'))->count();
+
         return view('seller.dashboard', compact(
             'seller',
             'products',
             'stockByProduct',
             'ratingByProduct',
-            'commentsByProvince'
+            'commentsByProvince',
+            'recentComments',
+            'totalComments'
         ));
     }
 
@@ -68,7 +79,7 @@ class SellerDashboardController extends Controller
         $seller = Auth::user()->seller;
         $products = $seller->products()->with('category')->latest()->paginate(12);
         
-        return view('seller.products.index', compact('products'));
+        return view('sellers.products.index', compact('products'));
     }
 
     /**
@@ -77,7 +88,7 @@ class SellerDashboardController extends Controller
     public function createProduct()
     {
         $categories = \App\Models\ProductCategory::whereNull('parent_id')->with('children')->get();
-        return view('seller.products.create', compact('categories'));
+        return view('sellers.products.create', compact('categories'));
     }
 
     /**
@@ -131,7 +142,7 @@ class SellerDashboardController extends Controller
         $product = Product::where('seller_id', $seller->id)->findOrFail($id);
         $categories = \App\Models\ProductCategory::whereNull('parent_id')->with('children')->get();
         
-        return view('seller.products.edit', compact('product', 'categories'));
+        return view('sellers.products.edit', compact('product', 'categories'));
     }
 
     /**

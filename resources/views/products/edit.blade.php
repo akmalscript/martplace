@@ -42,11 +42,7 @@
         <!-- Header -->
         <div class="mb-8">
             <nav class="flex items-center gap-2 text-sm text-forest/60 mb-4">
-                <a href="{{ route('seller.dashboard') }}" class="hover:text-sage">Dashboard</a>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-                <a href="{{ route('seller.products') }}" class="hover:text-sage">Produk Saya</a>
+                <a href="{{ route('my-products') }}" class="hover:text-sage">Produk Saya</a>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -57,7 +53,7 @@
         </div>
 
         <!-- Form -->
-        <form action="{{ route('seller.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" 
+        <form action="{{ route('my-products.update', $product->id) }}" method="POST" enctype="multipart/form-data" 
               x-data="editProductForm()" class="space-y-6">
             @csrf
             @method('PUT')
@@ -75,7 +71,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
                         @if($product->main_photo)
                             <div class="relative">
-                                <span class="absolute top-2 left-2 bg-sage text-cream px-2 py-1 rounded text-xs font-medium">Utama</span>
+                                <span class="absolute top-2 left-2 bg-sage text-cream px-2 py-1 rounded text-xs font-medium z-10">Utama</span>
                                 <img src="{{ asset('storage/' . $product->main_photo) }}" 
                                      class="w-full aspect-square object-cover rounded-xl border-2 border-sage">
                             </div>
@@ -227,6 +223,18 @@
                         @enderror
                     </div>
 
+                    <!-- Location -->
+                    <div>
+                        <label class="block text-sm font-medium text-forest mb-2">
+                            Lokasi <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" name="location" value="{{ old('location', $product->location) }}" required
+                               class="w-full px-4 py-3 border border-olive rounded-xl focus:outline-none focus:border-sage focus:ring-2 focus:ring-sage/20 transition">
+                        @error('location')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Weight -->
                     <div>
                         <label class="block text-sm font-medium text-forest mb-2">Berat (gram)</label>
@@ -250,7 +258,7 @@
 
             <!-- Submit Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                <a href="{{ route('seller.products') }}" 
+                <a href="{{ route('my-products') }}" 
                    class="px-6 py-3 border-2 border-olive text-forest rounded-xl font-medium hover:bg-olive/10 transition text-center">
                     Batal
                 </a>

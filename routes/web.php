@@ -29,6 +29,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // User Product Management - Any logged in user can upload products
+    Route::get('/my-products', [ProductController::class, 'myProducts'])->name('my-products');
+    Route::get('/my-products/create', [ProductController::class, 'create'])->name('my-products.create');
+    Route::post('/my-products', [ProductController::class, 'store'])->name('my-products.store');
+    Route::get('/my-products/{id}/edit', [ProductController::class, 'edit'])->name('my-products.edit');
+    Route::put('/my-products/{id}', [ProductController::class, 'update'])->name('my-products.update');
+    Route::delete('/my-products/{id}', [ProductController::class, 'destroy'])->name('my-products.delete');
 });
 
 // Wilayah API Proxy Routes
