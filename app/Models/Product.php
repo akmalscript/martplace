@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -19,14 +20,11 @@ class Product extends Model
         'description',
         'weight',
         'condition',
-        'main_photo',      // foto utama
-        'photos',          // array foto tambahan
-        'variations',      // array variasi
-        'status',          // ACTIVE / INACTIVE
-        // field tambahan dari branch lain
+        'main_photo',      
+        'photos',        
+        'variations',    
+        'status',         
         'original_price',
-        'rating',
-        'sold_count',
         'location',
         'discount_percentage',
         'badge',
@@ -40,6 +38,8 @@ class Product extends Model
         'original_price' => 'decimal:2',
         'is_active' => 'boolean',
     ];
+
+    protected $appends = ['rating', 'sold_count'];
 
     /**
      * Relationship: Product belongs to a Seller
@@ -55,6 +55,31 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'category_id');
+    }
+
+    /**
+     * Product Comments
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get average rating from comments
+     */
+    public function getRatingAttribute()
+    {
+        $avgRating = $this->comments()->avg('rating');
+        return $avgRating ? round($avgRating * 10) : 0; // Scale to 50 (5.0 * 10)
+    }
+
+    /**
+     * Get total comments count (as sold_count for now)
+     */
+    public function getSoldCountAttribute()
+    {
+        return $this->comments()->count();
     }
 
     /**
@@ -79,7 +104,15 @@ class Product extends Model
      */
     public function scopePopular($query)
     {
-        return $query->orderBy('sold_count', 'desc');
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
+
+    /**
+     * Low stock products (< 2)
+     */
+    public function scopeLowStock($query)
+    {
+        return $query->where('stock', '<', 2);
     }
 
     /**
@@ -95,5 +128,13 @@ class Product extends Model
         return $this->original_price
             ? 'Rp' . number_format((float) $this->original_price, 0, ',', '.')
             : null;
+    }
+
+    /**
+     * Get category name (fallback for old data)
+     */
+    public function getCategoryNameAttribute()
+    {
+        return $this->category ? $this->category->name : 'Uncategorized';
     }
 }

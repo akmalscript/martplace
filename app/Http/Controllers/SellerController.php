@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seller;
+use App\Services\SellerService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SellerCredentials;
 
 class SellerController extends Controller
 {
+    protected SellerService $sellerService;
+
+    public function __construct(SellerService $sellerService)
+    {
+        $this->sellerService = $sellerService;
+    }
+
     /**
-     * Display the form to create a new seller.
+     * Display the form to create a new seller (SRS-MartPlace-01)
      */
     public function create()
     {
@@ -21,11 +25,15 @@ class SellerController extends Controller
     }
 
     /**
-     * Store a newly created seller in storage.
+     * Store a newly created seller in storage (SRS-MartPlace-01)
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), Seller::validationRules());
+        $validator = Validator::make(
+            $request->all(),
+            SellerService::validationRules(),
+            SellerService::validationMessages()
+        );
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -50,24 +58,15 @@ class SellerController extends Controller
             'pic_ktp_number',
         ]);
 
-        // Password already included from request
+        $seller = $this->sellerService->register(
+            $data,
+            $request->file('pic_photo'),
+            $request->file('pic_ktp_file')
+        );
 
-        // Handle photo upload
-        if ($request->hasFile('pic_photo')) {
-            $data['pic_photo_path'] = $request->file('pic_photo')->store('sellers/photos', 'public');
-        }
-
-        // Handle KTP file upload
-        if ($request->hasFile('pic_ktp_file')) {
-            $data['pic_ktp_file_path'] = $request->file('pic_ktp_file')->store('sellers/ktp', 'public');
-        }
-
-        // Proses registrasi di Model
-        $registered = Seller::register($data);
-
-        if ($registered) {
+        if ($seller) {
             return redirect()->route('sellers.success')
-                ->with('success', 'Pendaftaran seller berhasil! Silakan simpan password Anda untuk login.');
+                ->with('success', 'Pendaftaran seller berhasil! Silakan tunggu proses verifikasi.');
         }
 
         return redirect()->back()
@@ -76,33 +75,39 @@ class SellerController extends Controller
     }
 
     /**
-     * Display the specified seller.
+     * Display the specified seller
      */
     public function show(string $id)
     {
-        $seller = Seller::findOrFail($id);
+        $seller = Seller::with(['products' => function ($query) {
+            $query->active()->latest()->limit(12);
+        }])->findOrFail($id);
+        
         return view('sellers.show', compact('seller'));
     }
 
     /**
-     * Display all sellers (admin only).
+     * Display all sellers (public directory)
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sellers = Seller::latest()->paginate(15);
-        return view('sellers.index', compact('sellers'));
+        $sellers = $this->sellerService->getActiveSellers($request->all());
+        $cities = $this->sellerService->getActiveCities();
+        $provinces = $this->sellerService->getActiveProvinces();
+
+        return view('sellers.index', compact('sellers', 'cities', 'provinces'));
     }
 
     /**
-     * Approve seller (admin only).
+     * Approve seller (admin only) (SRS-MartPlace-02)
      */
     public function approve(string $id)
     {
         $seller = Seller::findOrFail($id);
 
-        if ($seller->approve()) {
+        if ($this->sellerService->approve($seller)) {
             return redirect()->back()
-                ->with('success', 'Seller berhasil disetujui.');
+                ->with('success', 'Seller berhasil disetujui. Email notifikasi telah dikirim.');
         }
 
         return redirect()->back()
@@ -110,15 +115,16 @@ class SellerController extends Controller
     }
 
     /**
-     * Reject seller (admin only).
+     * Reject seller (admin only) (SRS-MartPlace-02)
      */
-    public function reject(string $id)
+    public function reject(Request $request, string $id)
     {
         $seller = Seller::findOrFail($id);
+        $reason = $request->input('reason', 'Dokumen tidak lengkap atau tidak valid.');
 
-        if ($seller->batal()) {
+        if ($this->sellerService->reject($seller, $reason)) {
             return redirect()->back()
-                ->with('success', 'Seller berhasil ditolak.');
+                ->with('success', 'Seller berhasil ditolak. Email notifikasi telah dikirim.');
         }
 
         return redirect()->back()
@@ -126,7 +132,7 @@ class SellerController extends Controller
     }
 
     /**
-     * Display success page after registration.
+     * Display success page after registration
      */
     public function success()
     {

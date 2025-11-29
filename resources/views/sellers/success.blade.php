@@ -4,70 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrasi Berhasil - MartPlace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+<body class="bg-cream min-h-screen font-sans">
+    {{-- Navbar --}}
+    <nav class="bg-white/80 backdrop-blur-md border-b border-olive/20 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-bold text-green-600">
+                <a href="{{ route('home') }}" class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-sage to-forest rounded-xl flex items-center justify-center">
+                        <span class="text-cream font-bold text-xl">M</span>
+                    </div>
+                    <span class="text-2xl font-bold bg-gradient-to-r from-sage to-forest bg-clip-text text-transparent">
                         MartPlace
-                    </a>
-                </div>
+                    </span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Success Message -->
-    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-            <!-- Success Icon -->
-            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
-                <svg class="h-12 w-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </div>
-
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">Registrasi Berhasil!</h1>
-            
-            <p class="text-gray-600 mb-8">
-                Terima kasih telah mendaftar sebagai seller di MartPlace. 
-                Pendaftaran Anda sedang dalam proses review oleh tim kami.
-            </p>
-
-            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+    {{-- Success Message --}}
+    <div class="flex items-center justify-center min-h-[calc(100vh-200px)] py-12">
+        <div class="max-w-lg mx-auto px-4">
+            <div class="bg-white rounded-3xl shadow-xl border border-olive/20 p-10 text-center relative overflow-hidden">
+                {{-- Decorative --}}
+                <div class="absolute top-0 right-0 w-32 h-32 bg-sage/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-olive/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                
+                {{-- Success Icon --}}
+                <div class="relative mx-auto w-24 h-24 bg-sage/20 rounded-3xl flex items-center justify-center mb-8">
+                    <div class="w-16 h-16 bg-sage rounded-2xl flex items-center justify-center animate-bounce-soft">
+                        <svg class="w-10 h-10 text-cream" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                         </svg>
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm text-blue-700 text-left">
-                            <strong>Informasi:</strong><br>
-                            Proses verifikasi biasanya memakan waktu 1-3 hari kerja. 
-                            Kami akan mengirimkan email notifikasi setelah toko Anda disetujui.
-                        </p>
+                </div>
+
+                <h1 class="text-3xl font-bold text-forest mb-4">Registrasi Berhasil!</h1>
+                
+                <p class="text-forest/70 mb-8 leading-relaxed">
+                    Terima kasih telah mendaftar sebagai penjual di MartPlace. 
+                    Pendaftaran Anda sedang dalam proses verifikasi oleh tim kami.
+                </p>
+
+                {{-- Info Box --}}
+                <div class="bg-olive/10 rounded-2xl p-6 mb-8 text-left">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-sage/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-sage" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-forest mb-1">Langkah Selanjutnya</h3>
+                            <ul class="text-sm text-forest/70 space-y-2">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-sage rounded-full"></span>
+                                    Tim kami akan memverifikasi data Anda (1-3 hari kerja)
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-sage rounded-full"></span>
+                                    Notifikasi akan dikirim via email yang terdaftar
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 bg-sage rounded-full"></span>
+                                    Setelah disetujui, Anda dapat login dan upload produk
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="space-y-4">
-                <a href="{{ route('home') }}" 
-                   class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
-                    Kembali ke Beranda
-                </a>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{{ route('home') }}" 
+                       class="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-sage to-forest text-cream px-6 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        Ke Beranda
+                    </a>
+                    <a href="{{ route('products.index') }}" 
+                       class="flex-1 inline-flex items-center justify-center gap-2 bg-white text-forest px-6 py-4 rounded-xl font-semibold border-2 border-olive/30 hover:border-sage transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        Lihat Katalog
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm text-gray-400">&copy; 2025 MartPlace. All rights reserved.</p>
+    {{-- Footer --}}
+    <footer class="bg-forest text-cream py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-olive">&copy; {{ date('Y') }} MartPlace. All rights reserved.</p>
         </div>
     </footer>
+
+    <style>
+        @keyframes bounce-soft {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-soft {
+            animation: bounce-soft 2s ease-in-out infinite;
+        }
+    </style>
 </body>
 </html>

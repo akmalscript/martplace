@@ -16,17 +16,29 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.login-new');
     }
 
     /**
      * Handle an incoming authentication request.
+     * Redirects based on user role: admin → admin dashboard, seller → seller dashboard
      */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        // Redirect based on role
+        if ($user->isAdmin()) {
+            return redirect()->intended(route('admin.dashboard'));
+        }
+
+        if ($user->isSeller() && $user->seller) {
+            return redirect()->intended(route('seller.dashboard'));
+        }
 
         return redirect()->intended('/');
     }

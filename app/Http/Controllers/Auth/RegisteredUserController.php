@@ -16,10 +16,11 @@ class RegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
+     * Shows options: Seller registration or browse as visitor
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.register-new');
     }
 
     /**
