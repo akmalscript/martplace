@@ -86,12 +86,58 @@ class SellerController extends Controller
     }
 
     /**
-     * Display all sellers (admin only).
+     * Display all sellers (public directory).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sellers = Seller::latest()->paginate(15);
-        return view('sellers.index', compact('sellers'));
+        $query = Seller::active()->with('products');
+
+        // Search by store name
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('store_name', 'like', "%{$request->search}%");
+        }
+
+        // Filter by city
+        if ($request->has('city') && !empty($request->city)) {
+            $query->where('city', $request->city);
+        }
+
+        // Filter by province
+        if ($request->has('province') && !empty($request->province)) {
+            $query->where('province', $request->province);
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort', 'latest');
+        switch ($sortBy) {
+            case 'rating':
+                $query->orderBy('rating', 'desc');
+                break;
+            case 'products':
+                $query->orderBy('total_products', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        $sellers = $query->paginate(12);
+
+        // Get unique cities and provinces for filters
+        $cities = Seller::active()
+            ->whereNotNull('city')
+            ->distinct()
+            ->pluck('city')
+            ->sort()
+            ->values();
+
+        $provinces = Seller::active()
+            ->whereNotNull('province')
+            ->distinct()
+            ->pluck('province')
+            ->sort()
+            ->values();
+
+        return view('sellers.index', compact('sellers', 'cities', 'provinces'));
     }
 
     /**

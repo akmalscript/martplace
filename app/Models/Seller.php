@@ -36,6 +36,11 @@ class Seller extends Model
         'pic_photo_path',
         'pic_ktp_file_path',
         'status',
+        'city',
+        'province',
+        'district',
+        'rating',
+        'total_products',
     ];
 
     protected $casts = [
@@ -160,5 +165,26 @@ class Seller extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Relationship to Products
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
+
+    // Scope for searching sellers
+    public function scopeSearch($query, $keyword)
+    {
+        return $query->where('store_name', 'like', "%{$keyword}%")
+            ->orWhere('city', 'like', "%{$keyword}%")
+            ->orWhere('province', 'like', "%{$keyword}%")
+            ->orWhere('district', 'like', "%{$keyword}%");
+    }
+
+    // Scope for active sellers
+    public function scopeActive($query)
+    {
+        return $query->where('status', SellerStatus::ACTIVE);
     }
 }
