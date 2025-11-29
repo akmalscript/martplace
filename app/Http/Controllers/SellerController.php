@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SellerCredentials;
+use App\Mail\SellerApproved;
+use App\Mail\SellerRejected;
 
 class SellerController extends Controller
 {
@@ -101,8 +102,17 @@ class SellerController extends Controller
         $seller = Seller::findOrFail($id);
 
         if ($seller->approve()) {
-            return redirect()->back()
-                ->with('success', 'Seller berhasil disetujui.');
+            try {
+                Mail::to($seller->pic_email)->send(new SellerApproved($seller));
+                
+                return redirect()->back()
+                    ->with('success', 'Seller berhasil disetujui dan email notifikasi telah dikirim.');
+            } catch (\Exception $e) {
+                \Log::error('Failed to send approval email: ' . $e->getMessage());
+                
+                return redirect()->back()
+                    ->with('warning', 'Seller berhasil disetujui, namun email notifikasi gagal dikirim.');
+            }
         }
 
         return redirect()->back()
@@ -112,13 +122,28 @@ class SellerController extends Controller
     /**
      * Reject seller (admin only).
      */
-    public function reject(string $id)
+    public function reject(Request $request, string $id)
     {
         $seller = Seller::findOrFail($id);
+        
+        $request->validate([
+            'reason' => 'nullable|string|max:1000'
+        ]);
+        
+        $reason = $request->input('reason', 'Dokumen atau data yang Anda kirimkan tidak memenuhi persyaratan kami.');
 
         if ($seller->batal()) {
-            return redirect()->back()
-                ->with('success', 'Seller berhasil ditolak.');
+            try {
+                Mail::to($seller->pic_email)->send(new SellerRejected($seller, $reason));
+                
+                return redirect()->back()
+                    ->with('success', 'Seller berhasil ditolak dan email notifikasi telah dikirim.');
+            } catch (\Exception $e) {
+                \Log::error('Failed to send rejection email: ' . $e->getMessage());
+                
+                return redirect()->back()
+                    ->with('warning', 'Seller berhasil ditolak, namun email notifikasi gagal dikirim.');
+            }
         }
 
         return redirect()->back()
