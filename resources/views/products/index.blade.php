@@ -15,12 +15,10 @@
             overflow: hidden;
         }
 
-        /* Smooth scroll behavior */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Navbar blur transition */
         .navbar-blur {
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -32,61 +30,21 @@
             background-color: rgba(255, 255, 255, 1);
         }
 
-        /* Fade in up animation */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Fade in animation */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Scale in animation */
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        /* Slide in from left */
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* Float animation for decorative elements */
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
 
-        /* Shimmer effect */
         @keyframes shimmer {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
 
-        /* Animate on scroll - initially hidden */
         .animate-on-scroll {
             opacity: 0;
             transform: translateY(30px);
@@ -98,7 +56,6 @@
             transform: translateY(0);
         }
 
-        /* Stagger animation for grid items */
         .stagger-item {
             opacity: 0;
             transform: translateY(40px) scale(0.95);
@@ -110,7 +67,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Product card hover effects */
         .product-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -148,7 +104,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Button hover effects */
         .btn-elegant {
             position: relative;
             overflow: hidden;
@@ -175,7 +130,6 @@
             box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
         }
 
-        /* Filter button effects */
         .filter-btn {
             position: relative;
             overflow: hidden;
@@ -203,7 +157,6 @@
             transform: translateY(-2px);
         }
 
-        /* Gradient text */
         .gradient-text {
             background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
             -webkit-background-clip: text;
@@ -211,7 +164,6 @@
             background-clip: text;
         }
 
-        /* Decorative gradient orbs */
         .gradient-orb {
             position: absolute;
             border-radius: 50%;
@@ -220,7 +172,6 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        /* Search input focus effect */
         .search-input {
             transition: all 0.3s ease;
         }
@@ -229,7 +180,6 @@
             box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
-        /* Badge pulse animation */
         .badge-pulse {
             animation: pulse 2s infinite;
         }
@@ -239,14 +189,6 @@
             50% { opacity: 0.7; }
         }
 
-        /* Loading skeleton */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -264,12 +206,6 @@
             background: linear-gradient(180deg, #059669, #0891b2);
         }
 
-        /* Hero section parallax */
-        .hero-parallax {
-            background-attachment: fixed;
-        }
-
-        /* Glass morphism effect */
         .glass {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
@@ -320,7 +256,6 @@
          :class="scrolled ? 'navbar-blur shadow-lg shadow-emerald-500/5' : 'navbar-solid'">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 lg:h-20">
-                <!-- Logo with animation -->
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="group flex items-center space-x-2">
                         <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
@@ -330,7 +265,6 @@
                     </a>
                 </div>
 
-                <!-- Search Bar with enhanced styling -->
                 <div class="hidden md:flex flex-1 max-w-xl mx-8">
                     <form action="{{ route('products.index') }}" method="GET" class="relative w-full group">
                         <div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -348,7 +282,6 @@
                     </form>
                 </div>
 
-                <!-- Nav Links -->
                 <div class="flex items-center space-x-3 lg:space-x-6">
                     <a href="{{ route('home') }}" class="hidden sm:flex items-center space-x-1 text-slate-600 hover:text-emerald-600 transition-colors group">
                         <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -364,7 +297,6 @@
                         <span class="font-medium">Toko</span>
                     </a>
 
-                    <!-- Cart Icon -->
                     <button class="relative p-2 text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all group">
                         <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -453,7 +385,6 @@
         <div class="animate-on-scroll mb-10">
             <div class="glass rounded-2xl p-4 lg:p-6">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    <!-- Filter Buttons -->
                     <div class="flex flex-wrap gap-2 lg:gap-3">
                         <a href="{{ route('products.index', array_merge(request()->except('sort'), ['sort' => 'latest'])) }}"
                             class="filter-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all {{ request('sort', 'latest') == 'latest' ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-emerald-500/25 active' : 'bg-white text-slate-600 hover:text-emerald-600 shadow-sm' }}">
@@ -493,7 +424,6 @@
                         </a>
                     </div>
 
-                    <!-- View Toggle -->
                     <div class="flex items-center gap-3">
                         <span class="text-sm text-slate-500">Tampilan:</span>
                         <div class="flex bg-white rounded-xl p-1 shadow-sm">
@@ -514,7 +444,6 @@
         </div>
 
         @if ($products->isEmpty())
-            <!-- Empty State with Animation -->
             <div class="animate-on-scroll text-center py-20">
                 <div class="relative inline-block">
                     <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full blur-2xl opacity-20 animate-pulse"></div>
@@ -534,15 +463,12 @@
                 </a>
             </div>
         @else
-            <!-- Products Grid with Stagger Animation -->
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6 mb-12">
                 @foreach ($products as $index => $product)
                     <a href="{{ route('products.show', $product->id) }}"
                         class="stagger-item product-card group bg-white rounded-2xl shadow-sm overflow-hidden"
                         data-index="{{ $index }}">
-                        <!-- Image Container -->
                         <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-100 to-slate-50">
-                            <!-- Discount Badge -->
                             @if ($product->discount_percentage > 0)
                                 <div class="absolute top-3 left-3 z-20">
                                     <span class="inline-flex items-center px-2.5 py-1 bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-bold rounded-lg shadow-lg shadow-rose-500/25">
@@ -551,20 +477,17 @@
                                 </div>
                             @endif
 
-                            <!-- Product Image -->
                             <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                 class="product-image w-full h-full object-cover"
-                                onerror="this.src='https://via.placeholder.com/300x300/f1f5f9/94a3b8?text=No+Image'"
+                                onerror="this.onerror=null; this.src='https://placehold.co/300x300/f1f5f9/94a3b8?text=No+Image'"
                                 loading="lazy">
 
-                            <!-- Hover Overlay -->
                             <div class="product-overlay absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent flex items-end justify-center pb-4">
                                 <span class="quick-view-btn px-4 py-2 bg-white/95 backdrop-blur text-slate-800 text-sm font-semibold rounded-xl shadow-lg">
                                     Lihat Detail
                                 </span>
                             </div>
 
-                            <!-- Badge -->
                             @if ($product->badge)
                                 <div class="absolute bottom-3 left-3 z-10">
                                     <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg
@@ -582,13 +505,11 @@
                             @endif
                         </div>
 
-                        <!-- Product Info -->
                         <div class="p-4">
                             <h3 class="text-sm font-medium text-slate-800 mb-2 line-clamp-2 group-hover:text-emerald-600 transition-colors">
                                 {{ $product->name }}
                             </h3>
 
-                            <!-- Price -->
                             <div class="flex items-baseline gap-2 mb-3">
                                 <span class="text-lg font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
                                     {{ $product->formatted_price }}
@@ -600,7 +521,6 @@
                                 @endif
                             </div>
 
-                            <!-- Rating & Sales -->
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="flex items-center gap-1">
                                     <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
@@ -612,7 +532,6 @@
                                 <span class="text-xs text-slate-500">{{ number_format($product->sold_count) }} terjual</span>
                             </div>
 
-                            <!-- Location -->
                             <div class="flex items-center gap-1 text-xs text-slate-400">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -625,7 +544,6 @@
                 @endforeach
             </div>
 
-            <!-- Pagination -->
             <div class="animate-on-scroll flex justify-center">
                 <div class="glass rounded-2xl px-6 py-4">
                     {{ $products->links() }}
@@ -636,7 +554,6 @@
 
     <!-- Footer -->
     <footer class="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
-        <!-- Decorative Elements -->
         <div class="absolute inset-0 overflow-hidden pointer-events-none">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500 rounded-full filter blur-3xl opacity-10"></div>
             <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500 rounded-full filter blur-3xl opacity-10"></div>
@@ -644,7 +561,6 @@
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                <!-- Brand -->
                 <div class="md:col-span-1">
                     <div class="flex items-center space-x-2 mb-4">
                         <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-xl flex items-center justify-center">
@@ -657,7 +573,6 @@
                     </p>
                 </div>
 
-                <!-- Links -->
                 <div>
                     <h4 class="font-semibold mb-4 text-white">Tentang</h4>
                     <ul class="space-y-3 text-sm text-slate-400">

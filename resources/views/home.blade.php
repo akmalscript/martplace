@@ -506,7 +506,7 @@
                             @endif
                             <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                 class="w-full h-48 object-cover"
-                                onerror="this.src='https://via.placeholder.com/200x200/E5E5E5/999999?text=No+Image'"
+                                onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
                                 loading="lazy">
                             @if ($product->badge)
                                 <span

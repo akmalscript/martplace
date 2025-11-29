@@ -37,5 +37,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProductCategorySeeder::class,
         ]);
+
+        // Run other seeders
+        $this->call([
+            SellerSeeder::class,
+            ProductSeeder::class,
+        ]);
     }
 }
