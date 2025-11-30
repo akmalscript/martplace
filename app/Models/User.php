@@ -48,6 +48,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the seller profile associated with the user.
+     */
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+    /**
      * Check if user is admin.
      */
     public function isAdmin(): bool

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\SellerDashboardController;
 use App\Http\Controllers\WilayahController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/sellers/{id}', [SellerController::class, 'show'])->name('sellers.show');
     Route::post('/sellers/{id}/approve', [SellerController::class, 'approve'])->name('sellers.approve');
     Route::post('/sellers/{id}/reject', [SellerController::class, 'reject'])->name('sellers.reject');
+});
+
+// Seller Dashboard Routes (requires authentication and active seller status)
+Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(function () {
+    Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
 });
 
 // Wilayah API Proxy Routes
