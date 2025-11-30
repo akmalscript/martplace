@@ -77,18 +77,9 @@ class SellerController extends Controller
     }
 
     /**
-     * Display the specified seller.
+     * Display public seller directory.
      */
-    public function show(string $id)
-    {
-        $seller = Seller::findOrFail($id);
-        return view('sellers.show', compact('seller'));
-    }
-
-    /**
-     * Display all sellers (public directory).
-     */
-    public function index(Request $request)
+    public function publicIndex(Request $request)
     {
         $query = Seller::active()->with('products');
 
@@ -122,7 +113,6 @@ class SellerController extends Controller
 
         $sellers = $query->paginate(12);
 
-        // Get unique cities and provinces for filters
         $cities = Seller::active()
             ->whereNotNull('city')
             ->distinct()
@@ -138,6 +128,33 @@ class SellerController extends Controller
             ->values();
 
         return view('sellers.index', compact('sellers', 'cities', 'provinces'));
+    }
+
+    /**
+     * Display public seller detail.
+     */
+    public function publicShow(string $id)
+    {
+        $seller = Seller::active()->findOrFail($id);
+        return view('sellers.show', compact('seller'));
+    }
+
+    /**
+     * Display the specified seller for admin review.
+     */
+    public function show(string $id)
+    {
+        $seller = Seller::findOrFail($id);
+        return view('admin.sellers-show', compact('seller'));
+    }
+
+    /**
+     * Display all sellers for admin management.
+     */
+    public function index()
+    {
+        $sellers = Seller::latest()->paginate(15);
+        return view('admin.sellers-index', compact('sellers'));
     }
 
     /**

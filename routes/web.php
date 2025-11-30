@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -17,6 +18,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin Routes (requires authentication and admin role)
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // Seller Management
+    Route::get('/sellers', [SellerController::class, 'index'])->name('sellers.index');
+    Route::get('/sellers/{id}', [SellerController::class, 'show'])->name('sellers.show');
+    Route::post('/sellers/{id}/approve', [SellerController::class, 'approve'])->name('sellers.approve');
+    Route::post('/sellers/{id}/reject', [SellerController::class, 'reject'])->name('sellers.reject');
 });
 
 // Wilayah API Proxy Routes
@@ -37,17 +49,11 @@ Route::prefix('products')->name('products.')->group(function () {
 // Seller Routes
 Route::prefix('sellers')->name('sellers.')->group(function () {
     // Public routes
-    Route::get('/', [SellerController::class, 'index'])->name('index');
+    Route::get('/', [SellerController::class, 'publicIndex'])->name('index');
     Route::get('/register', [SellerController::class, 'create'])->name('create');
     Route::post('/register', [SellerController::class, 'store'])->name('store');
     Route::get('/success', [SellerController::class, 'success'])->name('success');
-    Route::get('/{id}', [SellerController::class, 'show'])->name('show');
-
-    // Protected routes (requires authentication - admin only)
-    Route::middleware('auth')->group(function () {
-        Route::post('/{id}/approve', [SellerController::class, 'approve'])->name('approve');
-        Route::post('/{id}/reject', [SellerController::class, 'reject'])->name('reject');
-    });
+    Route::get('/{id}', [SellerController::class, 'publicShow'])->name('show');
 });
 
 require __DIR__.'/auth.php';
