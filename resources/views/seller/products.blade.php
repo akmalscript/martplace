@@ -43,19 +43,20 @@
             <nav class="p-6 space-y-2">
                 <a href="{{ route('seller.dashboard') }}" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
                     <i class="fas fa-chart-line w-5"></i>
-                    <span>Dashboard</span>
+                    <span>Dashboard Seller</span>
                 </a>
                 <a href="{{ route('seller.products') }}" class="flex items-center space-x-3 p-3 rounded-lg bg-green-50 text-green-600 font-semibold">
                     <i class="fas fa-box w-5"></i>
-                    <span>Produk Saya</span>
+                    <span>Kelola Produk</span>
                 </a>
-                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <i class="fas fa-shopping-cart w-5"></i>
-                    <span>Pesanan</span>
+                <a href="{{ route('seller.reports') }}" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-file-alt w-5"></i>
+                    <span>Laporan Seller</span>
                 </a>
-                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <i class="fas fa-store-alt w-5"></i>
-                    <span>Lihat Toko</span>
+                <hr class="my-4">
+                <a href="{{ route('home') }}" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <i class="fas fa-globe w-5"></i>
+                    <span>Lihat Website</span>
                 </a>
             </nav>
         </aside>

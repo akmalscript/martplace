@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -30,6 +31,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/sellers/{id}', [SellerController::class, 'show'])->name('sellers.show');
     Route::post('/sellers/{id}/approve', [SellerController::class, 'approve'])->name('sellers.approve');
     Route::post('/sellers/{id}/reject', [SellerController::class, 'reject'])->name('sellers.reject');
+
+    // Product Management (Kelola Produk)
+    Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
+    Route::get('/products/{id}', [AdminProductController::class, 'show'])->name('products.show');
+    Route::post('/products/{id}/suspend', [AdminProductController::class, 'suspend'])->name('products.suspend');
+    Route::post('/products/{id}/activate', [AdminProductController::class, 'activate'])->name('products.activate');
+    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('products.destroy');
 });
 
 // Seller Dashboard Routes (requires authentication and active seller status)
@@ -41,6 +49,7 @@ Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(
     Route::get('/products/{id}/edit', [SellerDashboardController::class, 'editProduct'])->name('products.edit');
     Route::put('/products/{id}', [SellerDashboardController::class, 'updateProduct'])->name('products.update');
     Route::delete('/products/{id}', [SellerDashboardController::class, 'deleteProduct'])->name('products.delete');
+    Route::get('/reports', [SellerDashboardController::class, 'reports'])->name('reports');
 });
 
 // Wilayah API Proxy Routes

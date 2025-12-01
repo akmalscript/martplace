@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MartPlace - Marketplace Terpercaya</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         .line-clamp-2 {
@@ -17,8 +18,69 @@
     </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- Navbar -->
+@php
+    $isSeller = Auth::check() && Auth::user()->seller && Auth::user()->seller->status === \App\Enums\SellerStatus::ACTIVE;
+@endphp
+
+<body class="bg-gray-50" x-data="{ sidebarOpen: false }">
+    @if($isSeller)
+    <!-- Seller Navbar -->
+    <nav class="bg-gradient-to-r from-cyan-400 to-green-300 shadow-lg fixed top-0 left-0 right-0 z-50">
+        <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-white lg:hidden">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                    <a href="{{ route('home') }}" class="text-2xl font-bold text-white flex items-center">
+                        <i class="fas fa-store mr-2"></i>MartPlace
+                    </a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <span class="text-white font-semibold hidden md:block">
+                        <i class="fas fa-user mr-2"></i>{{ Auth::user()->seller->store_name }}
+                    </span>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-white hover:text-gray-100 transition">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seller Sidebar -->
+    <aside class="fixed top-16 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-40 w-64"
+        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+        <div class="p-6">
+            <nav class="space-y-2">
+                <a href="{{ route('seller.dashboard') }}"
+                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-chart-line mr-3 w-5"></i>Dashboard Seller
+                </a>
+                <a href="{{ route('seller.products') }}"
+                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-box mr-3 w-5"></i>Kelola Produk
+                </a>
+                <a href="{{ route('seller.reports') }}"
+                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-file-alt mr-3 w-5"></i>Laporan Seller
+                </a>
+                <hr class="my-4">
+                <a href="{{ route('home') }}"
+                    class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
+                    <i class="fas fa-globe mr-3 w-5"></i>Lihat Website
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content with Sidebar Offset -->
+    <main class="lg:ml-64 pt-16">
+    @else
+    <!-- Regular Navbar -->
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -288,6 +350,9 @@
             </div>
         </div>
     </nav>
+    
+    <main>
+    @endif
 
     <!-- Hero Banner -->
     <section class="bg-gradient-to-r from-cyan-400 to-green-300 py-16">
@@ -520,8 +585,10 @@
         </div>
     </section>
 
+    </main>
+
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
+    <footer class="bg-gray-800 text-white py-8 mt-12 @if($isSeller) lg:ml-64 @endif">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>

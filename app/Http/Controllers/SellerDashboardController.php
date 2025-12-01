@@ -375,4 +375,55 @@ class SellerDashboardController extends Controller
             return back()->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
     }
+
+    public function reports()
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        // Basic statistics for reports
+        $totalProducts = Product::where('seller_id', $seller->id)->count();
+        $activeProducts = Product::where('seller_id', $seller->id)->where('is_active', true)->count();
+        $totalStock = Product::where('seller_id', $seller->id)->sum('stock');
+        $totalSold = Product::where('seller_id', $seller->id)->sum('sold_count');
+        $averageRating = Product::where('seller_id', $seller->id)->avg('average_rating');
+        $totalReviews = Product::where('seller_id', $seller->id)->sum('total_reviews');
+
+        // Products by category
+        $productsByCategory = Product::where('seller_id', $seller->id)
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->select('categories.name as category', DB::raw('count(*) as total'), DB::raw('sum(products.sold_count) as sold'))
+            ->groupBy('categories.name')
+            ->orderBy('total', 'desc')
+            ->get();
+
+        // Top selling products
+        $topSellingProducts = Product::where('seller_id', $seller->id)
+            ->orderBy('sold_count', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Low stock products (stock < 10)
+        $lowStockProducts = Product::where('seller_id', $seller->id)
+            ->where('stock', '<', 10)
+            ->where('is_active', true)
+            ->orderBy('stock', 'asc')
+            ->get();
+
+        return view('seller.reports', compact(
+            'seller',
+            'totalProducts',
+            'activeProducts',
+            'totalStock',
+            'totalSold',
+            'averageRating',
+            'totalReviews',
+            'productsByCategory',
+            'topSellingProducts',
+            'lowStockProducts'
+        ));
+    }
 }

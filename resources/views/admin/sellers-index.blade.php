@@ -49,7 +49,7 @@
                     class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
                     <i class="fas fa-store mr-3 w-5"></i>Kelola Seller
                 </a>
-                <a href="{{ route('products.index') }}"
+                <a href="{{ route('admin.products.index') }}"
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
                     <i class="fas fa-box mr-3 w-5"></i>Kelola Produk
                 </a>
