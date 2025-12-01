@@ -76,23 +76,29 @@
 
                                 <div class="space-y-5">
                                     <!-- Email Input -->
-                                    <div class="relative">
-                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
-                                            </svg>
-                                        </div>
-                                        <input id="email" name="email" type="email" autocomplete="email" required
-                                            value="{{ old('email') }}"
-                                            class="w-full pl-14 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-base focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 transition"
-                                            placeholder="Email Address">
-                                        @error('email')
-                                            <div class="absolute right-4 top-4">
-                                                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    <div>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                                 </svg>
                                             </div>
-                                            <p class="text-sm text-red-600 mt-1.5">{{ $message }}</p>
+                                            <input id="email" name="email" type="email" autocomplete="email" required
+                                                value="{{ old('email') }}"
+                                                class="w-full pl-14 pr-12 py-4 bg-gray-50 border @error('email') border-red-300 @else border-gray-200 @enderror rounded-xl text-base focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 transition"
+                                                placeholder="Email Address">
+                                            @error('email')
+                                                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        @error('email')
+                                            <div class="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                <p class="text-sm text-red-600 leading-relaxed">{{ $message }}</p>
+                                            </div>
                                         @enderror
                                     </div>
 

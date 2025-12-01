@@ -349,8 +349,6 @@
 </head>
 
 <body class="font-sans antialiased bg-gray-50">
-    @include('layouts.navbar')
-
     <!-- Store Header -->
     <section class="bg-gradient-to-r from-green-400 to-cyan-300 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

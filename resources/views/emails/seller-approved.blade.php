@@ -71,7 +71,7 @@
         .button {
             display: inline-block;
             background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-            color: white;
+            color: white !important;
             padding: 15px 40px;
             text-decoration: none;
             border-radius: 8px;

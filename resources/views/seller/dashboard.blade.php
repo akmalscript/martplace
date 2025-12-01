@@ -48,7 +48,7 @@
                     class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
                     <i class="fas fa-chart-line mr-3 w-5"></i>Dashboard
                 </a>
-                <a href="#"
+                <a href="{{ route('seller.products') }}"
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
                     <i class="fas fa-box mr-3 w-5"></i>Produk Saya
                 </a>

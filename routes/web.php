@@ -35,6 +35,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // Seller Dashboard Routes (requires authentication and active seller status)
 Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(function () {
     Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/products', [SellerDashboardController::class, 'products'])->name('products');
+    Route::get('/products/create', [SellerDashboardController::class, 'createProduct'])->name('products.create');
+    Route::post('/products', [SellerDashboardController::class, 'storeProduct'])->name('products.store');
 });
 
 // Wilayah API Proxy Routes

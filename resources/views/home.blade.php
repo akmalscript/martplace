@@ -226,16 +226,6 @@
 
                 <!-- Right Side Icons & Buttons -->
                 <div class="flex items-center space-x-4">
-                    <!-- Direktori Toko Link -->
-                    <a href="{{ route('sellers.index') }}"
-                        class="text-gray-700 hover:text-green-600 transition flex items-center gap-1">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="text-sm font-medium hidden lg:inline">Toko</span>
-                    </a>
-
                     <!-- Cart Icon -->
                     <a href="#" class="text-gray-700 hover:text-green-600 transition">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

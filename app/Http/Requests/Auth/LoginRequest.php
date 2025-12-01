@@ -49,6 +49,22 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if user is a seller with non-active status
+        $user = Auth::user();
+        if ($user->seller && $user->seller->status !== \App\Enums\SellerStatus::ACTIVE) {
+            Auth::logout();
+            
+            $statusMessage = match($user->seller->status) {
+                \App\Enums\SellerStatus::PENDING => 'Akun seller Anda masih menunggu persetujuan admin. Silakan cek email Anda untuk notifikasi lebih lanjut.',
+                \App\Enums\SellerStatus::REJECTED => 'Akun seller Anda ditolak. Silakan hubungi admin atau daftar ulang.',
+                default => 'Akun seller Anda tidak aktif. Silakan hubungi admin.'
+            };
+
+            throw ValidationException::withMessages([
+                'email' => $statusMessage,
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

@@ -22,12 +22,18 @@ class Product extends Model
         'discount_percentage',
         'badge',
         'is_active',
+        'has_variants',
+        'min_order',
+        'max_order',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'original_price' => 'decimal:2',
         'is_active' => 'boolean',
+        'has_variants' => 'boolean',
+        'min_order' => 'integer',
+        'max_order' => 'integer',
     ];
 
     /**
@@ -36,6 +42,30 @@ class Product extends Model
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class);
+    }
+
+    /**
+     * Relationship: Product has many variants
+     */
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    /**
+     * Relationship: Product has many images
+     */
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('order');
+    }
+
+    /**
+     * Get primary image
+     */
+    public function primaryImage()
+    {
+        return $this->hasOne(ProductImage::class)->where('is_primary', true);
     }
 
     /**
