@@ -4,142 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk - MartPlace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#F1F3E0',
+                        olive: '#D2DCB6',
+                        sage: '#A1BC98',
+                        forest: '#778873',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', 'Poppins', sans-serif; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 6s ease-in-out infinite; animation-delay: 2s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-cream text-forest antialiased">
     <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
         <!-- Decorative Background Elements -->
-        <div class="absolute top-0 right-0 w-1/2 h-64 bg-gradient-to-br from-green-300 to-green-400 opacity-20 rounded-bl-full transform translate-x-32 -translate-y-16"></div>
-        <div class="absolute bottom-0 left-0 w-1/2 h-64 bg-gradient-to-tr from-green-300 to-green-400 opacity-20 rounded-tr-full transform -translate-x-32 translate-y-16"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-sage/20 rounded-full blur-3xl animate-float pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-olive/30 rounded-full blur-3xl animate-float-delayed pointer-events-none"></div>
+        <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-sage/10 rounded-full blur-2xl pointer-events-none"></div>
 
-        <div class="w-full max-w-6xl mx-auto relative z-10">
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div class="w-full max-w-5xl mx-auto relative z-10">
+            <div class="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-forest/10 overflow-hidden border border-olive/10">
                 <div class="flex flex-col lg:flex-row">
-                    <!-- Left Side - Illustration -->
-                    <div class="lg:w-1/2 p-12 flex items-center justify-center bg-gradient-to-br from-white to-gray-50">
-                        <div class="text-center">
-                            <!-- Logo -->
-                            <div class="mb-8">
-                                <a href="{{ url('/') }}" class="text-4xl font-bold text-green-600">MartPlace</a>
-                            </div>
+                    <!-- Left Side - Branding -->
+                    <div class="lg:w-1/2 p-8 lg:p-12 flex items-center justify-center bg-gradient-to-br from-sage/10 via-olive/5 to-cream relative overflow-hidden">
+                        <div class="absolute top-10 right-10 w-20 h-20 border-2 border-sage/20 rounded-full pointer-events-none"></div>
+                        <div class="absolute bottom-20 left-10 w-32 h-32 border-2 border-olive/20 rounded-full pointer-events-none"></div>
+                        
+                        <div class="text-center relative z-10">
+                            <a href="{{ url('/') }}" class="inline-flex items-center gap-3 mb-8 group">
+                                <div class="w-14 h-14 bg-gradient-to-br from-sage to-forest rounded-2xl flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-sage/30">
+                                    <span class="text-cream font-bold text-2xl">M</span>
+                                </div>
+                                <span class="text-3xl font-bold bg-gradient-to-r from-sage to-forest bg-clip-text text-transparent">MartPlace</span>
+                            </a>
 
-                            <!-- Illustration SVG -->
-                            <div class="relative">
-                                <svg viewBox="0 0 400 300" class="w-full max-w-md mx-auto" xmlns="http://www.w3.org/2000/svg">
-                                    <!-- Desk -->
-                                    <rect x="80" y="180" width="240" height="8" fill="#10b981" rx="4"/>
-                                    <rect x="80" y="188" width="240" height="80" fill="#34d399" rx="4"/>
-                                    
-                                    <!-- Laptop -->
-                                    <rect x="120" y="140" width="80" height="50" fill="#e5e7eb" rx="2"/>
-                                    <rect x="125" y="145" width="70" height="40" fill="#60a5fa" rx="1"/>
-                                    <line x1="160" y1="190" x2="160" y2="180" stroke="#9ca3af" stroke-width="2"/>
-                                    
-                                    <!-- Plant Pot -->
-                                    <ellipse cx="280" cy="268" rx="20" ry="8" fill="#fbbf24"/>
-                                    <path d="M 260 268 Q 260 250 280 230 Q 300 250 300 268 Z" fill="#10b981"/>
-                                    <ellipse cx="280" cy="240" rx="8" ry="6" fill="#059669"/>
-                                    
-                                    <!-- Person 1 -->
-                                    <circle cx="90" cy="140" r="20" fill="#fbbf24"/>
-                                    <path d="M 70 160 L 70 210 L 85 210 L 85 185 L 95 185 L 95 210 L 110 210 L 110 160 Z" fill="#fbbf24"/>
-                                    <rect x="55" y="190" width="25" height="30" fill="#ef4444" rx="2"/>
-                                    
-                                    <!-- Person 2 -->
-                                    <circle cx="240" cy="140" r="20" fill="#fbbf24"/>
-                                    <path d="M 220 160 L 220 210 L 235 210 L 235 185 L 245 185 L 245 210 L 260 210 L 260 160 Z" fill="#8b5cf6"/>
-                                    
-                                    <!-- Shopping Bag -->
-                                    <rect x="50" y="205" width="30" height="35" fill="#ef4444" rx="2"/>
-                                    <path d="M 55 210 Q 65 200 75 210" fill="none" stroke="#dc2626" stroke-width="2"/>
-                                    
-                                    <!-- Decorative Dots -->
-                                    <circle cx="320" cy="120" r="4" fill="#10b981" opacity="0.4"/>
-                                    <circle cx="340" cy="140" r="3" fill="#10b981" opacity="0.4"/>
-                                    <circle cx="60" cy="100" r="4" fill="#10b981" opacity="0.4"/>
-                                    <circle cx="80" cy="120" r="3" fill="#10b981" opacity="0.4"/>
+                            <div class="relative mb-8">
+                                <svg viewBox="0 0 400 280" class="w-full max-w-sm mx-auto" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="200" cy="250" rx="150" ry="20" fill="#D2DCB6" opacity="0.5"/>
+                                    <rect x="80" y="180" width="240" height="8" fill="#778873" rx="4"/>
+                                    <rect x="90" y="188" width="220" height="60" fill="#A1BC98" rx="4"/>
+                                    <rect x="130" y="145" width="90" height="45" fill="#F1F3E0" rx="4" stroke="#778873" stroke-width="2"/>
+                                    <rect x="135" y="150" width="80" height="35" fill="#778873" rx="2"/>
+                                    <rect x="140" y="155" width="70" height="25" fill="#A1BC98" rx="1"/>
+                                    <rect x="120" y="190" width="110" height="6" fill="#D2DCB6" rx="3"/>
+                                    <rect x="270" y="150" width="30" height="35" fill="#D2DCB6" rx="4"/>
+                                    <ellipse cx="285" cy="145" rx="18" ry="20" fill="#A1BC98"/>
+                                    <ellipse cx="280" cy="140" rx="10" ry="12" fill="#778873"/>
+                                    <circle cx="200" cy="100" r="25" fill="#D2DCB6"/>
+                                    <circle cx="200" cy="95" r="20" fill="#F1F3E0" stroke="#778873" stroke-width="2"/>
+                                    <circle cx="193" cy="92" r="2" fill="#778873"/>
+                                    <circle cx="207" cy="92" r="2" fill="#778873"/>
+                                    <path d="M195 100 Q200 105 205 100" fill="none" stroke="#778873" stroke-width="2" stroke-linecap="round"/>
+                                    <rect x="180" y="120" width="40" height="50" fill="#A1BC98" rx="4"/>
+                                    <circle cx="320" cy="80" r="6" fill="#A1BC98" opacity="0.6"/>
+                                    <circle cx="80" cy="100" r="4" fill="#D2DCB6" opacity="0.8"/>
                                 </svg>
                             </div>
+                            
+                            <h2 class="text-xl font-semibold text-forest mb-2">Selamat Berbelanja!</h2>
+                            <p class="text-forest/60 text-sm max-w-xs mx-auto">Temukan ribuan produk berkualitas dari penjual terpercaya</p>
                         </div>
                     </div>
 
                     <!-- Right Side - Login Form -->
-                    <div class="lg:w-1/2 p-12 flex items-center">
+                    <div class="lg:w-1/2 p-8 lg:p-12 flex items-center bg-white">
                         <div class="w-full max-w-md mx-auto">
-                            <header class="mb-10">
-                                <h1 class="text-4xl font-bold text-gray-900 mb-3">Selamat Datang!</h1>
-                                <p class="text-gray-600 text-base">Silakan masuk dengan email dan password Anda</p>
+                            <header class="mb-8">
+                                <h1 class="text-3xl font-bold text-forest mb-2">Selamat Datang!</h1>
+                                <p class="text-forest/60">Silakan masuk dengan akun Anda</p>
                             </header>
 
                             <form class="space-y-5" action="{{ route('login') }}" method="POST">
                                 @csrf
 
-                                <div class="space-y-5">
-                                    <!-- Email Input -->
-                                    <div>
-                                        <div class="relative">
-                                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
-                                                </svg>
-                                            </div>
-                                            <input id="email" name="email" type="email" autocomplete="email" required
-                                                value="{{ old('email') }}"
-                                                class="w-full pl-14 pr-12 py-4 bg-gray-50 border @error('email') border-red-300 @else border-gray-200 @enderror rounded-xl text-base focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 transition"
-                                                placeholder="Email Address">
-                                            @error('email')
-                                                <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                                    </svg>
-                                                </div>
-                                            @enderror
-                                        </div>
-                                        @error('email')
-                                            <div class="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                                <p class="text-sm text-red-600 leading-relaxed">{{ $message }}</p>
-                                            </div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Password Input -->
+                                <!-- Email Input -->
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-forest mb-2">Email</label>
                                     <div class="relative">
                                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            <svg class="h-5 w-5 text-forest/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                                            </svg>
+                                        </div>
+                                        <input id="email" name="email" type="email" autocomplete="email" required
+                                            value="{{ old('email') }}"
+                                            class="w-full pl-12 pr-4 py-3.5 bg-cream/50 border border-olive/30 rounded-xl text-forest placeholder-forest/40 focus:border-sage focus:bg-white focus:ring-2 focus:ring-sage/20 focus:outline-none transition-all duration-300 @error('email') border-red-300 bg-red-50/50 @enderror"
+                                            placeholder="nama@email.com">
+                                    </div>
+                                    @error('email')
+                                        <div class="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                            <p class="text-sm text-red-600">{{ $message }}</p>
+                                        </div>
+                                    @enderror
+                                </div>
+
+                                <!-- Password Input -->
+                                <div>
+                                    <label for="password" class="block text-sm font-medium text-forest mb-2">Password</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <svg class="h-5 w-5 text-forest/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                             </svg>
                                         </div>
                                         <input id="password" name="password" type="password" autocomplete="current-password" required
-                                            class="w-full pl-14 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-base focus:border-green-500 focus:bg-white focus:ring-2 focus:ring-green-200 transition"
-                                            placeholder="Password">
-                                        @error('password')
-                                            <p class="text-sm text-red-600 mt-1.5">{{ $message }}</p>
-                                        @enderror
+                                            class="w-full pl-12 pr-4 py-3.5 bg-cream/50 border border-olive/30 rounded-xl text-forest placeholder-forest/40 focus:border-sage focus:bg-white focus:ring-2 focus:ring-sage/20 focus:outline-none transition-all duration-300"
+                                            placeholder="Masukkan password">
                                     </div>
+                                    @error('password')
+                                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <!-- Remember & Forgot -->
                                 <div class="flex items-center justify-between">
-                                    <label for="remember_me" class="inline-flex items-center gap-2.5 text-gray-700 cursor-pointer">
+                                    <label for="remember_me" class="inline-flex items-center gap-2.5 cursor-pointer group">
                                         <input id="remember_me" name="remember" type="checkbox"
-                                            class="h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer">
-                                        <span class="text-base">Remember Me</span>
+                                            class="h-4 w-4 rounded border-olive/30 text-sage focus:ring-sage/30 cursor-pointer transition">
+                                        <span class="text-sm text-forest/70 group-hover:text-forest transition">Ingat saya</span>
                                     </label>
 
                                     @if (Route::has('password.request'))
                                         <a href="{{ route('password.request') }}"
-                                            class="text-green-600 hover:text-green-700 font-medium text-base">
-                                            Forgot Password?
+                                            class="text-sm text-sage hover:text-forest font-medium transition-colors">
+                                            Lupa Password?
                                         </a>
                                     @endif
                                 </div>
 
                                 <!-- Login Button -->
                                 <button type="submit"
-                                    class="w-full rounded-lg bg-green-600 px-4 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-green-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition transform hover:scale-[1.02] active:scale-[0.98]">
-                                    Login
+                                    class="w-full py-3.5 px-6 bg-gradient-to-r from-sage to-forest text-cream font-semibold rounded-xl shadow-lg shadow-sage/30 hover:shadow-xl hover:shadow-sage/40 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-sage/30 transition-all duration-300">
+                                    Masuk
                                 </button>
                             </form>
+
+                            <!-- Divider -->
+                            <div class="relative my-8">
+                                <div class="absolute inset-0 flex items-center">
+                                    <div class="w-full border-t border-olive/20"></div>
+                                </div>
+                                <div class="relative flex justify-center text-sm">
+                                    <span class="px-4 bg-white text-forest/50">atau</span>
+                                </div>
+                            </div>
+
+                            <!-- Register Link -->
+                            <div class="text-center">
+                                <p class="text-forest/60">
+                                    Belum punya akun?
+                                    <a href="{{ route('register') }}" class="text-sage hover:text-forest font-semibold transition-colors">
+                                        Daftar sekarang
+                                    </a>
+                                </p>
+                            </div>
+                            
+                            <!-- Back to Home -->
+                            <div class="mt-6 text-center">
+                                <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-sm text-forest/50 hover:text-forest transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                    </svg>
+                                    Kembali ke Beranda
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
