@@ -34,20 +34,23 @@ class SellerDashboardController extends Controller
         $ratingByProduct = $products->map(function($product) {
             return [
                 'name' => $product->name,
-                'rating' => $product->rating / 10 // Convert back to 1-5 scale
+                'rating' => $product->rating / 10
             ];
         });
 
         // Commenters by province
         $commentsByProvince = Comment::whereIn('product_id', $products->pluck('id'))
-            ->select('email', \DB::raw('count(*) as total'))
-            ->groupBy('email')
+            ->whereNotNull('province')
+            ->where('province', '!=', '')
+            ->select('province', \DB::raw('count(*) as total'))
+            ->groupBy('province')
+            ->orderByDesc('total')
             ->get()
-            ->groupBy(function($comment) {
-                return 'Various'; 
-            })
-            ->map(function($group) {
-                return $group->count();
+            ->map(function($item) {
+                return [
+                    'province' => $item->province,
+                    'total' => $item->total
+                ];
             });
 
         // Recent comments for seller's products

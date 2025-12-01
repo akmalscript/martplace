@@ -47,6 +47,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is regular user
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
      * Relationship to Seller
      */
     public function seller()

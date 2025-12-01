@@ -30,6 +30,9 @@ class Product extends Model
         'discount_percentage',
         'badge',
         'is_active',
+        'has_variants',
+        'min_order',
+        'max_order',
     ];
 
     protected $casts = [
@@ -38,6 +41,9 @@ class Product extends Model
         'price' => 'decimal:2',
         'original_price' => 'decimal:2',
         'is_active' => 'boolean',
+        'has_variants' => 'boolean',
+        'min_order' => 'integer',
+        'max_order' => 'integer',
     ];
 
     protected $appends = ['rating', 'sold_count', 'image_url', 'all_photos'];
@@ -117,7 +123,7 @@ class Product extends Model
     public function getRatingAttribute()
     {
         $avgRating = $this->comments()->avg('rating');
-        return $avgRating ? round($avgRating * 10) : 0; // Scale to 50 (5.0 * 10)
+        return $avgRating ? round($avgRating * 10) : 0;
     }
 
     /**

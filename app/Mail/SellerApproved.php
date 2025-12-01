@@ -25,7 +25,7 @@ class SellerApproved extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat! Akun Seller Anda Telah Disetujui',
+            subject: 'Selamat! Akun Seller Anda Telah Disetujui - MartPlace',
         );
     }
 

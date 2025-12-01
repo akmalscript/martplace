@@ -25,7 +25,7 @@ class SellerRejected extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pemberitahuan Penolakan Pendaftaran Seller',
+            subject: 'Pemberitahuan Penolakan Pendaftaran Seller - MartPlace',
         );
     }
 
