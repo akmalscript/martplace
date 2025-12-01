@@ -32,36 +32,32 @@ class SellerDashboardController extends Controller
 
         // 2. Sebaran nilai rating per produk
         $ratingDistribution = Product::where('seller_id', $seller->id)
-            ->select('name', 'rating', 'sold_count')
-            ->orderBy('rating', 'desc')
+            ->select('name', 'average_rating', 'total_reviews')
+            ->orderBy('average_rating', 'desc')
             ->limit(10)
             ->get()
             ->map(function ($product) {
                 return [
                     'name' => $product->name,
-                    'rating' => (float) $product->rating,
-                    'reviews' => $product->sold_count
+                    'rating' => (float) $product->average_rating,
+                    'reviews' => $product->total_reviews
                 ];
             });
 
         // 3. Sebaran pemberi rating berdasarkan provinsi
-        // Sementara menggunakan data dummy karena tabel reviews belum ada
-        $ratingByProvince = collect([
-            ['province' => 'Jawa Barat', 'total' => 25],
-            ['province' => 'DKI Jakarta', 'total' => 20],
-            ['province' => 'Jawa Tengah', 'total' => 15],
-            ['province' => 'Jawa Timur', 'total' => 12],
-            ['province' => 'Banten', 'total' => 10],
-            ['province' => 'Sumatera Utara', 'total' => 8],
-            ['province' => 'Sulawesi Selatan', 'total' => 6],
-            ['province' => 'Bali', 'total' => 5],
-        ]);
+        $ratingByProvince = DB::table('product_reviews')
+            ->join('products', 'product_reviews.product_id', '=', 'products.id')
+            ->where('products.seller_id', $seller->id)
+            ->select('product_reviews.visitor_province as province', DB::raw('count(*) as total'))
+            ->groupBy('product_reviews.visitor_province')
+            ->orderBy('total', 'desc')
+            ->get();
 
         // Summary statistics
         $totalProducts = Product::where('seller_id', $seller->id)->count();
         $totalStock = Product::where('seller_id', $seller->id)->sum('stock');
-        $averageRating = Product::where('seller_id', $seller->id)->avg('rating');
-        $totalReviews = Product::where('seller_id', $seller->id)->sum('sold_count');
+        $averageRating = Product::where('seller_id', $seller->id)->avg('average_rating');
+        $totalReviews = Product::where('seller_id', $seller->id)->sum('total_reviews');
 
         return view('seller.dashboard', compact(
             'seller',
@@ -112,18 +108,9 @@ class SellerDashboardController extends Controller
             return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
         }
 
-        $categories = [
-            'Technology',
-            'Fashion Pria',
-            'Fashion Wanita',
-            'Handphone',
-            'Elektronik',
-            'Otomotif',
-            'Makanan & Minuman',
-            'Kesehatan',
-            'Olahraga',
-            'Hobi & Koleksi',
-        ];
+        $categories = \App\Models\Category::where('is_active', true)
+            ->orderBy('order')
+            ->get();
 
         return view('seller.products-create', compact('seller', 'categories'));
     }
@@ -138,7 +125,7 @@ class SellerDashboardController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:200',
-            'category' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
             'primary_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -159,8 +146,9 @@ class SellerDashboardController extends Controller
             // Create product
             $product = Product::create([
                 'seller_id' => $seller->id,
+                'category_id' => $request->category_id,
                 'name' => $request->name,
-                'category' => $request->category,
+                'slug' => \Illuminate\Support\Str::slug($request->name) . '-' . uniqid(),
                 'description' => $request->description,
                 'image_url' => asset('storage/' . $primaryImagePath),
                 'has_variants' => $request->has_variants ?? false,
@@ -168,8 +156,11 @@ class SellerDashboardController extends Controller
                 'stock' => $request->stock ?? 0,
                 'min_order' => $request->min_order ?? 1,
                 'max_order' => $request->max_order,
-                'location' => $seller->city . ', ' . $seller->province,
+                'province' => $seller->province,
+                'city' => $seller->city,
                 'is_active' => $request->is_active ?? true,
+                'average_rating' => 0,
+                'total_reviews' => 0,
             ]);
 
             // Save primary image to product_images
@@ -220,6 +211,168 @@ class SellerDashboardController extends Controller
             DB::rollBack();
             return back()->with('error', 'Gagal menambahkan produk: ' . $e->getMessage())
                 ->withInput();
+        }
+    }
+
+    public function editProduct($id)
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        $product = Product::where('seller_id', $seller->id)->findOrFail($id);
+        $categories = \App\Models\Category::where('is_active', true)
+            ->orderBy('order')
+            ->get();
+
+        return view('seller.products-edit', compact('seller', 'product', 'categories'));
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        $product = Product::where('seller_id', $seller->id)->findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:200',
+            'category_id' => 'required|exists:categories,id',
+            'description' => 'required|string',
+            'primary_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'has_variants' => 'nullable|boolean',
+            'price' => 'required_if:has_variants,false|nullable|numeric|min:0',
+            'stock' => 'required_if:has_variants,false|nullable|integer|min:0',
+            'min_order' => 'nullable|integer|min:1',
+            'max_order' => 'nullable|integer|min:1',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        DB::beginTransaction();
+        
+        try {
+            // Update basic info
+            $updateData = [
+                'category_id' => $request->category_id,
+                'name' => $request->name,
+                'slug' => \Illuminate\Support\Str::slug($request->name) . '-' . $product->id,
+                'description' => $request->description,
+                'has_variants' => $request->has_variants ?? false,
+                'price' => $request->price ?? 0,
+                'stock' => $request->stock ?? 0,
+                'min_order' => $request->min_order ?? 1,
+                'max_order' => $request->max_order,
+                'is_active' => $request->is_active ?? true,
+            ];
+
+            // Update primary image if provided
+            if ($request->hasFile('primary_image')) {
+                $primaryImagePath = $request->file('primary_image')->store('products', 'public');
+                $updateData['image_url'] = asset('storage/' . $primaryImagePath);
+                
+                // Update primary image in product_images table
+                \App\Models\ProductImage::updateOrCreate(
+                    [
+                        'product_id' => $product->id,
+                        'is_primary' => true
+                    ],
+                    [
+                        'image_path' => $primaryImagePath,
+                        'order' => 0,
+                    ]
+                );
+            }
+
+            $product->update($updateData);
+
+            // Upload additional images if provided
+            if ($request->hasFile('additional_images')) {
+                // Get current max order
+                $maxOrder = \App\Models\ProductImage::where('product_id', $product->id)
+                    ->max('order') ?? 0;
+                
+                foreach ($request->file('additional_images') as $index => $image) {
+                    $imagePath = $image->store('products', 'public');
+                    \App\Models\ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => $imagePath,
+                        'is_primary' => false,
+                        'order' => $maxOrder + $index + 1,
+                    ]);
+                }
+            }
+
+            // Handle variants update
+            if ($request->has_variants && $request->variants) {
+                // Delete existing variants
+                $product->variants()->delete();
+                
+                // Create new variants
+                foreach ($request->variants as $variant) {
+                    if (isset($variant['price']) && isset($variant['stock'])) {
+                        \App\Models\ProductVariant::create([
+                            'product_id' => $product->id,
+                            'variant_type_1' => $variant['type_1'] ?? null,
+                            'variant_value_1' => $variant['value_1'] ?? null,
+                            'variant_type_2' => $variant['type_2'] ?? null,
+                            'variant_value_2' => $variant['value_2'] ?? null,
+                            'price' => $variant['price'],
+                            'stock' => $variant['stock'],
+                        ]);
+                    }
+                }
+            } else {
+                // If no variants, delete existing variants
+                $product->variants()->delete();
+            }
+
+            DB::commit();
+
+            return redirect()->route('seller.products')
+                ->with('success', 'Produk berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal memperbarui produk: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
+    public function deleteProduct($id)
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        $product = Product::where('seller_id', $seller->id)->findOrFail($id);
+
+        DB::beginTransaction();
+        
+        try {
+            // Delete related data
+            $product->images()->delete();
+            $product->variants()->delete();
+            $product->reviews()->delete();
+            
+            // Delete product
+            $product->delete();
+
+            DB::commit();
+
+            return redirect()->route('seller.products')
+                ->with('success', 'Produk berhasil dihapus!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }
     }
 }

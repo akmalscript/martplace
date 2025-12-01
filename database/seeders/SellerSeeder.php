@@ -20,6 +20,7 @@ class SellerSeeder extends Seeder
                     'name' => 'Toko Elektronik Jakarta',
                     'email' => 'elektronik.jakarta@example.com',
                     'password' => Hash::make('password123'),
+                    'role' => 'seller',
                 ],
                 'seller' => [
                     'store_name' => 'Toko Elektronik Jakarta',
@@ -49,6 +50,7 @@ class SellerSeeder extends Seeder
                     'name' => 'Fashion Store Bandung',
                     'email' => 'fashion.bandung@example.com',
                     'password' => Hash::make('password123'),
+                    'role' => 'seller',
                 ],
                 'seller' => [
                     'store_name' => 'Fashion Store Bandung',
@@ -78,6 +80,7 @@ class SellerSeeder extends Seeder
                     'name' => 'Kuliner Surabaya Mall',
                     'email' => 'kuliner.surabaya@example.com',
                     'password' => Hash::make('password123'),
+                    'role' => 'seller',
                 ],
                 'seller' => [
                     'store_name' => 'Kuliner Surabaya Mall',
@@ -107,6 +110,7 @@ class SellerSeeder extends Seeder
                     'name' => 'Gadget Corner Solo',
                     'email' => 'gadget.solo@example.com',
                     'password' => Hash::make('password123'),
+                    'role' => 'seller',
                 ],
                 'seller' => [
                     'store_name' => 'Gadget Corner Solo',
@@ -136,6 +140,7 @@ class SellerSeeder extends Seeder
                     'name' => 'Kecantikan Store',
                     'email' => 'beauty.store@example.com',
                     'password' => Hash::make('password123'),
+                    'role' => 'seller',
                 ],
                 'seller' => [
                     'store_name' => 'Kecantikan Store',

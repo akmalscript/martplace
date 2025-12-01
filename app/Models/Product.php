@@ -9,18 +9,18 @@ class Product extends Model
 {
     protected $fillable = [
         'seller_id',
+        'category_id',
         'name',
+        'slug',
         'description',
         'price',
-        'original_price',
         'stock',
-        'image_url',
-        'category',
-        'rating',
         'sold_count',
-        'location',
-        'discount_percentage',
-        'badge',
+        'image_url',
+        'average_rating',
+        'total_reviews',
+        'province',
+        'city',
         'is_active',
         'has_variants',
         'min_order',
@@ -29,11 +29,15 @@ class Product extends Model
 
     protected $casts = [
         'price' => 'decimal:2',
-        'original_price' => 'decimal:2',
+        'average_rating' => 'decimal:2',
+        'total_reviews' => 'integer',
+        'stock' => 'integer',
+        'sold_count' => 'integer',
         'is_active' => 'boolean',
         'has_variants' => 'boolean',
         'min_order' => 'integer',
         'max_order' => 'integer',
+        'deleted_at' => 'datetime',
     ];
 
     /**
@@ -42,6 +46,14 @@ class Product extends Model
     public function seller(): BelongsTo
     {
         return $this->belongsTo(Seller::class);
+    }
+
+    /**
+     * Relationship: Product belongs to a Category
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**
@@ -66,6 +78,22 @@ class Product extends Model
     public function primaryImage()
     {
         return $this->hasOne(ProductImage::class)->where('is_primary', true);
+    }
+
+    /**
+     * Relationship: Product has many reviews
+     */
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class)->where('is_visible', true);
+    }
+
+    /**
+     * Relationship: Product has many visitor logs
+     */
+    public function visitorLogs()
+    {
+        return $this->hasMany(VisitorLog::class);
     }
 
     /**

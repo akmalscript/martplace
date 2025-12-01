@@ -31,6 +31,11 @@ return new class extends Migration
             $table->string('pic_photo_path')->nullable();
             $table->string('pic_ktp_file_path')->nullable();
             $table->enum('status', ['PENDING', 'ACTIVE', 'REJECTED'])->default('PENDING');
+            $table->string('city')->nullable();
+            $table->string('province')->nullable();
+            $table->string('district')->nullable();
+            $table->decimal('rating', 3, 2)->default(0);
+            $table->integer('total_products')->default(0);
             $table->timestamps();
         });
     }

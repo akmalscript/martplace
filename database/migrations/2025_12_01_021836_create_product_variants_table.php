@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('variant_value_2')->nullable(); // Misal: L
             $table->decimal('price', 15, 2);
             $table->integer('stock')->default(0);
-            $table->string('sku')->nullable();
             $table->timestamps();
             
             $table->index(['product_id', 'variant_type_1', 'variant_value_1']);

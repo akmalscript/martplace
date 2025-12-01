@@ -16,9 +16,10 @@ class AdminDashboardController extends Controller
     public function index()
     {
         // 1. Sebaran jumlah produk berdasarkan kategori
-        $productsByCategory = Product::select('category', DB::raw('count(*) as total'))
-            ->whereNotNull('category')
-            ->groupBy('category')
+        $productsByCategory = Product::select('categories.name as category', DB::raw('count(products.id) as total'))
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->whereNotNull('products.category_id')
+            ->groupBy('categories.name')
             ->orderBy('total', 'desc')
             ->get();
 
@@ -37,9 +38,9 @@ class AdminDashboardController extends Controller
         ])->count();
 
         // 4. Jumlah pengunjung yang memberikan komentar dan rating
-        // Note: Assuming you'll have reviews/comments table in the future
-        $totalReviews = 0; // Placeholder - will be implemented when review system is added
-        $totalRatings = 0; // Placeholder - will be implemented when review system is added
+        $totalReviews = DB::table('product_reviews')->count();
+        $totalRatings = DB::table('product_reviews')->count();
+        $uniqueReviewers = DB::table('product_reviews')->distinct('visitor_email')->count('visitor_email');
 
         // Additional useful statistics
         $totalProducts = Product::count();
@@ -54,6 +55,7 @@ class AdminDashboardController extends Controller
             'inactiveSellers',
             'totalReviews',
             'totalRatings',
+            'uniqueReviewers',
             'totalProducts',
             'totalSellers',
             'totalUsers',

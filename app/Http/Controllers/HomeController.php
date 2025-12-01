@@ -16,16 +16,15 @@ class HomeController extends Controller
 
         // Filter by category if provided
         if ($request->has('category') && !empty($request->category)) {
-            $query->where('category', $request->category);
+            $query->where('category_id', $request->category);
         }
 
         // Filter by type (untuk_anda, mall, terlaris, semua)
         $filterType = $request->get('filter', 'untuk_anda'); // Default: untuk_anda
 
         if ($filterType === 'untuk_anda') {
-            // Untuk Anda: Produk terbaru dengan rating tinggi, exclude Kecantikan, limit 12
-            $products = $query->where('rating', '>=', 47)
-                ->where('category', '!=', 'Kecantikan')
+            // Untuk Anda: Produk terbaru dengan rating tinggi, limit 12
+            $products = $query->where('average_rating', '>=', 4.0)
                 ->latest()
                 ->limit(12)
                 ->get();

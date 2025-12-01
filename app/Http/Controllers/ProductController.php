@@ -22,7 +22,7 @@ class ProductController extends Controller
 
         // Filter by category
         if ($request->has('category') && !empty($request->category)) {
-            $query->where('category', $request->category);
+            $query->where('category_id', $request->category);
         }
 
         // Sorting
@@ -134,7 +134,7 @@ class ProductController extends Controller
 
         // Get related products
         $relatedProducts = Product::active()
-            ->where('category', $product->category)
+            ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->limit(6)
             ->get();

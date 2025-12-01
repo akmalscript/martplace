@@ -14,7 +14,6 @@ class ProductVariant extends Model
         'variant_value_2',
         'price',
         'stock',
-        'sku',
     ];
 
     protected $casts = [

@@ -115,22 +115,10 @@
                     <a href="{{ route('products.show', $product->id) }}"
                         class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
                         <div class="relative bg-gray-200">
-                            @if ($product->discount_percentage > 0)
-                                <span
-                                    class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
-                                    {{ $product->discount_percentage }}%
-                                </span>
-                            @endif
                             <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                 class="w-full h-48 object-cover"
                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
                                 loading="lazy">
-                            @if ($product->badge)
-                                <span
-                                    class="absolute bottom-2 left-2 {{ $product->badge == 'Terkirim cepat' ? 'bg-orange-500' : ($product->badge == 'Best Seller' ? 'bg-yellow-500' : 'bg-purple-500') }} text-white text-xs px-2 py-1 rounded">
-                                    {{ $product->badge }}
-                                </span>
-                            @endif
                         </div>
                         <div class="p-3">
                             <h3 class="text-sm text-gray-800 mb-2 line-clamp-2">{{ $product->name }}</h3>
@@ -147,10 +135,10 @@
                                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                     </path>
                                 </svg>
-                                <span class="text-xs text-gray-600">{{ number_format($product->rating / 10, 1) }} •
+                                <span class="text-xs text-gray-600">{{ number_format($product->average_rating, 1) }} •
                                     {{ number_format($product->sold_count) }} terjual</span>
                             </div>
-                            <p class="text-xs text-gray-500">{{ $product->location }}</p>
+                            <p class="text-xs text-gray-500">{{ $product->city }}, {{ $product->province }}</p>
                         </div>
                     </a>
                 @endforeach

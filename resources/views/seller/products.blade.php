@@ -160,22 +160,6 @@
                             <img src="{{ $product->image_url }}" alt="{{ $product->name }}" 
                                  class="w-full h-full object-cover">
                             
-                            @if($product->discount_percentage > 0)
-                            <div class="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
-                                -{{ $product->discount_percentage }}%
-                            </div>
-                            @endif
-
-                            @if($product->badge)
-                            <div class="absolute top-2 right-2 px-2 py-1 rounded text-xs font-semibold text-white
-                                {{ $product->badge === 'Best Seller' ? 'bg-yellow-500' : '' }}
-                                {{ $product->badge === 'Ekslusif' ? 'bg-purple-500' : '' }}
-                                {{ $product->badge === 'Terkirim cepat' ? 'bg-orange-500' : '' }}
-                                {{ $product->badge === 'Mall' ? 'bg-green-500' : '' }}">
-                                {{ $product->badge }}
-                            </div>
-                            @endif
-
                             <!-- Status Badge -->
                             <div class="absolute bottom-2 left-2">
                                 @if($product->is_active)
@@ -200,17 +184,12 @@
                                 <div class="text-lg font-bold text-green-600">
                                     Rp{{ number_format($product->price, 0, ',', '.') }}
                                 </div>
-                                @if($product->discount_percentage > 0)
-                                <div class="text-xs text-gray-400 line-through">
-                                    Rp{{ number_format($product->original_price, 0, ',', '.') }}
-                                </div>
-                                @endif
                             </div>
 
                             <div class="flex items-center justify-between text-xs text-gray-600 mb-3">
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
-                                    <span>{{ number_format($product->rating / 10, 1) }}</span>
+                                    <span>{{ number_format($product->average_rating, 1) }}</span>
                                 </div>
                                 <div class="flex items-center">
                                     <i class="fas fa-shopping-bag text-gray-400 mr-1"></i>
@@ -229,12 +208,16 @@
 
                             <!-- Action Buttons -->
                             <div class="flex gap-2">
-                                <button class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg hover:bg-blue-100 transition text-sm font-semibold">
+                                <a href="{{ route('seller.products.edit', $product->id) }}" class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg hover:bg-blue-100 transition text-sm font-semibold text-center">
                                     <i class="fas fa-edit mr-1"></i>Edit
-                                </button>
-                                <button class="flex-1 bg-red-50 text-red-600 py-2 rounded-lg hover:bg-red-100 transition text-sm font-semibold">
-                                    <i class="fas fa-trash mr-1"></i>Hapus
-                                </button>
+                                </a>
+                                <form action="{{ route('seller.products.delete', $product->id) }}" method="POST" class="flex-1" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full bg-red-50 text-red-600 py-2 rounded-lg hover:bg-red-100 transition text-sm font-semibold">
+                                        <i class="fas fa-trash mr-1"></i>Hapus
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

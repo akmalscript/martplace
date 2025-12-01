@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Produk - Dashboard Seller</title>
+    <title>Edit Produk - Dashboard Seller</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -35,8 +35,8 @@
         <div class="max-w-5xl mx-auto">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Tambah Produk Baru</h1>
-                <p class="text-gray-600">Lengkapi semua informasi produk yang akan dijual</p>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Edit Produk</h1>
+                <p class="text-gray-600">Lengkapi semua informasi produk yang akan diperbarui</p>
             </div>
 
             @if(session('error'))
@@ -48,8 +48,10 @@
             </div>
             @endif
 
-            <form action="{{ route('seller.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <!-- Form -->
+            <form action="{{ route('seller.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
+                @method('PUT')
 
                 <!-- 1. Informasi Produk -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
@@ -64,7 +66,7 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
                                 Nama Produk <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="name" value="{{ old('name') }}" required maxlength="200"
+                            <input type="text" name="name" value="{{ old('name', $product->name) }}" required maxlength="200"
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('name') border-red-500 @enderror"
                                    placeholder="Contoh: Laptop Gaming ASUS ROG Strix G15">
                             <p class="text-xs text-gray-500 mt-1">Maksimal 200 karakter</p>
@@ -82,7 +84,7 @@
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('category_id') border-red-500 @enderror">
                                 <option value="">Pilih Kategori</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
                                         <i class="fas {{ $category->icon }}"></i> {{ $category->name }}
                                     </option>
                                 @endforeach
@@ -102,13 +104,25 @@
                         </h2>
                     </div>
                     <div class="p-6 space-y-4">
+                        <!-- Foto Utama Saat Ini -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Foto Produk Saat Ini
+                            </label>
+                            <div class="inline-block">
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" 
+                                     class="w-48 h-48 object-cover rounded-lg border-2 border-gray-300 shadow-sm"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'">
+                            </div>
+                        </div>
+
                         <!-- Foto Utama -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
                                 Foto Produk Utama <span class="text-red-500">*</span>
                             </label>
                             <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-green-500 transition">
-                                <input type="file" name="primary_image" required accept="image/jpeg,image/png,image/jpg"
+                                <input type="file" name="primary_image" accept="image/jpeg,image/png,image/jpg"
                                        @change="previewImage($event, 'primary')"
                                        class="hidden" id="primary_image">
                                 <label for="primary_image" class="cursor-pointer flex flex-col items-center">
@@ -120,6 +134,9 @@
                                     <img x-show="primaryPreview" :src="primaryPreview" class="max-h-48 rounded-lg">
                                 </label>
                             </div>
+                            <p class="text-xs text-gray-500 mt-2">
+                                <i class="fas fa-info-circle mr-1"></i>Kosongkan jika tidak ingin mengubah foto
+                            </p>
                             @error('primary_image')
                                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                             @enderror
@@ -163,7 +180,7 @@
                         </label>
                         <textarea name="description" required rows="8"
                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent @error('description') border-red-500 @enderror"
-                                  placeholder="Jelaskan detail produk, spesifikasi, kondisi, dan informasi penting lainnya...">{{ old('description') }}</textarea>
+                                  placeholder="Jelaskan detail produk, spesifikasi, kondisi, dan informasi penting lainnya...">{{ old('description', $product->description) }}</textarea>
                         @error('description')
                             <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                         @enderror
@@ -185,7 +202,7 @@
                                 <p class="text-sm text-gray-600">Produk memiliki pilihan warna, ukuran, atau variasi lain</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="has_variants" value="1" class="sr-only peer" x-model="hasVariants">
+                                <input type="checkbox" name="has_variants" value="1" class="sr-only peer" x-model="hasVariants" {{ old('has_variants', $product->has_variants) ? 'checked' : '' }}>
                                 <div class="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
                             </label>
                         </div>
@@ -287,7 +304,7 @@
                                 </label>
                                 <div class="relative">
                                     <span class="absolute left-4 top-3 text-gray-600">Rp</span>
-                                    <input type="number" name="price" value="{{ old('price') }}" min="0"
+                                    <input type="number" name="price" value="{{ old('price', $product->price) }}" min="0"
                                            :required="!hasVariants"
                                            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                            placeholder="50000">
@@ -299,7 +316,7 @@
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
                                     Stok Awal <span class="text-red-500">*</span>
                                 </label>
-                                <input type="number" name="stock" value="{{ old('stock') }}" min="0"
+                                <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" min="0"
                                        :required="!hasVariants"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                        placeholder="100">
@@ -310,12 +327,12 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Minimum Pemesanan</label>
-                                <input type="number" name="min_order" value="{{ old('min_order', 1) }}" min="1"
+                                <input type="number" name="min_order" value="{{ old('min_order', $product->min_order ?? 1) }}" min="1"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Maximum Pemesanan (Opsional)</label>
-                                <input type="number" name="max_order" value="{{ old('max_order') }}" min="1"
+                                <input type="number" name="max_order" value="{{ old('max_order', $product->max_order) }}" min="1"
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
                             </div>
                         </div>
@@ -336,7 +353,7 @@
                                 <p class="text-sm text-gray-600">Aktifkan produk agar dapat dilihat pembeli</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="is_active" value="1" checked class="sr-only peer">
+                                <input type="checkbox" name="is_active" value="1" {{ old('is_active', $product->is_active) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
                             </label>
                         </div>
@@ -347,7 +364,7 @@
                 <div class="flex gap-4 justify-end">
                     <a href="{{ route('seller.products') }}" 
                        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
-                        Batal
+                        <i class="fas fa-times mr-2"></i>Batal
                     </a>
                     <button type="submit" 
                             class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold">
@@ -361,7 +378,7 @@
     <script>
         function productForm() {
             return {
-                hasVariants: false,
+                hasVariants: {{ old('has_variants', $product->has_variants) ? 'true' : 'false' }},
                 primaryPreview: null,
                 additionalPreviews: {},
                 variantType1: '',

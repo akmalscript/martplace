@@ -32,15 +32,20 @@ class AuthenticatedSessionController extends Controller
 
         // Redirect based on user role
         if ($user->role === 'admin') {
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->route('admin.dashboard');
         }
 
         // Check if user is a seller
-        if ($user->seller && $user->seller->status === \App\Enums\SellerStatus::ACTIVE) {
-            return redirect()->intended(route('seller.dashboard'));
+        if ($user->role === 'seller' && $user->seller) {
+            if ($user->seller->status === \App\Enums\SellerStatus::ACTIVE) {
+                return redirect()->route('seller.dashboard');
+            }
+            // Seller not active yet
+            Auth::logout();
+            return redirect()->route('login')->with('error', 'Akun seller Anda belum diaktifkan atau ditolak.');
         }
 
-        return redirect()->intended('/');
+        return redirect()->route('home');
     }
 
     /**

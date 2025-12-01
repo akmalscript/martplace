@@ -62,7 +62,7 @@
                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                             </path>
                         </svg>
-                        <span class="ml-1 text-gray-700">{{ number_format($product->rating / 10, 1) }}</span>
+                        <span class="ml-1 text-gray-700">{{ number_format($product->average_rating, 1) }}</span>
                     </div>
                     <span class="text-gray-400">|</span>
                     <span class="text-gray-700">{{ number_format($product->sold_count) }} terjual</span>
@@ -72,25 +72,8 @@
                 <div class="mb-6">
                     <div class="flex items-baseline space-x-3">
                         <span class="text-4xl font-bold text-green-600">{{ $product->formatted_price }}</span>
-                        @if ($product->original_price)
-                            <span
-                                class="text-xl text-gray-400 line-through">{{ $product->formatted_original_price }}</span>
-                            <span
-                                class="bg-red-500 text-white text-sm px-2 py-1 rounded">{{ $product->discount_percentage }}%
-                                OFF</span>
-                        @endif
                     </div>
                 </div>
-
-                <!-- Badge -->
-                @if ($product->badge)
-                    <div class="mb-6">
-                        <span
-                            class="inline-block {{ $product->badge == 'Terkirim cepat' ? 'bg-orange-100 text-orange-600' : ($product->badge == 'Best Seller' ? 'bg-yellow-100 text-yellow-600' : 'bg-purple-100 text-purple-600') }} px-3 py-1 rounded-full text-sm font-medium">
-                            {{ $product->badge }}
-                        </span>
-                    </div>
-                @endif
 
                 <!-- Location -->
                 <div class="mb-6">
@@ -102,7 +85,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
-                        <span>{{ $product->location }}</span>
+                        <span>{{ $product->city }}, {{ $product->province }}</span>
                     </div>
                 </div>
 
@@ -147,11 +130,6 @@
                         <a href="{{ route('products.show', $related->id) }}"
                             class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
                             <div class="relative">
-                                @if ($related->discount_percentage > 0)
-                                    <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                        {{ $related->discount_percentage }}%
-                                    </span>
-                                @endif
                                 <img src="{{ $related->image_url }}" alt="{{ $related->name }}"
                                     class="w-full h-48 object-cover"
                                     onerror="this.src='https://via.placeholder.com/200x200/E5E5E5/999999?text=No+Image'">

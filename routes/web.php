@@ -38,6 +38,9 @@ Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(
     Route::get('/products', [SellerDashboardController::class, 'products'])->name('products');
     Route::get('/products/create', [SellerDashboardController::class, 'createProduct'])->name('products.create');
     Route::post('/products', [SellerDashboardController::class, 'storeProduct'])->name('products.store');
+    Route::get('/products/{id}/edit', [SellerDashboardController::class, 'editProduct'])->name('products.edit');
+    Route::put('/products/{id}', [SellerDashboardController::class, 'updateProduct'])->name('products.update');
+    Route::delete('/products/{id}', [SellerDashboardController::class, 'deleteProduct'])->name('products.delete');
 });
 
 // Wilayah API Proxy Routes
