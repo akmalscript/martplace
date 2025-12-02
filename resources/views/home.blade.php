@@ -15,6 +15,13 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
 
@@ -374,33 +381,104 @@
         </div>
     </section>
 
-    <!-- Category Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Kategori Pilihan</h2>
-            @if (isset($selectedCategory))
-                <a href="{{ route('home') }}" class="text-green-600 hover:text-green-700 font-medium">
-                    ← Lihat Semua Kategori
-                </a>
-            @endif
+    <!-- Category Section - Horizontal Scroll -->
+    <section class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Kategori Pilihan</h2>
+            </div>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            @forelse($categories->take(8) as $category)
-            <a href="{{ route('home', ['category' => $category->id]) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 transition">
-                    <i class="fas {{ $category->icon ?? 'fa-tag' }} text-2xl text-green-600"></i>
+        <div class="relative" x-data="{
+            scrollContainer: null,
+            canScrollLeft: false,
+            canScrollRight: true,
+            init() {
+                this.scrollContainer = this.$refs.categoryScroll;
+                this.checkScroll();
+                this.scrollContainer.addEventListener('scroll', () => this.checkScroll());
+                window.addEventListener('resize', () => this.checkScroll());
+            },
+            checkScroll() {
+                if (!this.scrollContainer) return;
+                this.canScrollLeft = this.scrollContainer.scrollLeft > 0;
+                this.canScrollRight = this.scrollContainer.scrollLeft < (this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth - 10);
+            },
+            scrollTo(direction) {
+                const scrollAmount = 320;
+                const currentScroll = this.scrollContainer.scrollLeft;
+                const targetScroll = direction === 'left' ? currentScroll - scrollAmount : currentScroll + scrollAmount;
+                this.scrollContainer.scrollTo({
+                    left: targetScroll,
+                    behavior: 'smooth'
+                });
+            }
+        }">
+            <!-- Left Arrow Button -->
+            <button x-show="canScrollLeft" 
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 -translate-x-2"
+                    x-transition:enter-end="opacity-100 translate-x-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 translate-x-0"
+                    x-transition:leave-end="opacity-0 -translate-x-2"
+                    @click="scrollTo('left')"
+                    class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 border border-gray-100">
+                <i class="fas fa-chevron-left text-sm md:text-base"></i>
+            </button>
+
+            <!-- Right Arrow Button -->
+            <button x-show="canScrollRight"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 translate-x-2"
+                    x-transition:enter-end="opacity-100 translate-x-0"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 translate-x-0"
+                    x-transition:leave-end="opacity-0 translate-x-2"
+                    @click="scrollTo('right')"
+                    class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 border border-gray-100">
+                <i class="fas fa-chevron-right text-sm md:text-base"></i>
+            </button>
+
+            <!-- Left Fade Gradient -->
+            <div x-show="canScrollLeft" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+
+            <!-- Right Fade Gradient -->
+            <div x-show="canScrollRight"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
+
+            <!-- Scrollable Category Container -->
+            <div x-ref="categoryScroll" 
+                 class="flex gap-4 md:gap-5 overflow-x-auto scroll-smooth px-4 md:px-8 lg:px-16 pt-2 pb-4 scrollbar-hide"
+                 style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;">
+                
+                @forelse($categories as $category)
+                <a href="{{ route('home', ['category' => $category->id]) }}"
+                   class="flex-shrink-0 scroll-snap-start group"
+                   style="scroll-snap-align: start;">
+                    <div class="w-36 md:w-40 h-36 md:h-40 bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-green-200 flex flex-col {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'ring-2 ring-green-500 shadow-green-100' : '' }}">
+                        <div class="flex flex-col items-center justify-center h-full">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center mb-3 group-hover:from-green-100 group-hover:to-green-200 group-hover:scale-105 transition-all duration-300 shadow-sm flex-shrink-0">
+                                <i class="fas {{ $category->icon ?? 'fa-tag' }} text-xl md:text-2xl text-green-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-700 text-center line-clamp-2 group-hover:text-green-700 transition-colors duration-200 h-10 flex items-center">{{ $category->name }}</span>
+                        </div>
+                    </div>
+                </a>
+                @empty
+                <div class="flex-1 text-center py-8 text-gray-500 min-w-full">
+                    <i class="fas fa-tags text-4xl mb-2"></i>
+                    <p>Belum ada kategori</p>
                 </div>
-                <span class="text-sm text-gray-700 text-center">{{ $category->name }}</span>
-            </a>
-            @empty
-            <div class="col-span-full text-center py-8 text-gray-500">
-                <i class="fas fa-tags text-4xl mb-2"></i>
-                <p>Belum ada kategori</p>
+                @endforelse
             </div>
-            @endforelse
         </div>
     </section>
 
