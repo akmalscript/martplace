@@ -236,19 +236,18 @@
                                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType2" x-text="variantType2"></th>
                                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">Harga (Rp)</th>
                                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">Stok</th>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">SKU</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <template x-for="(variant, index) in variants" :key="index">
                                             <tr class="border-b hover:bg-gray-50">
                                                 <td class="px-4 py-3" x-show="variantType1" x-text="variant.value1"></td>
-                                                <input type="hidden" :name="'variants[' + index + '][type_1]'" x-model="variantType1">
-                                                <input type="hidden" :name="'variants[' + index + '][value_1]'" x-model="variant.value1">
+                                                <input type="hidden" :name="'variants[' + index + '][variant_type_1]'" x-model="variantType1">
+                                                <input type="hidden" :name="'variants[' + index + '][variant_value_1]'" x-model="variant.value1">
                                                 
                                                 <td class="px-4 py-3" x-show="variantType2" x-text="variant.value2"></td>
-                                                <input type="hidden" :name="'variants[' + index + '][type_2]'" x-model="variantType2">
-                                                <input type="hidden" :name="'variants[' + index + '][value_2]'" x-model="variant.value2">
+                                                <input type="hidden" :name="'variants[' + index + '][variant_type_2]'" x-model="variantType2">
+                                                <input type="hidden" :name="'variants[' + index + '][variant_value_2]'" x-model="variant.value2">
                                                 
                                                 <td class="px-4 py-3">
                                                     <input type="number" x-model="variant.price" :name="'variants[' + index + '][price]'"
@@ -257,10 +256,6 @@
                                                 <td class="px-4 py-3">
                                                     <input type="number" x-model="variant.stock" :name="'variants[' + index + '][stock]'"
                                                            class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500" min="0" required>
-                                                </td>
-                                                <td class="px-4 py-3">
-                                                    <input type="text" x-model="variant.sku" :name="'variants[' + index + '][sku]'"
-                                                           class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500" placeholder="SKU">
                                                 </td>
                                             </tr>
                                         </template>
@@ -417,8 +412,7 @@
                                     value1: val1,
                                     value2: val2,
                                     price: '',
-                                    stock: '',
-                                    sku: ''
+                                    stock: ''
                                 });
                             });
                         });
@@ -429,8 +423,7 @@
                                 value1: val1,
                                 value2: '',
                                 price: '',
-                                stock: '',
-                                sku: ''
+                                stock: ''
                             });
                         });
                     }

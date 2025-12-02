@@ -148,20 +148,34 @@
                                 Foto Tambahan (Opsional)
                             </label>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <template x-for="i in 4" :key="i">
-                                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-green-500 transition aspect-square">
-                                        <input type="file" :name="'additional_images[' + (i-1) + ']'" accept="image/jpeg,image/png,image/jpg"
-                                               @change="previewImage($event, 'additional_' + i)"
-                                               class="hidden" :id="'additional_image_' + i">
-                                        <label :for="'additional_image_' + i" class="cursor-pointer flex flex-col items-center justify-center h-full">
-                                            <div x-show="!additionalPreviews['additional_' + i]" class="text-center">
-                                                <i class="fas fa-plus text-2xl text-gray-400 mb-1"></i>
-                                                <p class="text-xs text-gray-600">Foto <span x-text="i"></span></p>
-                                            </div>
-                                            <img x-show="additionalPreviews['additional_' + i]" :src="additionalPreviews['additional_' + i]" class="max-h-full rounded">
-                                        </label>
+                                @foreach(range(1, 4) as $i)
+                                @php
+                                    $existingImage = $product->images->where('is_primary', false)->skip($i-1)->first();
+                                @endphp
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-green-500 transition">
+                                    @if($existingImage)
+                                    <!-- Foto yang sudah ada -->
+                                    <div class="relative group">
+                                        <img src="{{ asset('storage/' . $existingImage->image_path) }}" 
+                                             class="w-full h-32 object-cover rounded" 
+                                             alt="Foto {{ $i }}">
+                                        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition rounded flex items-center justify-center">
+                                            <p class="text-white text-xs text-center px-2">Upload foto baru untuk mengganti</p>
+                                        </div>
                                     </div>
-                                </template>
+                                    @endif
+                                    <input type="file" name="additional_images[{{ $i-1 }}]" accept="image/jpeg,image/png,image/jpg"
+                                           @change="previewImage($event, 'additional_{{ $i }}')"
+                                           class="hidden" id="additional_image_{{ $i }}">
+                                    <label for="additional_image_{{ $i }}" class="cursor-pointer flex flex-col items-center justify-center {{ $existingImage ? 'mt-2' : 'h-32' }}">
+                                        <div x-show="!additionalPreviews['additional_{{ $i }}']" class="text-center">
+                                            <i class="fas fa-{{ $existingImage ? 'sync-alt' : 'plus' }} text-2xl text-gray-400 mb-1"></i>
+                                            <p class="text-xs text-gray-600">{{ $existingImage ? 'Ganti' : 'Foto ' . $i }}</p>
+                                        </div>
+                                        <img x-show="additionalPreviews['additional_{{ $i }}']" :src="additionalPreviews['additional_{{ $i }}']" class="max-h-32 rounded">
+                                    </label>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -249,23 +263,22 @@
                                 <table class="w-full border border-gray-300">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType1" x-text="variantType1"></th>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType2" x-text="variantType2"></th>
+                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType1 || variants.some(v => v.value1)" x-text="variantType1 || 'Varian 1'"></th>
+                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType2 || variants.some(v => v.value2)" x-text="variantType2 || 'Varian 2'"></th>
                                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">Harga (Rp)</th>
                                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">Stok</th>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">SKU</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <template x-for="(variant, index) in variants" :key="index">
                                             <tr class="border-b hover:bg-gray-50">
-                                                <td class="px-4 py-3" x-show="variantType1" x-text="variant.value1"></td>
-                                                <input type="hidden" :name="'variants[' + index + '][type_1]'" x-model="variantType1">
-                                                <input type="hidden" :name="'variants[' + index + '][value_1]'" x-model="variant.value1">
+                                                <td class="px-4 py-3" x-show="variantType1 || variant.value1" x-text="variant.value1"></td>
+                                                <input type="hidden" :name="'variants[' + index + '][variant_type_1]'" x-model="variantType1">
+                                                <input type="hidden" :name="'variants[' + index + '][variant_value_1]'" x-model="variant.value1">
                                                 
-                                                <td class="px-4 py-3" x-show="variantType2" x-text="variant.value2"></td>
-                                                <input type="hidden" :name="'variants[' + index + '][type_2]'" x-model="variantType2">
-                                                <input type="hidden" :name="'variants[' + index + '][value_2]'" x-model="variant.value2">
+                                                <td class="px-4 py-3" x-show="variantType2 || variant.value2" x-text="variant.value2"></td>
+                                                <input type="hidden" :name="'variants[' + index + '][variant_type_2]'" x-model="variantType2">
+                                                <input type="hidden" :name="'variants[' + index + '][variant_value_2]'" x-model="variant.value2">
                                                 
                                                 <td class="px-4 py-3">
                                                     <input type="number" x-model="variant.price" :name="'variants[' + index + '][price]'"
@@ -274,10 +287,6 @@
                                                 <td class="px-4 py-3">
                                                     <input type="number" x-model="variant.stock" :name="'variants[' + index + '][stock]'"
                                                            class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500" min="0" required>
-                                                </td>
-                                                <td class="px-4 py-3">
-                                                    <input type="text" x-model="variant.sku" :name="'variants[' + index + '][sku]'"
-                                                           class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500" placeholder="SKU">
                                                 </td>
                                             </tr>
                                         </template>
@@ -381,13 +390,20 @@
                 hasVariants: {{ old('has_variants', $product->has_variants) ? 'true' : 'false' }},
                 primaryPreview: null,
                 additionalPreviews: {},
-                variantType1: '',
-                variantType2: '',
-                variantValues1Input: '',
-                variantValues2Input: '',
-                variantValues1: [],
-                variantValues2: [],
-                variants: [],
+                variantType1: {!! json_encode($product->variants->first()->variant_type_1 ?? '') !!},
+                variantType2: {!! json_encode($product->variants->first()->variant_type_2 ?? '') !!},
+                variantValues1Input: {!! json_encode($product->variants->pluck('variant_value_1')->unique()->implode(', ')) !!},
+                variantValues2Input: {!! json_encode($product->variants->pluck('variant_value_2')->unique()->filter()->implode(', ')) !!},
+                variantValues1: {!! json_encode($product->variants->pluck('variant_value_1')->unique()->values()) !!},
+                variantValues2: {!! json_encode($product->variants->pluck('variant_value_2')->unique()->filter()->values()) !!},
+                variants: {!! json_encode($product->variants->map(function($v) {
+                    return [
+                        'value1' => $v->variant_value_1,
+                        'value2' => $v->variant_value_2,
+                        'price' => $v->price,
+                        'stock' => $v->stock
+                    ];
+                })->values()) !!},
 
                 previewImage(event, type) {
                     const file = event.target.files[0];
@@ -434,8 +450,7 @@
                                     value1: val1,
                                     value2: val2,
                                     price: '',
-                                    stock: '',
-                                    sku: ''
+                                    stock: ''
                                 });
                             });
                         });
@@ -446,8 +461,7 @@
                                 value1: val1,
                                 value2: '',
                                 price: '',
-                                stock: '',
-                                sku: ''
+                                stock: ''
                             });
                         });
                     }
