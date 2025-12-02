@@ -79,8 +79,9 @@ class SellerDashboardController extends Controller
             return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
         }
 
-        // Get all products with pagination
-        $products = Product::where('seller_id', $seller->id)
+        // Get all products with pagination and relations
+        $products = Product::with(['category', 'variants', 'images'])
+            ->where('seller_id', $seller->id)
             ->orderBy('created_at', 'desc')
             ->paginate(12);
 
@@ -123,6 +124,9 @@ class SellerDashboardController extends Controller
             return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
         }
 
+        // Check if has_variants
+        $hasVariants = $request->has('has_variants') && $request->has_variants;
+        
         $request->validate([
             'name' => 'required|string|max:200',
             'category_id' => 'required|exists:categories,id',
@@ -130,8 +134,8 @@ class SellerDashboardController extends Controller
             'primary_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'additional_images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'has_variants' => 'nullable|boolean',
-            'price' => 'required_if:has_variants,false|nullable|numeric|min:0',
-            'stock' => 'required_if:has_variants,false|nullable|integer|min:0',
+            'price' => $hasVariants ? 'nullable|numeric|min:0' : 'required|numeric|min:0',
+            'stock' => $hasVariants ? 'nullable|integer|min:0' : 'required|integer|min:0',
             'min_order' => 'nullable|integer|min:1',
             'max_order' => 'nullable|integer|min:1',
             'is_active' => 'nullable|boolean',
@@ -154,10 +158,11 @@ class SellerDashboardController extends Controller
                 'has_variants' => $request->has_variants ?? false,
                 'price' => $request->price ?? 0,
                 'stock' => $request->stock ?? 0,
+                'sold_count' => 0,
                 'min_order' => $request->min_order ?? 1,
                 'max_order' => $request->max_order,
-                'province' => $seller->province,
-                'city' => $seller->city,
+                'province' => $seller->province ?? 'DKI Jakarta',
+                'city' => $seller->city ?? 'Jakarta',
                 'is_active' => $request->is_active ?? true,
                 'average_rating' => 0,
                 'total_reviews' => 0,
@@ -190,13 +195,12 @@ class SellerDashboardController extends Controller
                     if (isset($variant['price']) && isset($variant['stock'])) {
                         \App\Models\ProductVariant::create([
                             'product_id' => $product->id,
-                            'variant_type_1' => $variant['type_1'] ?? null,
-                            'variant_value_1' => $variant['value_1'] ?? null,
-                            'variant_type_2' => $variant['type_2'] ?? null,
-                            'variant_value_2' => $variant['value_2'] ?? null,
+                            'variant_type_1' => $variant['variant_type_1'] ?? null,
+                            'variant_value_1' => $variant['variant_value_1'] ?? null,
+                            'variant_type_2' => $variant['variant_type_2'] ?? null,
+                            'variant_value_2' => $variant['variant_value_2'] ?? null,
                             'price' => $variant['price'],
                             'stock' => $variant['stock'],
-                            'sku' => $variant['sku'] ?? null,
                         ]);
                     }
                 }
@@ -222,7 +226,9 @@ class SellerDashboardController extends Controller
             return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
         }
 
-        $product = Product::where('seller_id', $seller->id)->findOrFail($id);
+        $product = Product::with(['images', 'variants'])
+            ->where('seller_id', $seller->id)
+            ->findOrFail($id);
         $categories = \App\Models\Category::where('is_active', true)
             ->orderBy('order')
             ->get();
@@ -318,10 +324,10 @@ class SellerDashboardController extends Controller
                     if (isset($variant['price']) && isset($variant['stock'])) {
                         \App\Models\ProductVariant::create([
                             'product_id' => $product->id,
-                            'variant_type_1' => $variant['type_1'] ?? null,
-                            'variant_value_1' => $variant['value_1'] ?? null,
-                            'variant_type_2' => $variant['type_2'] ?? null,
-                            'variant_value_2' => $variant['value_2'] ?? null,
+                            'variant_type_1' => $variant['variant_type_1'] ?? null,
+                            'variant_value_1' => $variant['variant_value_1'] ?? null,
+                            'variant_type_2' => $variant['variant_type_2'] ?? null,
+                            'variant_value_2' => $variant['variant_value_2'] ?? null,
                             'price' => $variant['price'],
                             'stock' => $variant['stock'],
                         ]);

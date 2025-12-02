@@ -181,10 +181,26 @@
                                 {{ $product->name }}
                             </h3>
 
+                            <!-- Price -->
                             <div class="mb-3">
-                                <div class="text-lg font-bold text-green-600">
-                                    Rp{{ number_format($product->price, 0, ',', '.') }}
-                                </div>
+                                @if($product->has_variants && $product->variants->isNotEmpty())
+                                    @php
+                                        $minPrice = $product->variants->min('price');
+                                        $maxPrice = $product->variants->max('price');
+                                    @endphp
+                                    <div class="text-lg font-bold text-green-600">
+                                        @if($minPrice == $maxPrice)
+                                            Rp{{ number_format($minPrice, 0, ',', '.') }}
+                                        @else
+                                            Rp{{ number_format($minPrice, 0, ',', '.') }} - Rp{{ number_format($maxPrice, 0, ',', '.') }}
+                                        @endif
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">{{ $product->variants->count() }} varian</p>
+                                @else
+                                    <div class="text-lg font-bold text-green-600">
+                                        Rp{{ number_format($product->price, 0, ',', '.') }}
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="flex items-center justify-between text-xs text-gray-600 mb-3">
@@ -198,13 +214,26 @@
                                 </div>
                             </div>
 
+                            <!-- Stock -->
                             <div class="mb-3 pb-3 border-b border-gray-200">
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-600">Stok:</span>
-                                    <span class="font-semibold {{ $product->stock > 10 ? 'text-green-600' : 'text-red-600' }}">
-                                        {{ $product->stock }} unit
-                                    </span>
-                                </div>
+                                @if($product->has_variants && $product->variants->isNotEmpty())
+                                    @php
+                                        $totalStock = $product->variants->sum('stock');
+                                    @endphp
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-600">Total Stok:</span>
+                                        <span class="font-semibold {{ $totalStock > 10 ? 'text-green-600' : 'text-red-600' }}">
+                                            {{ $totalStock }} unit
+                                        </span>
+                                    </div>
+                                @else
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span class="text-gray-600">Stok:</span>
+                                        <span class="font-semibold {{ $product->stock > 10 ? 'text-green-600' : 'text-red-600' }}">
+                                            {{ $product->stock }} unit
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
 
                             <!-- Action Buttons -->
