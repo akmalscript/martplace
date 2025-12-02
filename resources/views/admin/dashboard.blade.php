@@ -52,9 +52,9 @@
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
                     <i class="fas fa-store mr-3 w-5"></i>Kelola Seller
                 </a>
-                <a href="{{ route('admin.products.index') }}"
+                <a href="{{ route('admin.categories.index') }}"
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-box mr-3 w-5"></i>Kelola Produk
+                    <i class="fas fa-tags mr-3 w-5"></i>Kelola Kategori
                 </a>
                 <a href="{{ route('home') }}"
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">

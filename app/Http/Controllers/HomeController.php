@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,12 @@ class HomeController extends Controller
         $selectedCategory = $request->get('category');
         $selectedFilter = $filterType;
 
-        return view('home', compact('products', 'selectedCategory', 'selectedFilter'));
+        // Fetch active categories for display
+        $categories = Category::where('is_active', true)
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
+
+        return view('home', compact('products', 'selectedCategory', 'selectedFilter', 'categories'));
     }
 }

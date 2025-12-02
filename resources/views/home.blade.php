@@ -386,110 +386,21 @@
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            <!-- Category Item -->
-            <a href="{{ route('home', ['category' => 'Makanan Kering']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Makanan Kering' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
-                    <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Makanan Kering</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Figure']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Figure' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-blue-200 transition">
-                    <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Figure</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Tas Selempang Pria']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Tas Selempang Pria' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-amber-200 transition">
-                    <svg class="w-8 h-8 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Tas Selempang Pria</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Flat Shoes Wanita']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Flat Shoes Wanita' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-purple-200 transition">
-                    <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Flat Shoes Wanita</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Handphone']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Handphone' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-indigo-200 transition">
-                    <svg class="w-8 h-8 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Handphone</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Fashion Pria']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Fashion Pria' ? 'ring-2 ring-green-500' : '' }}">
+            @forelse($categories->take(8) as $category)
+            <a href="{{ route('home', ['category' => $category->id]) }}"
+                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'ring-2 ring-green-500' : '' }}">
                 <div
                     class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-green-200 transition">
-                    <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
+                    <i class="fas {{ $category->icon ?? 'fa-tag' }} text-2xl text-green-600"></i>
                 </div>
-                <span class="text-sm text-gray-700 text-center">Fashion Pria</span>
+                <span class="text-sm text-gray-700 text-center">{{ $category->name }}</span>
             </a>
-
-            <a href="{{ route('home', ['category' => 'Kecantikan']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Kecantikan' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-pink-200 transition">
-                    <svg class="w-8 h-8 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Kecantikan</span>
-            </a>
-
-            <a href="{{ route('home', ['category' => 'Rumah Tangga']) }}"
-                class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition group {{ isset($selectedCategory) && $selectedCategory == 'Rumah Tangga' ? 'ring-2 ring-green-500' : '' }}">
-                <div
-                    class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-2 group-hover:bg-orange-200 transition">
-                    <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
-                        </path>
-                    </svg>
-                </div>
-                <span class="text-sm text-gray-700 text-center">Rumah Tangga</span>
-            </a>
+            @empty
+            <div class="col-span-full text-center py-8 text-gray-500">
+                <i class="fas fa-tags text-4xl mb-2"></i>
+                <p>Belum ada kategori</p>
+            </div>
+            @endforelse
         </div>
     </section>
 

@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -32,12 +32,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/sellers/{id}/approve', [SellerController::class, 'approve'])->name('sellers.approve');
     Route::post('/sellers/{id}/reject', [SellerController::class, 'reject'])->name('sellers.reject');
 
-    // Product Management (Kelola Produk)
-    Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
-    Route::get('/products/{id}', [AdminProductController::class, 'show'])->name('products.show');
-    Route::post('/products/{id}/suspend', [AdminProductController::class, 'suspend'])->name('products.suspend');
-    Route::post('/products/{id}/activate', [AdminProductController::class, 'activate'])->name('products.activate');
-    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('products.destroy');
+    // Category Management (Kelola Kategori)
+    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [AdminCategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{id}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{id}', [AdminCategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 // Seller Dashboard Routes (requires authentication and active seller status)
