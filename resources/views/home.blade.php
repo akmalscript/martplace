@@ -382,14 +382,14 @@
     </section>
 
     <!-- Category Section - Horizontal Scroll -->
-    <section class="py-12">
+    <section class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Kategori Pilihan</h2>
             </div>
         </div>
 
-        <div class="relative" x-data="{
+        <div class="relative px-5 max-w-7xl mx-auto" x-data="{
             scrollContainer: null,
             canScrollLeft: false,
             canScrollRight: true,
@@ -445,14 +445,14 @@
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0"
                  x-transition:enter-end="opacity-100"
-                 class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+                 class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
 
             <!-- Right Fade Gradient -->
             <div x-show="canScrollRight"
                  x-transition:enter="transition ease-out duration-200"
                  x-transition:enter-start="opacity-0"
                  x-transition:enter-end="opacity-100"
-                 class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
+                 class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
             <!-- Scrollable Category Container -->
             <div x-ref="categoryScroll" 
