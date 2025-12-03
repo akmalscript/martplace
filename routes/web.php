@@ -39,6 +39,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/categories/{id}/edit', [AdminCategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/categories/{id}', [AdminCategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+
+    // Reports (Laporan)
+    Route::get('/reports', [\App\Http\Controllers\AdminReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/sellers', [\App\Http\Controllers\AdminReportController::class, 'sellersReport'])->name('reports.sellers');
+    Route::get('/reports/sellers-by-province', [\App\Http\Controllers\AdminReportController::class, 'sellersByProvinceReport'])->name('reports.sellers-by-province');
+    Route::get('/reports/products-by-rating', [\App\Http\Controllers\AdminReportController::class, 'productsByRatingReport'])->name('reports.products-by-rating');
 });
 
 // Seller Dashboard Routes (requires authentication and active seller status)
