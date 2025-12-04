@@ -139,6 +139,14 @@
                                     class="w-full rounded-lg bg-green-600 px-4 py-3.5 text-base font-semibold text-white shadow-lg hover:bg-green-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-200 transition transform hover:scale-[1.02] active:scale-[0.98]">
                                     Login
                                 </button>
+
+                                <!-- Register Button -->
+                                <p class="text-center text-gray-600">
+                                    Belum punya akun?
+                                    <a href="{{ route('sellers.create') }}" class="text-green-600 hover:text-green-700 font-medium">
+                                        Daftar toko Sekarang
+                                    </a>
+                                </p>
                             </form>
                         </div>
                     </div>

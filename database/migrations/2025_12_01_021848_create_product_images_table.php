@@ -6,10 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
@@ -18,15 +15,10 @@ return new class extends Migration
             $table->boolean('is_primary')->default(false);
             $table->integer('order')->default(0);
             $table->timestamps();
-            
-            $table->index('product_id');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('product_images');
     }

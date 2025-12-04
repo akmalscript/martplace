@@ -137,4 +137,26 @@ class Product extends Model
     {
         return $this->original_price ? 'Rp' . number_format((float) $this->original_price, 0, ',', '.') : null;
     }
+
+    /**
+     * Get image URL - prioritize primary image from images relation
+     */
+    public function getImageUrlAttribute($value)
+    {
+        if ($value) {
+            return $value;
+        }
+
+        $primaryImage = $this->images()->where('is_primary', true)->first();
+        if ($primaryImage) {
+            return $primaryImage->image_path;
+        }
+
+        $firstImage = $this->images()->first();
+        if ($firstImage) {
+            return $firstImage->image_path;
+        }
+
+        return 'https://placehold.co/600x600/E5E5E5/999999?text=No+Image';
+    }
 }

@@ -42,12 +42,55 @@
 
         <!-- Product Detail -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <!-- Product Image -->
-            <div>
-                <div class="bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-auto"
+            <!-- Product Images Carousel -->
+                <div x-data="{ 
+                    activeImage: 0, 
+                    images: @js($product->images->count() > 0 ? $product->images->pluck('image_path')->toArray() : [$product->image_url ?? 'https://via.placeholder.com/600x600/E5E5E5/999999?text=No+Image']) 
+                }">
+                <!-- Main Image -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-md mb-4 relative">
+                    <img :src="images[activeImage]" alt="{{ $product->name }}" class="w-full h-auto aspect-square object-cover"
                         onerror="this.src='https://via.placeholder.com/600x600/E5E5E5/999999?text=No+Image'">
+                    
+                    <!-- Navigation Arrows -->
+                    <template x-if="images.length > 1">
+                        <div>
+                            <button @click="activeImage = activeImage === 0 ? images.length - 1 : activeImage - 1" 
+                                class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition">
+                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button @click="activeImage = activeImage === images.length - 1 ? 0 : activeImage + 1"
+                                class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md transition">
+                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </template>
+
+                    <!-- Image Counter -->
+                    <template x-if="images.length > 1">
+                        <div class="absolute bottom-3 right-3 bg-black/60 text-white text-sm px-3 py-1 rounded-full">
+                            <span x-text="activeImage + 1"></span> / <span x-text="images.length"></span>
+                        </div>
+                    </template>
                 </div>
+
+                <!-- Thumbnail Images -->
+                <template x-if="images.length > 1">
+                    <div class="flex gap-2 overflow-x-auto pb-2">
+                        <template x-for="(image, index) in images" :key="index">
+                            <button @click="activeImage = index" 
+                                :class="activeImage === index ? 'ring-2 ring-green-500' : 'ring-1 ring-gray-200'"
+                                class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-white transition">
+                                <img :src="image" alt="Thumbnail" class="w-full h-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/80x80/E5E5E5/999999?text=No+Image'">
+                            </button>
+                        </template>
+                    </div>
+                </template>
             </div>
 
             <!-- Product Info -->
@@ -106,18 +149,6 @@
                         <p class="text-gray-700">{{ $product->description }}</p>
                     </div>
                 @endif
-
-                <!-- Action Buttons -->
-                <div class="flex space-x-4">
-                    <button
-                        class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
-                        Beli Sekarang
-                    </button>
-                    <button
-                        class="flex-1 bg-white text-green-600 border-2 border-green-600 py-3 rounded-lg font-semibold hover:bg-green-50 transition">
-                        + Keranjang
-                    </button>
-                </div>
             </div>
         </div>
 
