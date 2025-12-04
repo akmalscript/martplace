@@ -57,6 +57,11 @@ Route::middleware(['auth', 'seller'])->prefix('seller')->name('seller.')->group(
     Route::put('/products/{id}', [SellerDashboardController::class, 'updateProduct'])->name('products.update');
     Route::delete('/products/{id}', [SellerDashboardController::class, 'deleteProduct'])->name('products.delete');
     Route::get('/reports', [SellerDashboardController::class, 'reports'])->name('reports');
+    
+    // Seller Reports PDF Download
+    Route::get('/reports/stock-by-quantity', [SellerDashboardController::class, 'reportStockByQuantity'])->name('reports.stock-by-quantity');
+    Route::get('/reports/stock-by-rating', [SellerDashboardController::class, 'reportStockByRating'])->name('reports.stock-by-rating');
+    Route::get('/reports/low-stock', [SellerDashboardController::class, 'reportLowStock'])->name('reports.low-stock');
 });
 
 // Wilayah API Proxy Routes

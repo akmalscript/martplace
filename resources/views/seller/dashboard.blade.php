@@ -54,7 +54,7 @@
                 </a>
                 <a href="{{ route('seller.reports') }}"
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-file-alt mr-3 w-5"></i>Laporan Seller
+                    <i class="fas fa-book mr-3 w-5"></i>Laporan
                 </a>
                 <hr class="my-4">
                 <a href="{{ route('home') }}"

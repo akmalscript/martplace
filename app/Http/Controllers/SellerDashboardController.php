@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SellerDashboardController extends Controller
 {
@@ -404,9 +405,9 @@ class SellerDashboardController extends Controller
             ->orderBy('total', 'desc')
             ->get();
 
-        // Low stock products (stock < 10)
+        // Low stock products (stock < 2)
         $lowStockProducts = Product::where('seller_id', $seller->id)
-            ->where('stock', '<', 10)
+            ->where('stock', '<', 2)
             ->where('is_active', true)
             ->orderBy('stock', 'asc')
             ->get();
@@ -421,5 +422,102 @@ class SellerDashboardController extends Controller
             'productsByCategory',
             'lowStockProducts'
         ));
+    }
+
+    /**
+     * Generate PDF report for stock products ordered by quantity (descending)
+     */
+    public function reportStockByQuantity()
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        // Get all products for this seller ordered by stock (descending)
+        $products = Product::with('category')
+            ->where('seller_id', $seller->id)
+            ->orderBy('stock', 'desc')
+            ->get();
+
+        $data = [
+            'products' => $products,
+            'tanggalDibuat' => now()->locale('id')->isoFormat('D MMMM Y'),
+            'namaAkunPemroses' => Auth::user()->name,
+        ];
+
+        $pdf = Pdf::loadView('seller.pdf.stock-by-quantity-report', $data);
+        $pdf->setPaper('A4', 'portrait');
+
+        $filename = 'Laporan_Stok_Produk_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Generate PDF report for stock products ordered by rating (descending)
+     */
+    public function reportStockByRating()
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        // Get all products for this seller ordered by rating (descending)
+        $products = Product::with('category')
+            ->where('seller_id', $seller->id)
+            ->orderBy('average_rating', 'desc')
+            ->get();
+
+        $data = [
+            'products' => $products,
+            'tanggalDibuat' => now()->locale('id')->isoFormat('D MMMM Y'),
+            'namaAkunPemroses' => Auth::user()->name,
+        ];
+
+        $pdf = Pdf::loadView('seller.pdf.stock-by-rating-report', $data);
+        $pdf->setPaper('A4', 'portrait');
+
+        $filename = 'Laporan_Stok_Rating_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
+    /**
+     * Generate PDF report for low stock products (stock < 2)
+     */
+    public function reportLowStock()
+    {
+        $seller = Auth::user()->seller;
+
+        if (!$seller) {
+            return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
+        }
+
+        // Get all products for this seller with stock < 2, ordered by category and product name
+        $products = Product::with('category')
+            ->where('seller_id', $seller->id)
+            ->where('stock', '<', 2)
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->orderBy('categories.name', 'asc')
+            ->orderBy('products.name', 'asc')
+            ->select('products.*')
+            ->get();
+
+        $data = [
+            'products' => $products,
+            'tanggalDibuat' => now()->locale('id')->isoFormat('D MMMM Y'),
+            'namaAkunPemroses' => Auth::user()->name,
+        ];
+
+        $pdf = Pdf::loadView('seller.pdf.low-stock-report', $data);
+        $pdf->setPaper('A4', 'portrait');
+
+        $filename = 'Laporan_Stok_Hampir_Habis_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
     }
 }

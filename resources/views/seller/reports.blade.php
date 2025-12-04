@@ -9,6 +9,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+        }
+        .report-row {
+            transition: all 0.3s ease;
+        }
+        .report-row:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .glow-button {
+            position: relative;
+            overflow: hidden;
+        }
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        .glow-button:hover::before {
+            left: 100%;
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50" x-data="{ sidebarOpen: false }">
@@ -54,7 +90,7 @@
                 </a>
                 <a href="{{ route('seller.reports') }}"
                     class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
-                    <i class="fas fa-file-alt mr-3 w-5"></i>Laporan Seller
+                    <i class="fas fa-book mr-3 w-5"></i>Laporan
                 </a>
                 <hr class="my-4">
                 <a href="{{ route('home') }}"
@@ -70,224 +106,192 @@
         <div class="p-6 lg:p-8">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-file-alt mr-3 text-green-600"></i>Laporan {{ $seller->store_name }}
-                </h1>
-                <p class="text-gray-600">Ringkasan dan analisis performa toko Anda</p>
-            </div>
-
-            <!-- Summary Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Total Produk</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalProducts) }}</p>
-                            <p class="text-xs text-gray-500 mt-1">{{ $activeProducts }} aktif</p>
-                        </div>
-                        <div class="bg-blue-100 p-4 rounded-full">
-                            <i class="fas fa-box text-blue-600 text-2xl"></i>
-                        </div>
+                <div class="flex items-center space-x-4 mb-2">
+                    <div class="w-12 h-12 bg-gradient-to-r from-cyan-400 to-green-400 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-book text-white text-xl icon-float"></i>
                     </div>
-                </div>
-
-
-
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Total Stok</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalStock) }}</p>
-                            <p class="text-xs text-gray-500 mt-1">unit tersedia</p>
-                        </div>
-                        <div class="bg-purple-100 p-4 rounded-full">
-                            <i class="fas fa-warehouse text-purple-600 text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-yellow-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Rating Rata-rata</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($averageRating ?? 0, 1) }}</p>
-                            <p class="text-xs text-gray-500 mt-1">{{ number_format($totalReviews) }} ulasan</p>
-                        </div>
-                        <div class="bg-yellow-100 p-4 rounded-full">
-                            <i class="fas fa-star text-yellow-600 text-2xl"></i>
-                        </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Laporan {{ $seller->store_name }}</h1>
+                        <p class="text-gray-600">Ringkasan dan analisis performa toko Anda</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Row -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <!-- Products by Category -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6">
-                        <i class="fas fa-tags text-blue-600 mr-2"></i>Produk per Kategori
-                    </h2>
-                    @if($productsByCategory->count() > 0)
-                    <div class="relative" style="height: 300px;">
-                        <canvas id="categoryChart"></canvas>
+            <!-- Download Reports Section -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 mb-8">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-8 py-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-file-pdf text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Download Laporan PDF</h2>
+                                <p class="text-white text-opacity-80 text-sm">Unduh laporan produk dalam format PDF</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:flex items-center space-x-2 text-white text-opacity-80">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="text-sm">{{ $totalProducts ?? 0 }} produk tersedia</span>
+                        </div>
                     </div>
-                    @else
-                    <div class="text-center py-12 text-gray-500">
-                        <i class="fas fa-chart-pie text-4xl mb-4"></i>
-                        <p>Belum ada data kategori</p>
-                    </div>
-                    @endif
                 </div>
 
-
-            </div>
-
-            <!-- Low Stock Alert -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-                <h2 class="text-xl font-bold text-gray-800 mb-6">
-                    <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>Peringatan Stok Rendah
-                </h2>
-                @if($lowStockProducts->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-red-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-red-600 uppercase">Produk</th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-red-600 uppercase">Stok Tersisa</th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-red-600 uppercase">Harga</th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-red-600 uppercase">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($lowStockProducts as $product)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-10 h-10 object-cover rounded mr-3"
-                                            onerror="this.src='https://placehold.co/40x40/E5E5E5/999999?text=No'">
-                                        <span class="text-sm font-medium text-gray-900">{{ Str::limit($product->name, 40) }}</span>
+                <!-- Reports List -->
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <!-- Report 1: Stock by Quantity -->
+                        <div class="report-row gradient-card rounded-xl p-5 border border-gray-100">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-boxes-stacked text-white text-xl"></i>
+                                        </div>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 text-sm font-bold rounded-full {{ $product->stock == 0 ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                        {{ $product->stock }} unit
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $product->formatted_price }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <a href="{{ route('seller.products.edit', $product->id) }}" class="text-blue-600 hover:text-blue-900">
-                                        <i class="fas fa-edit mr-1"></i>Edit Stok
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">01</span>
+                                            <h3 class="font-bold text-gray-800 text-lg">Laporan Stok Produk (Urut Stok)</h3>
+                                        </div>
+                                        <p class="text-gray-600 text-sm mb-2">
+                                            Daftar stok produk diurutkan berdasarkan jumlah stok secara menurun
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-star mr-1 text-yellow-500"></i>Rating
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-tag mr-1 text-green-500"></i>Kategori
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-money-bill mr-1 text-emerald-500"></i>Harga
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="{{ route('seller.reports.stock-by-quantity') }}" 
+                                       class="glow-button inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Download PDF
                                     </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @else
-                <div class="text-center py-8 text-gray-500">
-                    <i class="fas fa-check-circle text-green-500 text-4xl mb-4"></i>
-                    <p class="text-green-600 font-semibold">Semua produk memiliki stok yang cukup!</p>
-                </div>
-                @endif
-            </div>
+                                </div>
+                            </div>
+                        </div>
 
-            <!-- Products by Category Table -->
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-6">
-                    <i class="fas fa-table text-purple-600 mr-2"></i>Ringkasan per Kategori
-                </h2>
-                @if($productsByCategory->count() > 0)
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gradient-to-r from-cyan-400 to-green-300">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-white uppercase">Kategori</th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-white uppercase">Jumlah Produk</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($productsByCategory as $category)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-medium text-gray-900">{{ $category->category }}</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full">
-                                        {{ $category->total }} produk
-                                    </span>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        <!-- Report 2: Stock by Rating -->
+                        <div class="report-row gradient-card rounded-xl p-5 border border-gray-100">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-star text-white text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2.5 py-1 rounded-full">02</span>
+                                            <h3 class="font-bold text-gray-800 text-lg">Laporan Stok Produk (Urut Rating)</h3>
+                                        </div>
+                                        <p class="text-gray-600 text-sm mb-2">
+                                            Daftar stok produk diurutkan berdasarkan rating secara menurun
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-cubes mr-1 text-blue-500"></i>Stok
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-tag mr-1 text-green-500"></i>Kategori
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-money-bill mr-1 text-emerald-500"></i>Harga
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="{{ route('seller.reports.stock-by-rating') }}" 
+                                       class="glow-button inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Report 3: Low Stock Alert -->
+                        <div class="report-row gradient-card rounded-xl p-5 border border-gray-100">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <span class="bg-red-100 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full">03</span>
+                                            <h3 class="font-bold text-gray-800 text-lg">Laporan Stok Hampir Habis</h3>
+                                            @if(($lowStockProducts->count() ?? 0) > 0)
+                                            <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                                                {{ $lowStockProducts->count() }} produk
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <p class="text-gray-600 text-sm mb-2">
+                                            Daftar produk dengan stok &lt; 2 yang harus segera dipesan ulang
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center text-xs text-red-600 bg-red-50 px-2 py-1 rounded-lg font-medium">
+                                                <i class="fas fa-warning mr-1"></i>Stok Kritis (< 2)
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-tag mr-1 text-green-500"></i>Kategori
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-money-bill mr-1 text-emerald-500"></i>Harga
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="{{ route('seller.reports.low-stock') }}" 
+                                       class="glow-button inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:from-red-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+                                        <i class="fas fa-download mr-2"></i>
+                                        Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                @else
-                <div class="text-center py-8 text-gray-500">
-                    <i class="fas fa-inbox text-4xl mb-4"></i>
-                    <p>Belum ada data kategori</p>
+
+                <!-- Card Footer -->
+                <div class="bg-gray-50 px-8 py-4 border-t border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div class="flex items-start space-x-3 text-sm text-gray-600">
+                            <div class="flex-shrink-0 w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-lightbulb text-cyan-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-700 mb-1">Tips Pengelolaan Stok:</p>
+                                <ul class="text-xs space-y-1 text-gray-500">
+                                    <li>• Periksa laporan stok hampir habis secara berkala</li>
+                                    <li>• Perhatikan produk dengan rating tinggi untuk prioritas restock</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            Terakhir diperbarui: {{ now()->locale('id')->isoFormat('D MMMM Y, HH:mm') }}
+                        </div>
+                    </div>
                 </div>
-                @endif
             </div>
         </div>
     </main>
-
-    @if($productsByCategory->count() > 0)
-    <script>
-        const categoryData = @json($productsByCategory);
-        
-        const colors = [
-            'rgba(59, 130, 246, 0.8)',
-            'rgba(16, 185, 129, 0.8)',
-            'rgba(234, 179, 8, 0.8)',
-            'rgba(239, 68, 68, 0.8)',
-            'rgba(168, 85, 247, 0.8)',
-            'rgba(236, 72, 153, 0.8)',
-            'rgba(249, 115, 22, 0.8)',
-            'rgba(20, 184, 166, 0.8)',
-        ];
-
-        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-        new Chart(categoryCtx, {
-            type: 'doughnut',
-            data: {
-                labels: categoryData.map(item => item.category),
-                datasets: [{
-                    data: categoryData.map(item => item.total),
-                    backgroundColor: colors,
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            padding: 15,
-                            font: { size: 12 }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return `${label}: ${value} produk (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-    @endif
 </body>
 
 </html>

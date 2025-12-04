@@ -50,8 +50,8 @@
                     <span>Kelola Produk</span>
                 </a>
                 <a href="{{ route('seller.reports') }}" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <i class="fas fa-file-alt w-5"></i>
-                    <span>Laporan Seller</span>
+                    <i class="fas fa-book w-5"></i>
+                    <span>Laporan</span>
                 </a>
                 <hr class="my-4">
                 <a href="{{ route('home') }}" class="flex items-center space-x-3 p-3 rounded-lg text-gray-700 hover:bg-gray-100">
