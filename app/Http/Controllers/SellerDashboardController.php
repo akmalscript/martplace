@@ -158,7 +158,6 @@ class SellerDashboardController extends Controller
                 'has_variants' => $request->has_variants ?? false,
                 'price' => $request->price ?? 0,
                 'stock' => $request->stock ?? 0,
-                'sold_count' => 0,
                 'min_order' => $request->min_order ?? 1,
                 'max_order' => $request->max_order,
                 'province' => $seller->province ?? 'DKI Jakarta',
@@ -394,22 +393,15 @@ class SellerDashboardController extends Controller
         $totalProducts = Product::where('seller_id', $seller->id)->count();
         $activeProducts = Product::where('seller_id', $seller->id)->where('is_active', true)->count();
         $totalStock = Product::where('seller_id', $seller->id)->sum('stock');
-        $totalSold = Product::where('seller_id', $seller->id)->sum('sold_count');
         $averageRating = Product::where('seller_id', $seller->id)->avg('average_rating');
         $totalReviews = Product::where('seller_id', $seller->id)->sum('total_reviews');
 
         // Products by category
         $productsByCategory = Product::where('seller_id', $seller->id)
             ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->select('categories.name as category', DB::raw('count(*) as total'), DB::raw('sum(products.sold_count) as sold'))
+            ->select('categories.name as category', DB::raw('count(*) as total'))
             ->groupBy('categories.name')
             ->orderBy('total', 'desc')
-            ->get();
-
-        // Top selling products
-        $topSellingProducts = Product::where('seller_id', $seller->id)
-            ->orderBy('sold_count', 'desc')
-            ->limit(10)
             ->get();
 
         // Low stock products (stock < 10)
@@ -424,11 +416,9 @@ class SellerDashboardController extends Controller
             'totalProducts',
             'activeProducts',
             'totalStock',
-            'totalSold',
             'averageRating',
             'totalReviews',
             'productsByCategory',
-            'topSellingProducts',
             'lowStockProducts'
         ));
     }

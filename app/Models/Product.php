@@ -15,7 +15,6 @@ class Product extends Model
         'description',
         'price',
         'stock',
-        'sold_count',
         'image_url',
         'average_rating',
         'total_reviews',
@@ -32,7 +31,6 @@ class Product extends Model
         'average_rating' => 'decimal:2',
         'total_reviews' => 'integer',
         'stock' => 'integer',
-        'sold_count' => 'integer',
         'is_active' => 'boolean',
         'has_variants' => 'boolean',
         'min_order' => 'integer',
@@ -112,14 +110,6 @@ class Product extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    /**
-     * Scope: Order by popularity
-     */
-    public function scopePopular($query)
-    {
-        return $query->orderBy('sold_count', 'desc');
     }
 
     /**

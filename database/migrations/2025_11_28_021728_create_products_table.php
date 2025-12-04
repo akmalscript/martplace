@@ -26,7 +26,6 @@ return new class extends Migration
             
             // Stock
             $table->integer('stock')->default(0);
-            $table->integer('sold_count')->default(0);
             
             // Variant support
             $table->boolean('has_variants')->default(false);

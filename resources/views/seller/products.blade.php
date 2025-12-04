@@ -203,14 +203,10 @@
                                 @endif
                             </div>
 
-                            <div class="flex items-center justify-between text-xs text-gray-600 mb-3">
+                            <div class="flex items-center text-xs text-gray-600 mb-3">
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span>{{ number_format($product->average_rating, 1) }}</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-shopping-bag text-gray-400 mr-1"></i>
-                                    <span>{{ number_format($product->sold_count) }} terjual</span>
                                 </div>
                             </div>
 

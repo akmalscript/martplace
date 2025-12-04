@@ -167,7 +167,6 @@ Tabel utama untuk menyimpan semua produk yang dijual.
 | description | TEXT | NULLABLE | Deskripsi produk |
 | price | DECIMAL(15,2) | NOT NULL | Harga satuan |
 | stock | INTEGER | DEFAULT 0 | Jumlah stok |
-| sold_count | INTEGER | DEFAULT 0 | Jumlah terjual |
 | has_variants | BOOLEAN | DEFAULT false | Apakah punya varian |
 | min_order | INTEGER | DEFAULT 1 | Minimal pemesanan |
 | max_order | INTEGER | NULLABLE | Maksimal pemesanan |
@@ -475,7 +474,6 @@ Tabel `product_reviews` melacak pengiriman email:
 Beberapa field dihitung otomatis:
 - `products.average_rating`: Rata-rata dari semua review
 - `products.total_reviews`: Jumlah review
-- `products.sold_count`: Counter penjualan
 - `sellers.rating`: Rating toko
 - `sellers.total_products`: Jumlah produk seller
 
@@ -538,6 +536,7 @@ DB::table('product_reviews')
 | 1.1 | 2025-12-01 | Removed SKU fields from products & variants |
 | 1.2 | 2025-12-01 | Removed discount fields (discount_percentage, original_price) |
 | 1.3 | 2025-12-01 | Removed badge field from products |
+| 1.4 | 2025-12-04 | Removed sold_count field from products |
 
 ---
 

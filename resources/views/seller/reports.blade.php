@@ -91,18 +91,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Total Terjual</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalSold) }}</p>
-                            <p class="text-xs text-gray-500 mt-1">unit produk</p>
-                        </div>
-                        <div class="bg-green-100 p-4 rounded-full">
-                            <i class="fas fa-shopping-cart text-green-600 text-2xl"></i>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
                     <div class="flex items-center justify-between">
@@ -150,38 +139,7 @@
                     @endif
                 </div>
 
-                <!-- Top Selling Products -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-6">
-                        <i class="fas fa-trophy text-yellow-500 mr-2"></i>Produk Terlaris
-                    </h2>
-                    @if($topSellingProducts->count() > 0)
-                    <div class="space-y-3 max-h-80 overflow-y-auto">
-                        @foreach($topSellingProducts as $index => $product)
-                        <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                            <span class="w-8 h-8 flex items-center justify-center rounded-full {{ $index < 3 ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-200 text-gray-600' }} font-bold text-sm mr-3">
-                                {{ $index + 1 }}
-                            </span>
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-10 h-10 object-cover rounded mr-3"
-                                onerror="this.src='https://placehold.co/40x40/E5E5E5/999999?text=No'">
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate">{{ $product->name }}</p>
-                                <p class="text-xs text-gray-500">{{ $product->formatted_price }}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-sm font-bold text-green-600">{{ number_format($product->sold_count) }}</p>
-                                <p class="text-xs text-gray-500">terjual</p>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                    @else
-                    <div class="text-center py-12 text-gray-500">
-                        <i class="fas fa-shopping-bag text-4xl mb-4"></i>
-                        <p>Belum ada produk terjual</p>
-                    </div>
-                    @endif
-                </div>
+
             </div>
 
             <!-- Low Stock Alert -->
@@ -248,7 +206,6 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-bold text-white uppercase">Kategori</th>
                                 <th class="px-6 py-3 text-left text-xs font-bold text-white uppercase">Jumlah Produk</th>
-                                <th class="px-6 py-3 text-left text-xs font-bold text-white uppercase">Total Terjual</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -261,9 +218,6 @@
                                     <span class="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full">
                                         {{ $category->total }} produk
                                     </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="text-sm font-bold text-green-600">{{ number_format($category->sold) }} unit</span>
                                 </td>
                             </tr>
                             @endforeach

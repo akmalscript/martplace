@@ -116,11 +116,7 @@
                         </h2>
                     </div>
                     <div class="p-6">
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="text-center p-4 bg-blue-50 rounded-lg">
-                                <p class="text-2xl font-bold text-blue-600">{{ number_format($product->sold_count) }}</p>
-                                <p class="text-sm text-gray-600">Terjual</p>
-                            </div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                             <div class="text-center p-4 bg-yellow-50 rounded-lg">
                                 <div class="flex items-center justify-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>

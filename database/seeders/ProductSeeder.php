@@ -357,7 +357,6 @@ class ProductSeeder extends Seeder
                 'is_active' => true,
                 'average_rating' => 0,
                 'total_reviews' => 0,
-                'sold_count' => rand(0, 100),
             ]);
         }
 

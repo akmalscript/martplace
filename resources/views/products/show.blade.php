@@ -97,7 +97,7 @@
             <div class="bg-white rounded-lg p-6 shadow-md">
                 <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $product->name }}</h1>
 
-                <!-- Rating & Sold -->
+                <!-- Rating -->
                 <div class="flex items-center space-x-4 mb-4">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -107,8 +107,6 @@
                         </svg>
                         <span class="ml-1 text-gray-700">{{ number_format($product->average_rating, 1) }}</span>
                     </div>
-                    <span class="text-gray-400">|</span>
-                    <span class="text-gray-700">{{ number_format($product->sold_count) }} terjual</span>
                 </div>
 
                 <!-- Price -->

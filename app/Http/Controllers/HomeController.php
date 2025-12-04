@@ -34,9 +34,6 @@ class HomeController extends Controller
             $products = $query->where('badge', 'Mall')
                 ->latest()
                 ->get();
-        } elseif ($filterType === 'terlaris') {
-            // Produk Terlaris: Urutkan berdasarkan sold_count, limit 12
-            $products = $query->orderBy('sold_count', 'desc')->limit(12)->get();
         } elseif ($filterType === 'semua') {
             // Semua: Tampilkan semua produk, urutkan terbaru
             $products = $query->latest()->get();

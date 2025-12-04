@@ -440,7 +440,7 @@
                                 </span>
                             </div>
 
-                            <div class="flex items-center justify-between text-xs text-gray-500">
+                            <div class="flex items-center text-xs text-gray-500">
                                 <div class="flex items-center">
                                     <svg class="w-3 h-3 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path
@@ -449,7 +449,6 @@
                                     </svg>
                                     <span>{{ number_format($product->average_rating, 1) }}</span>
                                 </div>
-                                <span>{{ number_format($product->sold_count) }} terjual</span>
                             </div>
 
                             <div class="mt-2 text-xs text-gray-500 flex items-center">
