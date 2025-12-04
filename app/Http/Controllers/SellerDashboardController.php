@@ -195,7 +195,7 @@ class SellerDashboardController extends Controller
                 'max_order' => $request->max_order,
                 'province' => $seller->province ?? 'DKI Jakarta',
                 'city' => $seller->city ?? 'Jakarta',
-                'is_active' => $request->is_active ?? true,
+                'is_active' => $request->is_active == '1',
                 'average_rating' => 0,
                 'total_reviews' => 0,
             ]);
@@ -306,7 +306,7 @@ class SellerDashboardController extends Controller
                 'stock' => $request->stock ?? 0,
                 'min_order' => $request->min_order ?? 1,
                 'max_order' => $request->max_order,
-                'is_active' => $request->is_active ?? true,
+                'is_active' => $request->is_active == '1',
             ];
 
             // Update primary image if provided

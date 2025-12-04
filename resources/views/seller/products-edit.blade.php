@@ -362,6 +362,7 @@
                                 <p class="text-sm text-gray-600">Aktifkan produk agar dapat dilihat pembeli</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="hidden" name="is_active" value="0">
                                 <input type="checkbox" name="is_active" value="1" {{ old('is_active', $product->is_active) ? 'checked' : '' }} class="sr-only peer">
                                 <div class="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
                             </label>
