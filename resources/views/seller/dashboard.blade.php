@@ -9,6 +9,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .stat-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,1) 100%);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.03) 0%, rgba(34, 197, 94, 0.03) 100%);
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.5;
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50" x-data="{ sidebarOpen: false }">
@@ -70,61 +103,82 @@
         <div class="p-6 lg:p-8">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Dashboard {{ $seller->store_name }}</h1>
-                <p class="text-gray-600">Statistik dan analisis toko Anda</p>
+                <div class="flex items-center space-x-4 mb-2">
+                    <div class="w-14 h-14 bg-gradient-to-br from-cyan-400 to-green-400 rounded-2xl flex items-center justify-center shadow-xl">
+                        <i class="fas fa-chart-line text-white text-2xl icon-float"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">
+                            Dashboard {{ $seller->store_name }}
+                        </h1>
+                        <p class="text-gray-600 mt-1">Statistik dan analisis performa toko real-time</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Products -->
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Total Produk</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalProducts) }}</p>
+                <div class="stat-card bg-white rounded-2xl shadow-xl p-6 border border-gray-100 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full opacity-10 -mr-8 -mt-8"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg pulse-ring">
+                                <i class="fas fa-box text-white text-xl"></i>
+                            </div>
                         </div>
-                        <div class="bg-blue-100 p-4 rounded-full">
-                            <i class="fas fa-box text-blue-600 text-2xl"></i>
-                        </div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide mb-1">Total Produk</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                            {{ number_format($totalProducts) }}
+                        </p>
                     </div>
                 </div>
 
                 <!-- Total Stock -->
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Total Stok</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalStock) }}</p>
+                <div class="stat-card bg-white rounded-2xl shadow-xl p-6 border border-gray-100 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full opacity-10 -mr-8 -mt-8"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg pulse-ring">
+                                <i class="fas fa-warehouse text-white text-xl"></i>
+                            </div>
                         </div>
-                        <div class="bg-purple-100 p-4 rounded-full">
-                            <i class="fas fa-warehouse text-purple-600 text-2xl"></i>
-                        </div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide mb-1">Total Stok</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
+                            {{ number_format($totalStock) }}
+                        </p>
                     </div>
                 </div>
 
                 <!-- Average Rating -->
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-yellow-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Rating Rata-rata</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($averageRating ?? 0, 1) }}</p>
+                <div class="stat-card bg-white rounded-2xl shadow-xl p-6 border border-gray-100 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-10 -mr-8 -mt-8"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg pulse-ring">
+                                <i class="fas fa-star text-white text-xl"></i>
+                            </div>
                         </div>
-                        <div class="bg-yellow-100 p-4 rounded-full">
-                            <i class="fas fa-star text-yellow-600 text-2xl"></i>
-                        </div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide mb-1">Rating Rata-rata</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                            {{ number_format($averageRating ?? 0, 1) }}
+                        </p>
                     </div>
                 </div>
 
                 <!-- Total Reviews -->
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600 font-semibold">Total Ulasan</p>
-                            <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($totalReviews) }}</p>
+                <div class="stat-card bg-white rounded-2xl shadow-xl p-6 border border-gray-100 overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full opacity-10 -mr-8 -mt-8"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg pulse-ring">
+                                <i class="fas fa-comment text-white text-xl"></i>
+                            </div>
                         </div>
-                        <div class="bg-green-100 p-4 rounded-full">
-                            <i class="fas fa-comment text-green-600 text-2xl"></i>
-                        </div>
+                        <p class="text-sm text-gray-500 font-medium uppercase tracking-wide mb-1">Total Ulasan</p>
+                        <p class="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">
+                            {{ number_format($totalReviews) }}
+                        </p>
                     </div>
                 </div>
             </div>

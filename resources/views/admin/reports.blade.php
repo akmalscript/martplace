@@ -8,6 +8,42 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .gradient-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+        }
+        .report-row {
+            transition: all 0.3s ease;
+        }
+        .report-row:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .glow-button {
+            position: relative;
+            overflow: hidden;
+        }
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        .glow-button:hover::before {
+            left: 100%;
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50" x-data="{ sidebarOpen: false }">
@@ -72,10 +108,15 @@
         <div class="p-6 lg:p-8">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-book mr-3 text-green-500"></i>Laporan MartPlace
-                </h1>
-                <p class="text-gray-600">Unduh dan kelola laporan platform marketplace</p>
+                <div class="flex items-center space-x-4 mb-2">
+                    <div class="w-12 h-12 bg-gradient-to-r from-cyan-400 to-green-400 rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-book text-white text-xl icon-float"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">Laporan Admin MartPlace</h1>
+                        <p class="text-gray-600">Unduh dan kelola laporan platform marketplace</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Success Message -->
@@ -97,117 +138,166 @@
             </div>
             @endif
 
-            <!-- Reports Table -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-6 py-4">
-                    <h2 class="text-xl font-bold text-white flex items-center">
-                        <i class="fas fa-file-alt mr-3"></i>Daftar Laporan
-                    </h2>
+            <!-- Download Reports Section -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 mb-8">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-8 py-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-file-pdf text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-white">Download Laporan PDF</h2>
+                                <p class="text-white text-opacity-80 text-sm">Unduh laporan platform dalam format PDF</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead class="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-20">No</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Jenis Laporan</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Deskripsi</th>
-                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700 w-48">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <!-- Laporan 1: Daftar Seller Aktif/Tidak Aktif -->
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 text-gray-700 font-medium">1</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                                            <i class="fas fa-users text-blue-600"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold text-gray-800">Daftar Akun Penjual</p>
-                                            <p class="text-xs text-gray-500">Format: PDF</p>
+
+                <!-- Reports List -->
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <!-- Report 1: Daftar Akun Penjual -->
+                        <div class="report-row gradient-card rounded-xl p-5 border border-gray-100">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-users text-white text-xl"></i>
                                         </div>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600 text-sm">
-                                    Laporan daftar akun penjual aktif dan tidak aktif dengan detail informasi toko
-                                </td>
-                                <td class="px-6 py-4 text-center">
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-1 rounded-full">01</span>
+                                            <h3 class="font-bold text-gray-800 text-lg">Daftar Akun Penjual</h3>
+                                        </div>
+                                        <p class="text-gray-600 text-sm mb-2">
+                                            Laporan daftar akun penjual aktif dan tidak aktif dengan detail informasi toko
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-store mr-1 text-blue-500"></i>Nama Toko
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-user mr-1 text-green-500"></i>Pemilik
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-toggle-on mr-1 text-emerald-500"></i>Status
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
                                     <a href="{{ route('admin.reports.sellers') }}" 
-                                       class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-md hover:shadow-lg">
+                                       class="glow-button inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
                                         <i class="fas fa-download mr-2"></i>
                                         Download PDF
                                     </a>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
+                        </div>
 
-                            <!-- Laporan 2: Seller per Provinsi -->
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 text-gray-700 font-medium">2</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
-                                            <i class="fas fa-map-marker-alt text-green-600"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold text-gray-800">Penjual per Provinsi</p>
-                                            <p class="text-xs text-gray-500">Format: PDF</p>
+                        <!-- Report 2: Penjual per Provinsi -->
+                        <div class="report-row gradient-card rounded-xl p-5 border border-gray-100">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-map-marker-alt text-white text-xl"></i>
                                         </div>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600 text-sm">
-                                    Laporan daftar penjual (toko) yang dikelompokkan berdasarkan lokasi provinsi
-                                </td>
-                                <td class="px-6 py-4 text-center">
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">02</span>
+                                            <h3 class="font-bold text-gray-800 text-lg">Penjual per Provinsi</h3>
+                                        </div>
+                                        <p class="text-gray-600 text-sm mb-2">
+                                            Laporan daftar penjual (toko) yang dikelompokkan berdasarkan lokasi provinsi
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-map mr-1 text-green-500"></i>Provinsi
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-store mr-1 text-blue-500"></i>Nama Toko
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-phone mr-1 text-purple-500"></i>Kontak
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
                                     <a href="{{ route('admin.reports.sellers-by-province') }}" 
-                                       class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md hover:shadow-lg">
+                                       class="glow-button inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
                                         <i class="fas fa-download mr-2"></i>
                                         Download PDF
                                     </a>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
+                        </div>
 
-                            <!-- Laporan 3: Produk Berdasarkan Rating -->
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 text-gray-700 font-medium">3</td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
-                                            <i class="fas fa-star text-yellow-600"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold text-gray-800">Produk & Rating</p>
-                                            <p class="text-xs text-gray-500">Format: PDF</p>
+                        <!-- Report 3: Produk & Rating -->
+                        <div class="report-row gradient-card rounded-xl p-5 border border-gray-100">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="flex-shrink-0">
+                                        <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i class="fas fa-star text-white text-xl"></i>
                                         </div>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 text-gray-600 text-sm">
-                                    Laporan daftar produk dengan rating, toko, kategori, harga, dan lokasi provinsi (diurutkan berdasarkan rating tertinggi)
-                                </td>
-                                <td class="px-6 py-4 text-center">
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-2 mb-1">
+                                            <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2.5 py-1 rounded-full">03</span>
+                                            <h3 class="font-bold text-gray-800 text-lg">Produk & Rating</h3>
+                                        </div>
+                                        <p class="text-gray-600 text-sm mb-2">
+                                            Laporan daftar produk dengan rating, toko, kategori, harga, dan lokasi provinsi
+                                        </p>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-star mr-1 text-yellow-500"></i>Rating
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-tag mr-1 text-green-500"></i>Kategori
+                                            </span>
+                                            <span class="inline-flex items-center text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                                                <i class="fas fa-money-bill mr-1 text-emerald-500"></i>Harga
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-shrink-0">
                                     <a href="{{ route('admin.reports.products-by-rating') }}" 
-                                       class="inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition shadow-md hover:shadow-lg">
+                                       class="glow-button inline-flex items-center px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
                                         <i class="fas fa-download mr-2"></i>
                                         Download PDF
                                     </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Info Footer -->
-                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-                    <div class="flex items-start space-x-3 text-sm text-gray-600">
-                        <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
-                        <div>
-                            <p class="font-semibold text-gray-700 mb-1">Informasi Laporan:</p>
-                            <ul class="list-disc list-inside space-y-1 ml-2">
-                                <li>Semua laporan akan diunduh dalam format PDF</li>
-                                <li>Data laporan diambil secara real-time dari database</li>
-                                <li>Laporan dapat diunduh kapan saja sesuai kebutuhan</li>
-                            </ul>
+                <!-- Card Footer -->
+                <div class="bg-gray-50 px-8 py-4 border-t border-gray-100">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div class="flex items-start space-x-3 text-sm text-gray-600">
+                            <div class="flex-shrink-0 w-8 h-8 bg-cyan-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-lightbulb text-cyan-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-700 mb-1">Informasi Laporan:</p>
+                                <ul class="text-xs space-y-1 text-gray-500">
+                                    <li>• Semua laporan diunduh dalam format PDF</li>
+                                    <li>• Data laporan diambil real-time dari database</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            Terakhir diperbarui: {{ now()->locale('id')->isoFormat('D MMMM Y, HH:mm') }}
                         </div>
                     </div>
                 </div>

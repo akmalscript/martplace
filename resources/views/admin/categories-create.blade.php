@@ -7,6 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .form-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.03) 0%, rgba(34, 197, 94, 0.03) 100%);
+        }
+        .input-modern:focus {
+            box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 <body class="bg-gray-50" x-data="{ sidebarOpen: false }">
     <!-- Navbar -->
@@ -70,13 +85,20 @@
         <div class="p-6 lg:p-8">
             <!-- Header -->
             <div class="mb-8">
-                <div class="flex items-center mb-4">
-                    <a href="{{ route('admin.categories.index') }}" class="text-gray-600 hover:text-gray-800 mr-2">
-                        <i class="fas fa-arrow-left"></i>
+                <div class="flex items-center space-x-4 mb-2">
+                    <a href="{{ route('admin.categories.index') }}" 
+                       class="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center transition-all">
+                        <i class="fas fa-arrow-left text-gray-600"></i>
                     </a>
-                    <h1 class="text-3xl font-bold text-gray-800">
-                        <i class="fas fa-plus-circle mr-3 text-green-600"></i>Tambah Kategori
-                    </h1>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-xl">
+                        <i class="fas fa-plus-circle text-white text-xl icon-float"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                            Tambah Kategori Baru
+                        </h1>
+                        <p class="text-gray-600 mt-1">Buat kategori produk baru untuk marketplace</p>
+                    </div>
                 </div>
                 <p class="text-gray-600">Tambahkan kategori baru untuk produk</p>
             </div>

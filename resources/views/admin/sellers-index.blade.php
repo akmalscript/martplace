@@ -7,6 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .table-row {
+            transition: all 0.2s ease;
+        }
+        .table-row:hover {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+            transform: scale(1.01);
+        }
+        .badge {
+            animation: pulse-subtle 2s ease-in-out infinite;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
 </head>
 <body class="bg-gray-50" x-data="{ sidebarOpen: false }">
     <!-- Navbar -->
@@ -70,10 +93,17 @@
         <div class="p-6 lg:p-8">
             <!-- Header -->
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-users-cog mr-3 text-green-600"></i>Kelola Seller
-                </h1>
-                <p class="text-gray-600">Kelola status dan verifikasi seller</p>
+                <div class="flex items-center space-x-4 mb-2">
+                    <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
+                        <i class="fas fa-users-cog text-white text-2xl icon-float"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                            Kelola Seller
+                        </h1>
+                        <p class="text-gray-600 mt-1">Kelola status dan verifikasi akun penjual</p>
+                    </div>
+                </div>
             </div>
 
         <!-- Alerts -->

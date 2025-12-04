@@ -7,6 +7,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+    </style>
 </head>
 <body class="bg-gray-50" x-data="{ sidebarOpen: false, showDeleteModal: false, deleteCategoryId: null, deleteCategoryName: '' }">
     <!-- Navbar -->
@@ -69,15 +102,20 @@
     <main class="lg:ml-64 pt-16">
         <div class="p-6 lg:p-8">
             <!-- Header -->
-            <div class="mb-8 flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                        <i class="fas fa-tags mr-3 text-green-600"></i>Kelola Kategori
-                    </h1>
-                    <p class="text-gray-600">Kelola kategori produk di platform</p>
+            <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
+                        <i class="fas fa-tags text-white text-2xl icon-float"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                            Kelola Kategori
+                        </h1>
+                        <p class="text-gray-600 mt-1">Kelola kategori produk di platform marketplace</p>
+                    </div>
                 </div>
                 <a href="{{ route('admin.categories.create') }}"
-                    class="bg-gradient-to-r from-cyan-400 to-green-300 hover:from-cyan-500 hover:to-green-400 text-white font-semibold py-2 px-6 rounded-lg transition flex items-center">
+                    class="btn-glow bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
                     <i class="fas fa-plus mr-2"></i>Tambah Kategori
                 </a>
             </div>

@@ -72,7 +72,7 @@ class SellerDashboardController extends Controller
         ));
     }
 
-    public function products()
+    public function products(Request $request)
     {
         $seller = Auth::user()->seller;
 
@@ -80,11 +80,42 @@ class SellerDashboardController extends Controller
             return redirect()->route('home')->with('error', 'Anda belum terdaftar sebagai seller.');
         }
 
-        // Get all products with pagination and relations
-        $products = Product::with(['category', 'variants', 'images'])
-            ->where('seller_id', $seller->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        // Get all categories for filter
+        $categories = \App\Models\Category::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        // Build query with search and filter
+        $query = Product::with(['category', 'variants', 'images'])
+            ->where('seller_id', $seller->id);
+
+        // Search by product name or category
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhereHas('category', function($q) use ($searchTerm) {
+                      $q->where('name', 'like', '%' . $searchTerm . '%');
+                  });
+            });
+        }
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        // Get products with pagination
+        $products = $query->orderBy('created_at', 'desc')->paginate(12);
 
         // Summary statistics
         $totalProducts = Product::where('seller_id', $seller->id)->count();
@@ -95,6 +126,7 @@ class SellerDashboardController extends Controller
         return view('seller.products', compact(
             'seller',
             'products',
+            'categories',
             'totalProducts',
             'totalStock',
             'activeProducts',
