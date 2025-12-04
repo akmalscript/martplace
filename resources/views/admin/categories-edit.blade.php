@@ -53,6 +53,10 @@
                     class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
                     <i class="fas fa-tags mr-3 w-5"></i>Kelola Kategori
                 </a>
+                <a href="{{ route('admin.reports.index') }}"
+                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                    <i class="fas fa-book mr-3 w-5"></i>Laporan
+                </a>
                 <a href="{{ route('home') }}"
                     class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
                     <i class="fas fa-globe mr-3 w-5"></i>Lihat Website
