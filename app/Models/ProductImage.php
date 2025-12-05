@@ -18,6 +18,13 @@ class ProductImage extends Model
         'order' => 'integer',
     ];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_path;
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);

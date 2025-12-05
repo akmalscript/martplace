@@ -710,24 +710,21 @@
                                 class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
                                 loading="lazy">
-                            @if($product->average_rating >= 4.5)
-                            <div class="absolute top-2 right-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg">
-                                <i class="fas fa-crown mr-1"></i>Best
-                            </div>
-                            @endif
                         </div>
                         <div class="p-4">
                             <h3 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-green-600 group-hover:bg-clip-text transition-all">{{ $product->name }}</h3>
                             <div class="flex items-baseline space-x-2 mb-3">
                                 <span class="text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
                             </div>
-                            <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center bg-gradient-to-r from-yellow-50 to-orange-50 px-2 py-1 rounded-lg">
-                                    <i class="fas fa-star text-yellow-500 text-xs mr-1"></i>
-                                    <span class="text-xs font-bold text-gray-800">{{ number_format($product->average_rating, 1) }}</span>
+                            <div class="flex items-center space-x-2 mb-2">
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="ml-1 text-xs font-semibold text-gray-700">{{ number_format($product->average_rating, 1) }}</span>
                                 </div>
+                                <span class="text-gray-300">|</span>
+                                <span class="text-xs text-gray-600">{{ $product->total_reviews }} ulasan</span>
                             </div>
-                            <div class="flex items-center text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg">
+                            <div class="flex items-center text-xs text-gray-500">
                                 <i class="fas fa-map-marker-alt mr-1 text-cyan-500"></i>
                                 <span class="truncate">{{ $product->city }}</span>
                             </div>

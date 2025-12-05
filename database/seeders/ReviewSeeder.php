@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ProductReviewSeeder extends Seeder
+class ReviewSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -50,15 +50,12 @@ class ProductReviewSeeder extends Seeder
                 
                 $reviews[] = [
                     'product_id' => $productId,
-                    'visitor_name' => $names[array_rand($names)],
-                    'visitor_phone' => '08' . rand(1000000000, 9999999999),
-                    'visitor_email' => 'customer' . rand(100, 999) . '@example.com',
-                    'visitor_province' => $provinces[array_rand($provinces)],
+                    'name' => $names[array_rand($names)],
+                    'phone' => '08' . rand(1000000000, 9999999999),
+                    'email' => 'customer' . rand(100, 999) . '@example.com',
+                    'province' => $provinces[array_rand($provinces)],
                     'rating' => $rating,
                     'comment' => $comments[array_rand($comments)],
-                    'thank_you_email_sent' => true,
-                    'email_sent_at' => now()->subDays(rand(1, 60)),
-                    'is_visible' => true,
                     'created_at' => now()->subDays(rand(1, 60)),
                     'updated_at' => now()->subDays(rand(1, 60)),
                 ];
@@ -66,12 +63,12 @@ class ProductReviewSeeder extends Seeder
                 $reviewCount++;
             }
         }
-        
-        DB::table('product_reviews')->insert($reviews);
+
+        DB::table('reviews')->insert($reviews);
         
         // Update average_rating dan total_reviews untuk setiap product
         foreach ($productIds as $productId) {
-            $productReviews = DB::table('product_reviews')
+            $productReviews = DB::table('reviews')
                 ->where('product_id', $productId)
                 ->get();
             
@@ -86,7 +83,7 @@ class ProductReviewSeeder extends Seeder
                 ]);
         }
         
-        $this->command->info("$reviewCount product reviews seeded successfully!");
+        $this->command->info("$reviewCount reviews seeded successfully!");
         $this->command->info('Product ratings updated!');
     }
 }

@@ -196,11 +196,6 @@
                                     class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
                                     onerror="this.onerror=null; this.src='https://placehold.co/400x400/E5E5E5/999999?text=No+Image'"
                                     loading="lazy">
-                                @if($product->average_rating >= 4.5)
-                                <div class="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg">
-                                    <i class="fas fa-crown mr-1"></i>Best
-                                </div>
-                                @endif
                             </div>
                             <div class="p-5">
                                 <h3 class="text-base font-bold text-gray-800 mb-3 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-green-600 group-hover:bg-clip-text transition-all">{{ $product->name }}</h3>

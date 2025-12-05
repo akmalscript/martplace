@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             SellerSeeder::class,
             ProductSeeder::class,
             ProductImageSeeder::class,
-            ProductReviewSeeder::class,
+            ReviewSeeder::class,
         ]);
     }
 }

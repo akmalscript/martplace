@@ -194,7 +194,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('images')->active()->findOrFail($id);
+        $product = Product::with(['images', 'reviews'])->active()->findOrFail($id);
 
         // Get related products
         $relatedProducts = Product::active()

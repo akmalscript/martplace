@@ -35,6 +35,12 @@ class ReviewController extends Controller
             'comment' => $request->comment,
         ]);
 
+        // Update product's average rating and total reviews
+        $product = $review->product;
+        $product->average_rating = $product->reviews()->avg('rating');
+        $product->total_reviews = $product->reviews()->count();
+        $product->save();
+
         // Send email (IMPORTANT FIX)
         Mail::to($review->email)->send(new ReviewSubmittedMail($review));
 
