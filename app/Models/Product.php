@@ -95,13 +95,27 @@ class Product extends Model
     }
 
     /**
-     * Scope: Search products by name
+     * Scope: Search products by name, description, category, seller name, and location
      */
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
-                     ->orWhere('description', 'like', '%' . $search . '%')
-                     ->orWhere('category', 'like', '%' . $search . '%');
+        return $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', '%' . $search . '%')
+              ->orWhere('description', 'like', '%' . $search . '%')
+              ->orWhere('city', 'like', '%' . $search . '%')
+              ->orWhere('province', 'like', '%' . $search . '%')
+              // Search by category name
+              ->orWhereHas('category', function ($categoryQuery) use ($search) {
+                  $categoryQuery->where('name', 'like', '%' . $search . '%');
+              })
+              // Search by seller/store name or location
+              ->orWhereHas('seller', function ($sellerQuery) use ($search) {
+                  $sellerQuery->where('store_name', 'like', '%' . $search . '%')
+                              ->orWhere('city', 'like', '%' . $search . '%')
+                              ->orWhere('province', 'like', '%' . $search . '%')
+                              ->orWhere('district', 'like', '%' . $search . '%');
+              });
+        });
     }
 
     /**
