@@ -89,6 +89,40 @@
         .btn-glow:hover::before {
             left: 100%;
         }
+
+        /* Infinite Carousel Animation */
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .testimonial-track {
+            display: flex;
+            animation: scroll-left 30s linear infinite;
+        }
+
+        .testimonial-track:hover {
+            animation-play-state: paused;
+        }
+
+        .testimonial-card {
+            flex-shrink: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 10;
+        }
+
+        .testimonial-container {
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
     </style>
 </head>
 
@@ -809,89 +843,205 @@
     </section>
 
     <!-- Testimonials Section -->
-    <section class="py-20 bg-gradient-to-br from-gray-100 via-gray-50 to-white relative overflow-hidden">
-        <!-- Decorative Wave Pattern -->
-        <div class="absolute top-0 left-0 right-0 opacity-5">
-            <svg viewBox="0 0 1440 120" class="w-full h-24">
-                <path fill="currentColor" class="text-gray-300" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
-            </svg>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-3">Apa Kata Mereka?</h2>
-                <p class="text-gray-600 text-lg">Testimoni dari pelanggan setia MartPlace</p>
+    <section class="py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-100 relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-200 to-transparent rounded-full blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-green-200 to-transparent rounded-full blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
+        <div class="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-gradient-to-br from-purple-100 to-pink-100 rounded-full blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
+        
+        <!-- Subtle Pattern -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, #374151 1px, transparent 0); background-size: 40px 40px;"></div>
+        
+        <div class="relative z-10">
+            <!-- Section Header -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
+                <div class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/10 to-green-500/10 backdrop-blur-sm px-5 py-2.5 rounded-full mb-6 border border-cyan-200/50">
+                    <i class="fas fa-quote-left text-cyan-600"></i>
+                    <span class="text-sm font-semibold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">Testimoni Pelanggan</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent mb-4 leading-tight">Apa Kata Mereka?</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Dengarkan pengalaman nyata dari pelanggan yang telah berbelanja di MartPlace</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-cyan-200">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 text-lg">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+            @if(isset($testimonials) && $testimonials->count() > 0)
+            <!-- Infinite Carousel Container -->
+            <div class="testimonial-container overflow-hidden">
+                <div class="testimonial-track gap-6 py-4">
+                    @php
+                        $colors = [
+                            ['from-cyan-400', 'to-cyan-600', 'border-cyan-200', 'from-cyan-50', 'to-cyan-100'],
+                            ['from-green-400', 'to-green-600', 'border-green-200', 'from-green-50', 'to-green-100'],
+                            ['from-purple-400', 'to-purple-600', 'border-purple-200', 'from-purple-50', 'to-purple-100'],
+                            ['from-pink-400', 'to-pink-600', 'border-pink-200', 'from-pink-50', 'to-pink-100'],
+                            ['from-amber-400', 'to-amber-600', 'border-amber-200', 'from-amber-50', 'to-amber-100'],
+                            ['from-blue-400', 'to-blue-600', 'border-blue-200', 'from-blue-50', 'to-blue-100'],
+                            ['from-rose-400', 'to-rose-600', 'border-rose-200', 'from-rose-50', 'to-rose-100'],
+                            ['from-teal-400', 'to-teal-600', 'border-teal-200', 'from-teal-50', 'to-teal-100'],
+                            ['from-indigo-400', 'to-indigo-600', 'border-indigo-200', 'from-indigo-50', 'to-indigo-100'],
+                            ['from-emerald-400', 'to-emerald-600', 'border-emerald-200', 'from-emerald-50', 'to-emerald-100'],
+                        ];
+                    @endphp
+                    
+                    {{-- First set of cards --}}
+                    @foreach($testimonials as $index => $testimonial)
+                        @php
+                            $color = $colors[$index % count($colors)];
+                        @endphp
+                        <div class="testimonial-card w-[380px] mx-3">
+                            <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-gray-100/80 hover:border-{{ str_replace('border-', '', $color[2]) }} transition-all duration-500 h-full relative overflow-hidden group">
+                                <!-- Decorative Gradient Orb -->
+                                <div class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br {{ $color[3] }} {{ $color[4] }} rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
+                                
+                                <!-- Quote Icon -->
+                                <div class="absolute top-6 right-6 text-4xl text-gray-100 group-hover:text-{{ str_replace('from-', '', $color[0]) }}/20 transition-colors duration-300">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                                
+                                <!-- Rating Stars -->
+                                <div class="flex items-center gap-1 mb-5">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $testimonial->rating)
+                                            <i class="fas fa-star text-amber-400 text-lg drop-shadow-sm"></i>
+                                        @else
+                                            <i class="fas fa-star text-gray-200 text-lg"></i>
+                                        @endif
+                                    @endfor
+                                    <span class="ml-2 text-sm font-medium text-gray-500">{{ $testimonial->rating }}.0</span>
+                                </div>
+                                
+                                <!-- Comment -->
+                                <p class="text-gray-600 leading-relaxed mb-8 relative z-10 line-clamp-4">"{{ $testimonial->comment }}"</p>
+                                
+                                <!-- Product Info -->
+                                @if($testimonial->product)
+                                <div class="mb-6 p-3 bg-gradient-to-r {{ $color[3] }} {{ $color[4] }}/50 rounded-xl border border-gray-100">
+                                    <p class="text-xs text-gray-500 mb-1">Review untuk:</p>
+                                    <p class="text-sm font-semibold text-gray-700 truncate">{{ $testimonial->product->name }}</p>
+                                </div>
+                                @endif
+                                
+                                <!-- Author Info -->
+                                <div class="flex items-center relative z-10">
+                                    <div class="w-14 h-14 bg-gradient-to-br {{ $color[0] }} {{ $color[1] }} rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-{{ str_replace('from-', '', $color[0]) }}/30">
+                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <div class="font-bold text-gray-800 text-lg">{{ $testimonial->name }}</div>
+                                        <div class="flex items-center gap-2 text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt text-{{ str_replace('from-', '', $color[0]) }}"></i>
+                                            <span>{{ $testimonial->province ?? 'Indonesia' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                                        <i class="fas fa-check text-green-600"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed italic">"Belanja di MartPlace sangat menyenangkan! Produknya lengkap, harga kompetitif, dan pengiriman cepat. Highly recommended!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                            A
+                    @endforeach
+                    
+                    {{-- Duplicate set for seamless infinite scroll --}}
+                    @foreach($testimonials as $index => $testimonial)
+                        @php
+                            $color = $colors[$index % count($colors)];
+                        @endphp
+                        <div class="testimonial-card w-[380px] mx-3">
+                            <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-gray-100/80 hover:border-{{ str_replace('border-', '', $color[2]) }} transition-all duration-500 h-full relative overflow-hidden group">
+                                <!-- Decorative Gradient Orb -->
+                                <div class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br {{ $color[3] }} {{ $color[4] }} rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
+                                
+                                <!-- Quote Icon -->
+                                <div class="absolute top-6 right-6 text-4xl text-gray-100 group-hover:text-{{ str_replace('from-', '', $color[0]) }}/20 transition-colors duration-300">
+                                    <i class="fas fa-quote-right"></i>
+                                </div>
+                                
+                                <!-- Rating Stars -->
+                                <div class="flex items-center gap-1 mb-5">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $testimonial->rating)
+                                            <i class="fas fa-star text-amber-400 text-lg drop-shadow-sm"></i>
+                                        @else
+                                            <i class="fas fa-star text-gray-200 text-lg"></i>
+                                        @endif
+                                    @endfor
+                                    <span class="ml-2 text-sm font-medium text-gray-500">{{ $testimonial->rating }}.0</span>
+                                </div>
+                                
+                                <!-- Comment -->
+                                <p class="text-gray-600 leading-relaxed mb-8 relative z-10 line-clamp-4">"{{ $testimonial->comment }}"</p>
+                                
+                                <!-- Product Info -->
+                                @if($testimonial->product)
+                                <div class="mb-6 p-3 bg-gradient-to-r {{ $color[3] }} {{ $color[4] }}/50 rounded-xl border border-gray-100">
+                                    <p class="text-xs text-gray-500 mb-1">Review untuk:</p>
+                                    <p class="text-sm font-semibold text-gray-700 truncate">{{ $testimonial->product->name }}</p>
+                                </div>
+                                @endif
+                                
+                                <!-- Author Info -->
+                                <div class="flex items-center relative z-10">
+                                    <div class="w-14 h-14 bg-gradient-to-br {{ $color[0] }} {{ $color[1] }} rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-{{ str_replace('from-', '', $color[0]) }}/30">
+                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <div class="font-bold text-gray-800 text-lg">{{ $testimonial->name }}</div>
+                                        <div class="flex items-center gap-2 text-sm text-gray-500">
+                                            <i class="fas fa-map-marker-alt text-{{ str_replace('from-', '', $color[0]) }}"></i>
+                                            <span>{{ $testimonial->province ?? 'Indonesia' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                                        <i class="fas fa-check text-green-600"></i>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <div class="font-bold text-gray-800">Aditya Pratama</div>
-                            <div class="text-sm text-gray-500">Jakarta</div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-
-                <!-- Testimonial 2 -->
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-green-200">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 text-lg">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="max-w-4xl mx-auto px-4 mt-16">
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
+                            <i class="fas fa-shield-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-800">100% Terverifikasi</p>
+                            <p class="text-sm text-gray-500">Semua review asli</p>
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed italic">"Sebagai seller, saya sangat puas dengan platform ini. Mudah digunakan dan customer support sangat responsif!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                            S
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
+                            <i class="fas fa-star text-white text-xl"></i>
                         </div>
-                        <div class="ml-4">
-                            <div class="font-bold text-gray-800">Siti Nurhaliza</div>
-                            <div class="text-sm text-gray-500">Bandung</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonial 3 -->
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-purple-200">
-                    <div class="flex items-center mb-4">
-                        <div class="flex text-yellow-400 text-lg">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                        <div>
+                            <p class="font-bold text-gray-800">{{ $testimonials->count() }}+ Review</p>
+                            <p class="text-sm text-gray-500">Rating tinggi</p>
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-6 leading-relaxed italic">"Sistem pembayaran sangat aman dan proses checkout-nya mudah. Tidak perlu khawatir saat berbelanja online!"</p>
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                            B
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                            <i class="fas fa-users text-white text-xl"></i>
                         </div>
-                        <div class="ml-4">
-                            <div class="font-bold text-gray-800">Budi Santoso</div>
-                            <div class="text-sm text-gray-500">Surabaya</div>
+                        <div>
+                            <p class="font-bold text-gray-800">Pelanggan Puas</p>
+                            <p class="text-sm text-gray-500">Kepuasan terjamin</p>
                         </div>
                     </div>
                 </div>
             </div>
+            @else
+            <!-- Empty State -->
+            <div class="max-w-2xl mx-auto px-4 text-center py-16">
+                <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-comments text-4xl text-gray-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-700 mb-3">Belum Ada Testimoni</h3>
+                <p class="text-gray-500">Jadilah yang pertama memberikan ulasan untuk produk kami!</p>
+            </div>
+            @endif
         </div>
     </section>
     <!-- CTA Section -->

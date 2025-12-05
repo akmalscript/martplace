@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -40,6 +41,16 @@ class HomeController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('home', compact('products', 'selectedCategory', 'selectedFilter', 'categories', 'totalProducts'));
+        // Fetch 5-10 testimonials from reviews with high ratings
+        $testimonials = Review::with('product')
+            ->where('rating', '>=', 4)
+            ->whereNotNull('comment')
+            ->where('comment', '!=', '')
+            ->orderBy('rating', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        return view('home', compact('products', 'selectedCategory', 'selectedFilter', 'categories', 'totalProducts', 'testimonials'));
     }
 }
