@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
         $rumahTangga = DB::table('categories')->where('slug', 'rumah-tangga')->first()->id;
         $olahraga = DB::table('categories')->where('slug', 'olahraga')->first()->id;
         $makanan = DB::table('categories')->where('slug', 'makanan-minuman')->first()->id;
-        
+
         $products = [
             // Seller 1 - Elektronik
             [

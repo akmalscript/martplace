@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Seller;
 use Illuminate\Http\Request;
@@ -58,7 +59,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Search suggestions (API endpoint) - Enhanced with sellers and locations
+     * Search suggestions (API endpoint) - Enhanced with sellers, categories, and locations
      */
     public function search(Request $request)
     {
@@ -68,26 +69,72 @@ class ProductController extends Controller
             return response()->json([
                 'products' => [],
                 'sellers' => [],
+                'categories' => [],
                 'locations' => []
             ]);
         }
 
-        // Search Products - get top 5
+        // Search Products - get top 5 with related seller and category
         $products = Product::active()
-            ->search($search)
+            ->with(['seller:id,store_name,city,province', 'category:id,name'])
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%");
+            })
             ->limit(5)
-            ->get(['id', 'name', 'price', 'image_url', 'category', 'location']);
+            ->get(['id', 'name', 'price', 'image_url', 'seller_id', 'category_id'])
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'image_url' => $product->image_url,
+                    'category' => $product->category ? $product->category->name : null,
+                    'seller' => $product->seller ? $product->seller->store_name : null,
+                ];
+            });
+
+        // Search Categories - get top 3 matching categories
+        $categories = Category::where('is_active', true)
+            ->where('name', 'like', "%{$search}%")
+            ->limit(3)
+            ->get(['id', 'name', 'icon'])
+            ->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'icon' => $category->icon ?? 'fa-tag',
+                ];
+            });
 
         // Search Sellers (Toko) - get top 3
         $sellers = Seller::active()
-            ->search($search)
+            ->where(function ($query) use ($search) {
+                $query->where('store_name', 'like', "%{$search}%")
+                      ->orWhere('city', 'like', "%{$search}%")
+                      ->orWhere('province', 'like', "%{$search}%")
+                      ->orWhere('district', 'like', "%{$search}%");
+            })
+            ->withCount(['products' => function ($query) {
+                $query->where('is_active', true);
+            }])
             ->limit(3)
-            ->get(['id', 'store_name', 'city', 'province', 'rating', 'total_products']);
+            ->get(['id', 'store_name', 'city', 'province', 'rating'])
+            ->map(function ($seller) {
+                return [
+                    'id' => $seller->id,
+                    'store_name' => $seller->store_name,
+                    'city' => $seller->city,
+                    'province' => $seller->province,
+                    'rating' => $seller->rating ?? 0,
+                    'total_products' => $seller->products_count ?? 0,
+                ];
+            });
 
-        // Search Locations - aggregate unique cities and provinces
+        // Search Locations - aggregate unique cities and provinces from sellers
         $locations = [];
 
-        // Get unique provinces from sellers
+        // Get unique provinces from sellers that match the search
         $provinces = Seller::active()
             ->where('province', 'like', "%{$search}%")
             ->select('province')
@@ -102,12 +149,12 @@ class ProductController extends Controller
             ];
         }
 
-        // Get unique cities from sellers
+        // Get unique cities from sellers that match the search
         $cities = Seller::active()
             ->where('city', 'like', "%{$search}%")
             ->select('city', 'province')
             ->distinct()
-            ->limit(3 - count($locations))
+            ->limit(max(0, 3 - count($locations)))
             ->get();
 
         foreach ($cities as $city) {
@@ -121,6 +168,7 @@ class ProductController extends Controller
         return response()->json([
             'products' => $products,
             'sellers' => $sellers,
+            'categories' => $categories,
             'locations' => $locations
         ]);
     }

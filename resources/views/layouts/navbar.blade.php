@@ -14,6 +14,7 @@
                 search: '',
                 products: [],
                 sellers: [],
+                categories: [],
                 locations: [],
                 activeTab: 'products',
                 showSuggestions: false,
@@ -22,6 +23,7 @@
                     if (this.search.length < 2) {
                         this.products = [];
                         this.sellers = [];
+                        this.categories = [];
                         this.locations = [];
                         this.showSuggestions = false;
                         return;
@@ -33,8 +35,9 @@
                         .then(data => {
                             this.products = data.products || [];
                             this.sellers = data.sellers || [];
+                            this.categories = data.categories || [];
                             this.locations = data.locations || [];
-                            this.showSuggestions = (this.products.length > 0 || this.sellers.length > 0 || this.locations.length > 0);
+                            this.showSuggestions = (this.products.length > 0 || this.sellers.length > 0 || this.categories.length > 0 || this.locations.length > 0);
                             this.loading = false;
                         });
                 },
@@ -43,6 +46,9 @@
                 },
                 selectSeller(sellerId) {
                     window.location.href = `/sellers/${sellerId}`;
+                },
+                selectCategory(categoryId) {
+                    window.location.href = `/?category=${categoryId}`;
                 },
                 selectLocation(location) {
                     window.location.href = `/products?search=${encodeURIComponent(location)}`;
@@ -58,8 +64,8 @@
             }">
                 <form @submit.prevent="submitSearch" class="relative w-full" @click.away="showSuggestions = false">
                     <input type="text" x-model="search" @input.debounce.300ms="getSuggestions"
-                        @focus="showSuggestions = (products.length > 0 || sellers.length > 0 || locations.length > 0)"
-                        placeholder="Cari produk, toko, atau lokasi..."
+                        @focus="showSuggestions = (products.length > 0 || sellers.length > 0 || categories.length > 0 || locations.length > 0)"
+                        placeholder="Cari produk, toko, kategori, atau lokasi..."
                         class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                     <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -84,26 +90,32 @@
                             </div>
                         </template>
                         <template
-                            x-if="!loading && (products.length > 0 || sellers.length > 0 || locations.length > 0)">
+                            x-if="!loading && (products.length > 0 || sellers.length > 0 || categories.length > 0 || locations.length > 0)">
                             <div>
                                 <!-- Tabs -->
                                 <div class="flex border-b bg-gray-50">
                                     <button type="button" @click="activeTab = 'products'"
                                         :class="activeTab === 'products' ? 'border-b-2 border-green-600 text-green-600' :
                                             'text-gray-600'"
-                                        class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
+                                        class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                         Produk (<span x-text="products.length"></span>)
                                     </button>
                                     <button type="button" @click="activeTab = 'sellers'"
                                         :class="activeTab === 'sellers' ? 'border-b-2 border-green-600 text-green-600' :
                                             'text-gray-600'"
-                                        class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
+                                        class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                         Toko (<span x-text="sellers.length"></span>)
+                                    </button>
+                                    <button type="button" @click="activeTab = 'categories'"
+                                        :class="activeTab === 'categories' ? 'border-b-2 border-green-600 text-green-600' :
+                                            'text-gray-600'"
+                                        class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
+                                        Kategori (<span x-text="categories.length"></span>)
                                     </button>
                                     <button type="button" @click="activeTab = 'locations'"
                                         :class="activeTab === 'locations' ? 'border-b-2 border-green-600 text-green-600' :
                                             'text-gray-600'"
-                                        class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
+                                        class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                         Lokasi (<span x-text="locations.length"></span>)
                                     </button>
                                 </div>
@@ -158,6 +170,29 @@
                                                         <span class="text-xs text-gray-500"
                                                             x-text="`${seller.total_products} produk`"></span>
                                                     </div>
+                                                </div>
+                                                <svg class="w-5 h-5 text-gray-400" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                </svg>
+                                            </button>
+                                        </template>
+                                    </div>
+
+                                    <!-- Categories Tab -->
+                                    <div x-show="activeTab === 'categories'" class="divide-y">
+                                        <template x-for="category in categories" :key="category.id">
+                                            <button type="button" @click="selectCategory(category.id)"
+                                                class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
+                                                <div
+                                                    class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                                    <i :class="'fas ' + category.icon + ' text-purple-600'"></i>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <p class="text-sm font-medium text-gray-900"
+                                                        x-text="category.name"></p>
+                                                    <p class="text-xs text-gray-500">Kategori Produk</p>
                                                 </div>
                                                 <svg class="w-5 h-5 text-gray-400" fill="none"
                                                     stroke="currentColor" viewBox="0 0 24 24">

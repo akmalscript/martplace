@@ -15,9 +15,11 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
+
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -26,322 +28,364 @@
 </head>
 
 @php
-    $isSeller = Auth::check() && Auth::user()->seller && Auth::user()->seller->status === \App\Enums\SellerStatus::ACTIVE;
+    $isSeller =
+        Auth::check() && Auth::user()->seller && Auth::user()->seller->status === \App\Enums\SellerStatus::ACTIVE;
 @endphp
 
 <body class="bg-gray-50" x-data="{ sidebarOpen: false }">
-    @if($isSeller)
-    <!-- Seller Navbar -->
-    <nav class="bg-gradient-to-r from-cyan-400 to-green-300 shadow-lg fixed top-0 left-0 right-0 z-50">
-        <div class="px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-white lg:hidden">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                    <a href="{{ route('home') }}" class="text-2xl font-bold text-white flex items-center">
-                        <i class="fas fa-store mr-2"></i>MartPlace
-                    </a>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <span class="text-white font-semibold hidden md:block">
-                        <i class="fas fa-user mr-2"></i>{{ Auth::user()->seller->store_name }}
-                    </span>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="text-white hover:text-gray-100 transition">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+    @if ($isSeller)
+        <!-- Seller Navbar -->
+        <nav class="bg-gradient-to-r from-cyan-400 to-green-300 shadow-lg fixed top-0 left-0 right-0 z-50">
+            <div class="px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button @click="sidebarOpen = !sidebarOpen" class="text-white lg:hidden">
+                            <i class="fas fa-bars text-2xl"></i>
                         </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Seller Sidebar -->
-    <aside class="fixed top-16 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-40 w-64"
-        :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
-        <div class="p-6">
-            <nav class="space-y-2">
-                <a href="{{ route('seller.dashboard') }}"
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-chart-line mr-3 w-5"></i>Dashboard Seller
-                </a>
-                <a href="{{ route('seller.products') }}"
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-box mr-3 w-5"></i>Kelola Produk
-                </a>
-                <a href="{{ route('seller.reports') }}"
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-file-alt mr-3 w-5"></i>Laporan Seller
-                </a>
-                <hr class="my-4">
-                <a href="{{ route('home') }}"
-                    class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
-                    <i class="fas fa-globe mr-3 w-5"></i>Lihat Website
-                </a>
-            </nav>
-        </div>
-    </aside>
-
-    <!-- Main Content with Sidebar Offset -->
-    <main class="lg:ml-64 pt-16">
-    @else
-    <!-- Regular Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="text-2xl font-bold text-green-600">
-                        MartPlace
-                    </a>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="hidden md:flex flex-1 max-w-md mx-8" x-data="{
-                    search: '',
-                    products: [],
-                    sellers: [],
-                    locations: [],
-                    activeTab: 'products',
-                    showSuggestions: false,
-                    loading: false,
-                    getSuggestions() {
-                        if (this.search.length < 2) {
-                            this.products = [];
-                            this.sellers = [];
-                            this.locations = [];
-                            this.showSuggestions = false;
-                            return;
-                        }
-
-                        this.loading = true;
-                        fetch(`/products/search?q=${encodeURIComponent(this.search)}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                this.products = data.products || [];
-                                this.sellers = data.sellers || [];
-                                this.locations = data.locations || [];
-                                this.showSuggestions = (this.products.length > 0 || this.sellers.length > 0 || this.locations.length > 0);
-                                this.loading = false;
-                            });
-                    },
-                    selectProduct(productId) {
-                        window.location.href = `/products/${productId}`;
-                    },
-                    selectSeller(sellerId) {
-                        window.location.href = `/sellers/${sellerId}`;
-                    },
-                    selectLocation(location) {
-                        window.location.href = `/products?search=${encodeURIComponent(location)}`;
-                    },
-                    submitSearch() {
-                        if (this.search.trim()) {
-                            window.location.href = `/products?search=${encodeURIComponent(this.search)}`;
-                        }
-                    },
-                    formatPrice(price) {
-                        return 'Rp' + Number(price).toLocaleString('id-ID');
-                    }
-                }">
-                    <form @submit.prevent="submitSearch" class="relative w-full" @click.away="showSuggestions = false">
-                        <input type="text" x-model="search" @input.debounce.300ms="getSuggestions"
-                            @focus="showSuggestions = (products.length > 0 || sellers.length > 0 || locations.length > 0)"
-                            placeholder="Cari produk, toko, atau lokasi..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-
-                        <!-- Search Suggestions Dropdown with Tabs -->
-                        <div x-show="showSuggestions || loading" x-transition @click.stop
-                            class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden">
-                            <template x-if="loading">
-                                <div class="p-6 text-center text-gray-500">
-                                    <svg class="animate-spin h-5 w-5 mx-auto mb-2 text-green-600"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10"
-                                            stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                        </path>
-                                    </svg>
-                                    Mencari...
-                                </div>
-                            </template>
-                            <template
-                                x-if="!loading && (products.length > 0 || sellers.length > 0 || locations.length > 0)">
-                                <div>
-                                    <!-- Tabs -->
-                                    <div class="flex border-b bg-gray-50">
-                                        <button type="button" @click="activeTab = 'products'"
-                                            :class="activeTab === 'products' ? 'border-b-2 border-green-600 text-green-600' :
-                                                'text-gray-600'"
-                                            class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
-                                            Produk (<span x-text="products.length"></span>)
-                                        </button>
-                                        <button type="button" @click="activeTab = 'sellers'"
-                                            :class="activeTab === 'sellers' ? 'border-b-2 border-green-600 text-green-600' :
-                                                'text-gray-600'"
-                                            class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
-                                            Toko (<span x-text="sellers.length"></span>)
-                                        </button>
-                                        <button type="button" @click="activeTab = 'locations'"
-                                            :class="activeTab === 'locations' ? 'border-b-2 border-green-600 text-green-600' :
-                                                'text-gray-600'"
-                                            class="flex-1 px-4 py-3 text-sm font-medium hover:text-green-600 transition">
-                                            Lokasi (<span x-text="locations.length"></span>)
-                                        </button>
-                                    </div>
-
-                                    <!-- Tab Content -->
-                                    <div class="max-h-80 overflow-y-auto">
-                                        <!-- Products Tab -->
-                                        <div x-show="activeTab === 'products'" class="divide-y">
-                                            <template x-for="product in products" :key="product.id">
-                                                <button type="button" @click="selectProduct(product.id)"
-                                                    class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
-                                                    <img :src="product.image_url" :alt="product.name"
-                                                        class="w-12 h-12 object-cover rounded">
-                                                    <div class="flex-1 min-w-0">
-                                                        <p class="text-sm font-medium text-gray-900 truncate"
-                                                            x-text="product.name"></p>
-                                                        <p class="text-sm text-green-600 font-semibold"
-                                                            x-text="formatPrice(product.price)"></p>
-                                                    </div>
-                                                    <svg class="w-5 h-5 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </button>
-                                            </template>
-                                        </div>
-
-                                        <!-- Sellers Tab -->
-                                        <div x-show="activeTab === 'sellers'" class="divide-y">
-                                            <template x-for="seller in sellers" :key="seller.id">
-                                                <button type="button" @click="selectSeller(seller.id)"
-                                                    class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
-                                                    <div
-                                                        class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                                        <svg class="w-6 h-6 text-green-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="flex-1 min-w-0">
-                                                        <p class="text-sm font-medium text-gray-900 truncate"
-                                                            x-text="seller.store_name"></p>
-                                                        <p class="text-xs text-gray-500"
-                                                            x-text="`${seller.city}, ${seller.province}`"></p>
-                                                        <div class="flex items-center gap-2 mt-1">
-                                                            <span class="text-xs text-yellow-600">★ <span
-                                                                    x-text="seller.rating"></span></span>
-                                                            <span class="text-xs text-gray-400">•</span>
-                                                            <span class="text-xs text-gray-500"
-                                                                x-text="`${seller.total_products} produk`"></span>
-                                                        </div>
-                                                    </div>
-                                                    <svg class="w-5 h-5 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </button>
-                                            </template>
-                                        </div>
-
-                                        <!-- Locations Tab -->
-                                        <div x-show="activeTab === 'locations'" class="divide-y">
-                                            <template x-for="location in locations" :key="location.name">
-                                                <button type="button" @click="selectLocation(location.name)"
-                                                    class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
-                                                    <div
-                                                        class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd"
-                                                                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                                                                clip-rule="evenodd"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="flex-1">
-                                                        <p class="text-sm font-medium text-gray-900"
-                                                            x-text="location.name"></p>
-                                                        <p class="text-xs text-gray-500"
-                                                            x-text="location.type === 'city' ? 'Kota/Kabupaten' : 'Provinsi'">
-                                                        </p>
-                                                    </div>
-                                                    <svg class="w-5 h-5 text-gray-400" fill="none"
-                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
-                                                </button>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Right Side Buttons -->
-                <div class="flex items-center space-x-4">
-
-                    @guest
-                        <!-- Login Button -->
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-green-600 transition">
-                            Masuk
+                        <a href="{{ route('home') }}" class="text-2xl font-bold text-white flex items-center">
+                            <i class="fas fa-store mr-2"></i>MartPlace
                         </a>
-
-                        <!-- Register Seller Button -->
-                        <a href="{{ route('sellers.create') }}"
-                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                            Daftar Toko
-                        </a>
-                    @else
-                        <!-- User Dropdown -->
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open"
-                                class="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition">
-                                <span>Hai, {{ Auth::user()->name }}</span>
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7"></path>
-                                </svg>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <span class="text-white font-semibold hidden md:block">
+                            <i class="fas fa-user mr-2"></i>{{ Auth::user()->seller->store_name }}
+                        </span>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-white hover:text-gray-100 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
                             </button>
-
-                            <div x-show="open" @click.away="open = false" x-transition
-                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                                <a href="{{ route('dashboard') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
-                                <a href="{{ route('profile.edit') }}"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profil</a>
-                                <hr class="my-2">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                        class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                        Keluar
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    @endguest
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
-    
-    <main>
+        </nav>
+
+        <!-- Seller Sidebar -->
+        <aside class="fixed top-16 left-0 h-full bg-white shadow-lg transition-transform duration-300 z-40 w-64"
+            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'">
+            <div class="p-6">
+                <nav class="space-y-2">
+                    <a href="{{ route('seller.dashboard') }}"
+                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                        <i class="fas fa-chart-line mr-3 w-5"></i>Dashboard Seller
+                    </a>
+                    <a href="{{ route('seller.products') }}"
+                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                        <i class="fas fa-box mr-3 w-5"></i>Kelola Produk
+                    </a>
+                    <a href="{{ route('seller.reports') }}"
+                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
+                        <i class="fas fa-file-alt mr-3 w-5"></i>Laporan Seller
+                    </a>
+                    <hr class="my-4">
+                    <a href="{{ route('home') }}"
+                        class="flex items-center px-4 py-3 text-green-600 bg-green-50 rounded-lg font-semibold">
+                        <i class="fas fa-globe mr-3 w-5"></i>Lihat Website
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content with Sidebar Offset -->
+        <main class="lg:ml-64 pt-16">
+        @else
+            <!-- Regular Navbar -->
+            <nav class="bg-white shadow-sm sticky top-0 z-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center h-16">
+                        <!-- Logo -->
+                        <div class="flex items-center">
+                            <a href="{{ route('home') }}" class="text-2xl font-bold text-green-600">
+                                MartPlace
+                            </a>
+                        </div>
+
+                        <!-- Search Bar -->
+                        <div class="hidden md:flex flex-1 max-w-md mx-8" x-data="{
+                            search: '',
+                            products: [],
+                            sellers: [],
+                            categories: [],
+                            locations: [],
+                            activeTab: 'products',
+                            showSuggestions: false,
+                            loading: false,
+                            getSuggestions() {
+                                if (this.search.length < 2) {
+                                    this.products = [];
+                                    this.sellers = [];
+                                    this.categories = [];
+                                    this.locations = [];
+                                    this.showSuggestions = false;
+                                    return;
+                                }
+
+                                this.loading = true;
+                                fetch(`/products/search?q=${encodeURIComponent(this.search)}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        this.products = data.products || [];
+                                        this.sellers = data.sellers || [];
+                                        this.categories = data.categories || [];
+                                        this.locations = data.locations || [];
+                                        this.showSuggestions = (this.products.length > 0 || this.sellers.length > 0 || this.categories.length > 0 || this.locations.length > 0);
+                                        this.loading = false;
+                                    });
+                            },
+                            selectProduct(productId) {
+                                window.location.href = `/products/${productId}`;
+                            },
+                            selectSeller(sellerId) {
+                                window.location.href = `/sellers/${sellerId}`;
+                            },
+                            selectCategory(categoryId) {
+                                window.location.href = `/?category=${categoryId}`;
+                            },
+                            selectLocation(location) {
+                                window.location.href = `/products?search=${encodeURIComponent(location)}`;
+                            },
+                            submitSearch() {
+                                if (this.search.trim()) {
+                                    window.location.href = `/products?search=${encodeURIComponent(this.search)}`;
+                                }
+                            },
+                            formatPrice(price) {
+                                return 'Rp' + Number(price).toLocaleString('id-ID');
+                            }
+                        }">
+                            <form @submit.prevent="submitSearch" class="relative w-full"
+                                @click.away="showSuggestions = false">
+                                <input type="text" x-model="search" @input.debounce.300ms="getSuggestions"
+                                    @focus="showSuggestions = (products.length > 0 || sellers.length > 0 || categories.length > 0 || locations.length > 0)"
+                                    placeholder="Cari produk, toko, kategori, atau lokasi..."
+                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+
+                                <!-- Search Suggestions Dropdown with Tabs -->
+                                <div x-show="showSuggestions || loading" x-transition @click.stop
+                                    class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden">
+                                    <template x-if="loading">
+                                        <div class="p-6 text-center text-gray-500">
+                                            <svg class="animate-spin h-5 w-5 mx-auto mb-2 text-green-600"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                    stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                </path>
+                                            </svg>
+                                            Mencari...
+                                        </div>
+                                    </template>
+                                    <template
+                                        x-if="!loading && (products.length > 0 || sellers.length > 0 || categories.length > 0 || locations.length > 0)">
+                                        <div>
+                                            <!-- Tabs -->
+                                            <div class="flex border-b bg-gray-50">
+                                                <button type="button" @click="activeTab = 'products'"
+                                                    :class="activeTab === 'products' ?
+                                                        'border-b-2 border-green-600 text-green-600' :
+                                                        'text-gray-600'"
+                                                    class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
+                                                    Produk (<span x-text="products.length"></span>)
+                                                </button>
+                                                <button type="button" @click="activeTab = 'sellers'"
+                                                    :class="activeTab === 'sellers' ?
+                                                        'border-b-2 border-green-600 text-green-600' :
+                                                        'text-gray-600'"
+                                                    class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
+                                                    Toko (<span x-text="sellers.length"></span>)
+                                                </button>
+                                                <button type="button" @click="activeTab = 'categories'"
+                                                    :class="activeTab === 'categories' ?
+                                                        'border-b-2 border-green-600 text-green-600' :
+                                                        'text-gray-600'"
+                                                    class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
+                                                    Kategori (<span x-text="categories.length"></span>)
+                                                </button>
+                                                <button type="button" @click="activeTab = 'locations'"
+                                                    :class="activeTab === 'locations' ?
+                                                        'border-b-2 border-green-600 text-green-600' :
+                                                        'text-gray-600'"
+                                                    class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
+                                                    Lokasi (<span x-text="locations.length"></span>)
+                                                </button>
+                                            </div>
+
+                                            <!-- Tab Content -->
+                                            <div class="max-h-80 overflow-y-auto">
+                                                <!-- Products Tab -->
+                                                <div x-show="activeTab === 'products'" class="divide-y">
+                                                    <template x-for="product in products" :key="product.id">
+                                                        <button type="button" @click="selectProduct(product.id)"
+                                                            class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
+                                                            <img :src="product.image_url" :alt="product.name"
+                                                                class="w-12 h-12 object-cover rounded">
+                                                            <div class="flex-1 min-w-0">
+                                                                <p class="text-sm font-medium text-gray-900 truncate"
+                                                                    x-text="product.name"></p>
+                                                                <p class="text-sm text-green-600 font-semibold"
+                                                                    x-text="formatPrice(product.price)"></p>
+                                                            </div>
+                                                            <svg class="w-5 h-5 text-gray-400" fill="none"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Sellers Tab -->
+                                                <div x-show="activeTab === 'sellers'" class="divide-y">
+                                                    <template x-for="seller in sellers" :key="seller.id">
+                                                        <button type="button" @click="selectSeller(seller.id)"
+                                                            class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
+                                                            <div
+                                                                class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                                                <svg class="w-6 h-6 text-green-600"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="flex-1 min-w-0">
+                                                                <p class="text-sm font-medium text-gray-900 truncate"
+                                                                    x-text="seller.store_name"></p>
+                                                                <p class="text-xs text-gray-500"
+                                                                    x-text="`${seller.city}, ${seller.province}`"></p>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <span class="text-xs text-yellow-600">★ <span
+                                                                            x-text="seller.rating"></span></span>
+                                                                    <span class="text-xs text-gray-400">•</span>
+                                                                    <span class="text-xs text-gray-500"
+                                                                        x-text="`${seller.total_products} produk`"></span>
+                                                                </div>
+                                                            </div>
+                                                            <svg class="w-5 h-5 text-gray-400" fill="none"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Categories Tab -->
+                                                <div x-show="activeTab === 'categories'" class="divide-y">
+                                                    <template x-for="category in categories" :key="category.id">
+                                                        <button type="button" @click="selectCategory(category.id)"
+                                                            class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
+                                                            <div
+                                                                class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                                                <i
+                                                                    :class="'fas ' + category.icon + ' text-purple-600'"></i>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <p class="text-sm font-medium text-gray-900"
+                                                                    x-text="category.name"></p>
+                                                                <p class="text-xs text-gray-500">Kategori Produk</p>
+                                                            </div>
+                                                            <svg class="w-5 h-5 text-gray-400" fill="none"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Locations Tab -->
+                                                <div x-show="activeTab === 'locations'" class="divide-y">
+                                                    <template x-for="location in locations" :key="location.name">
+                                                        <button type="button" @click="selectLocation(location.name)"
+                                                            class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
+                                                            <div
+                                                                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                                                <svg class="w-6 h-6 text-blue-600" fill="currentColor"
+                                                                    viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                                                                        clip-rule="evenodd"></path>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="flex-1">
+                                                                <p class="text-sm font-medium text-gray-900"
+                                                                    x-text="location.name"></p>
+                                                                <p class="text-xs text-gray-500"
+                                                                    x-text="location.type === 'city' ? 'Kota/Kabupaten' : 'Provinsi'">
+                                                                </p>
+                                                            </div>
+                                                            <svg class="w-5 h-5 text-gray-400" fill="none"
+                                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Side Buttons -->
+                        <div class="flex items-center space-x-4">
+
+                            @guest
+                                <!-- Login Button -->
+                                <a href="{{ route('login') }}" class="text-gray-700 hover:text-green-600 transition">
+                                    Masuk
+                                </a>
+
+                                <!-- Register Seller Button -->
+                                <a href="{{ route('sellers.create') }}"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                                    Daftar Toko
+                                </a>
+                            @else
+                                <!-- User Dropdown -->
+                                <div class="relative" x-data="{ open: false }">
+                                    <button @click="open = !open"
+                                        class="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition">
+                                        <span>Hai, {{ Auth::user()->name }}</span>
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                                        <a href="{{ route('dashboard') }}"
+                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                        <a href="{{ route('profile.edit') }}"
+                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profil</a>
+                                        <hr class="my-2">
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit"
+                                                class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                                Keluar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endguest
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main>
     @endif
 
     <!-- Hero Banner -->
@@ -398,68 +442,63 @@
             }
         }">
             <!-- Left Arrow Button -->
-            <button x-show="canScrollLeft" 
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 -translate-x-2"
-                    x-transition:enter-end="opacity-100 translate-x-0"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 translate-x-0"
-                    x-transition:leave-end="opacity-0 -translate-x-2"
-                    @click="scrollTo('left')"
-                    class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 border border-gray-100">
+            <button x-show="canScrollLeft" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-x-2" x-transition:enter-end="opacity-100 translate-x-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-2"
+                @click="scrollTo('left')"
+                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 border border-gray-100">
                 <i class="fas fa-chevron-left text-sm md:text-base"></i>
             </button>
 
             <!-- Right Arrow Button -->
-            <button x-show="canScrollRight"
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 translate-x-2"
-                    x-transition:enter-end="opacity-100 translate-x-0"
-                    x-transition:leave="transition ease-in duration-150"
-                    x-transition:leave-start="opacity-100 translate-x-0"
-                    x-transition:leave-end="opacity-0 translate-x-2"
-                    @click="scrollTo('right')"
-                    class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 border border-gray-100">
+            <button x-show="canScrollRight" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 translate-x-2" x-transition:enter-end="opacity-100 translate-x-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-2"
+                @click="scrollTo('right')"
+                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-700 hover:bg-gray-50 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-200 border border-gray-100">
                 <i class="fas fa-chevron-right text-sm md:text-base"></i>
             </button>
 
             <!-- Left Fade Gradient -->
-            <div x-show="canScrollLeft" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+            <div x-show="canScrollLeft" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none">
+            </div>
 
             <!-- Right Fade Gradient -->
-            <div x-show="canScrollRight"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+            <div x-show="canScrollRight" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none">
+            </div>
 
             <!-- Scrollable Category Container -->
-            <div x-ref="categoryScroll" 
-                 class="flex gap-4 md:gap-5 overflow-x-auto scroll-smooth px-4 md:px-8 lg:px-16 pt-2 pb-4 scrollbar-hide"
-                 style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;">
-                
+            <div x-ref="categoryScroll"
+                class="flex gap-4 md:gap-5 overflow-x-auto scroll-smooth px-4 md:px-8 lg:px-16 pt-2 pb-4 scrollbar-hide"
+                style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;">
+
                 @forelse($categories as $category)
-                <a href="{{ route('home', ['category' => $category->id]) }}"
-                   class="flex-shrink-0 scroll-snap-start group"
-                   style="scroll-snap-align: start;">
-                    <div class="w-36 md:w-40 h-36 md:h-40 bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-green-200 flex flex-col {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'ring-2 ring-green-500 shadow-green-100' : '' }}">
-                        <div class="flex flex-col items-center justify-center h-full">
-                            <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center mb-3 group-hover:from-green-100 group-hover:to-green-200 group-hover:scale-105 transition-all duration-300 shadow-sm flex-shrink-0">
-                                <i class="fas {{ $category->icon ?? 'fa-tag' }} text-xl md:text-2xl text-green-600"></i>
+                    <a href="{{ route('home', ['category' => $category->id]) }}"
+                        class="flex-shrink-0 scroll-snap-start group" style="scroll-snap-align: start;">
+                        <div
+                            class="w-36 md:w-40 h-36 md:h-40 bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-green-200 flex flex-col {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'ring-2 ring-green-500 shadow-green-100' : '' }}">
+                            <div class="flex flex-col items-center justify-center h-full">
+                                <div
+                                    class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center mb-3 group-hover:from-green-100 group-hover:to-green-200 group-hover:scale-105 transition-all duration-300 shadow-sm flex-shrink-0">
+                                    <i
+                                        class="fas {{ $category->icon ?? 'fa-tag' }} text-xl md:text-2xl text-green-600"></i>
+                                </div>
+                                <span
+                                    class="text-sm font-medium text-gray-700 text-center line-clamp-2 group-hover:text-green-700 transition-colors duration-200 h-10 flex items-center">{{ $category->name }}</span>
                             </div>
-                            <span class="text-sm font-medium text-gray-700 text-center line-clamp-2 group-hover:text-green-700 transition-colors duration-200 h-10 flex items-center">{{ $category->name }}</span>
                         </div>
-                    </div>
-                </a>
+                    </a>
                 @empty
-                <div class="flex-1 text-center py-8 text-gray-500 min-w-full">
-                    <i class="fas fa-tags text-4xl mb-2"></i>
-                    <p>Belum ada kategori</p>
-                </div>
+                    <div class="flex-1 text-center py-8 text-gray-500 min-w-full">
+                        <i class="fas fa-tags text-4xl mb-2"></i>
+                        <p>Belum ada kategori</p>
+                    </div>
                 @endforelse
             </div>
         </div>
@@ -537,7 +576,8 @@
                                         d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
                                     </path>
                                 </svg>
-                                <span class="text-xs text-gray-600">{{ number_format($product->average_rating, 1) }}</span>
+                                <span
+                                    class="text-xs text-gray-600">{{ number_format($product->average_rating, 1) }}</span>
                             </div>
                             <p class="text-xs text-gray-500">{{ $product->city }}, {{ $product->province }}</p>
                         </div>
@@ -555,7 +595,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12 @if($isSeller) lg:ml-64 @endif">
+    <footer class="bg-gray-800 text-white py-8 mt-12 @if ($isSeller) lg:ml-64 @endif">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
