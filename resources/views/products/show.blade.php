@@ -102,51 +102,60 @@
         </div>
 
         <!-- ============================= -->
-        <!-- REVIEW FORM -->
+        <!-- REVIEW FORM WITH VALIDATION -->
         <!-- ============================= -->
 
         <div class="mt-10 bg-white p-6 rounded-lg shadow-sm"
-             x-data="{
-                rating: 0,
-                provinces: [],
-                selectedProvince: '',
-                init() {
-                    fetch('/api/wilayah/provinces')
-                        .then(res => res.json())
-                        .then(json => this.provinces = json.data);
-                }
-             }">
+             x-data="reviewForm()">
 
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Tulis Ulasan</h2>
 
-            <form action="{{ route('reviews.store', $product->id) }}" method="POST">
+            <form @submit.prevent="validateForm" action="{{ route('reviews.store', $product->id) }}" method="POST">
                 @csrf
+
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                 <!-- Name -->
                 <label class="block font-medium">Nama</label>
-                <input type="text" name="name" class="w-full border p-2 rounded mb-4" required>
+                <input type="text" name="name"
+                       x-model="name"
+                       :class="errors.name ? 'border-red-500' : ''"
+                       class="w-full border p-2 rounded mb-1">
+                <p class="text-red-500 text-sm mb-3" x-show="errors.name">Nama wajib diisi</p>
 
                 <!-- Email -->
                 <label class="block font-medium">Email</label>
-                <input type="email" name="email" class="w-full border p-2 rounded mb-4" required>
+                <input type="email" name="email"
+                       x-model="email"
+                       :class="errors.email ? 'border-red-500' : ''"
+                       class="w-full border p-2 rounded mb-1">
+                <p class="text-red-500 text-sm mb-3" x-show="errors.email">Email wajib diisi</p>
 
                 <!-- Phone -->
                 <label class="block font-medium">No. Telepon</label>
-                <input type="text" name="phone" class="w-full border p-2 rounded mb-4">
+                <input type="text" name="phone"
+                       x-model="phone"
+                       :class="errors.phone ? 'border-red-500' : ''"
+                       class="w-full border p-2 rounded mb-1">
+                <p class="text-red-500 text-sm mb-3" x-show="errors.phone">Nomor telepon wajib diisi</p>
 
                 <!-- Province -->
                 <label class="block font-medium">Provinsi</label>
-                <select name="province" x-model="selectedProvince" class="w-full border p-2 rounded mb-4">
+                <select name="province"
+                        x-model="province"
+                        :class="errors.province ? 'border-red-500' : ''"
+                        class="w-full border p-2 rounded mb-1">
                     <option value="" selected disabled>Pilih provinsi...</option>
 
                     <template x-for="prov in provinces" :key="prov.code">
                         <option :value="prov.name" x-text="prov.name"></option>
                     </template>
                 </select>
+                <p class="text-red-500 text-sm mb-3" x-show="errors.province">Provinsi wajib dipilih</p>
 
                 <!-- Stars -->
                 <label class="block font-medium mb-2">Rating</label>
-                <div class="flex space-x-2 mb-4">
+                <div class="flex space-x-2 mb-1">
                     <template x-for="star in [1,2,3,4,5]" :key="star">
                         <svg @click="rating = star"
                              :class="rating >= star ? 'text-yellow-400' : 'text-gray-300'"
@@ -163,20 +172,19 @@
                         </svg>
                     </template>
                 </div>
+                <p class="text-red-500 text-sm mb-3" x-show="errors.rating">Rating wajib dipilih</p>
 
                 <input type="hidden" name="rating" :value="rating">
 
                 <!-- Comment -->
-                <div x-show="rating > 0" x-transition>
-                    <label class="block font-medium mb-2">Komentar</label>
-                    <textarea name="comment" rows="4" class="w-full border p-3 rounded mb-4"
-                              placeholder="Tulis pengalaman Anda..."></textarea>
+                <label class="block font-medium mb-2">Komentar (opsional)</label>
+                <textarea name="comment" rows="4"
+                          class="w-full border p-3 rounded mb-4"
+                          placeholder="Tulis pengalaman Anda..."></textarea>
 
-                    <button class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
-                        Kirim Ulasan
-                    </button>
-                </div>
-
+                <button class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
+                    Kirim Ulasan
+                </button>
             </form>
         </div>
 
@@ -190,14 +198,10 @@
                 <div class="border-b pb-4 mb-4">
 
                     <div class="flex items-center mb-1">
-                        <span class="font-semibold">
-                            {{ $review->name }}
-                        </span>
+                        <span class="font-semibold">{{ $review->name }}</span>
 
                         @if($review->province)
-                            <span class="ml-2 text-sm text-gray-500">
-                                ({{ $review->province }})
-                            </span>
+                            <span class="ml-2 text-sm text-gray-500">({{ $review->province }})</span>
                         @endif
 
                         <span class="ml-2 text-sm text-gray-400">
@@ -205,7 +209,6 @@
                         </span>
                     </div>
 
-                    <!-- Stars -->
                     <div class="flex mb-2">
                         @for ($i = 1; $i <= 5; $i++)
                             <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}"
@@ -240,6 +243,43 @@
             <p>&copy; 2025 MartPlace. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- ============================= -->
+    <!-- ALPINE.JS VALIDATION SCRIPT -->
+    <!-- ============================= -->
+    <script>
+        function reviewForm() {
+            return {
+                name: '',
+                email: '',
+                phone: '',
+                province: '',
+                rating: 0,
+                provinces: [],
+                errors: {},
+
+                init() {
+                    fetch('/api/wilayah/provinces')
+                        .then(res => res.json())
+                        .then(json => this.provinces = json.data);
+                },
+
+                validateForm(event) {
+                    this.errors = {};
+
+                    if (!this.name) this.errors.name = true;
+                    if (!this.email) this.errors.email = true;
+                    if (!this.phone) this.errors.phone = true;
+                    if (!this.province) this.errors.province = true;
+                    if (this.rating === 0) this.errors.rating = true;
+
+                    if (Object.keys(this.errors).length === 0) {
+                        event.target.submit();
+                    }
+                }
+            }
+        }
+    </script>
 
 </body>
 </html>
