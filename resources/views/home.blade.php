@@ -26,19 +26,44 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 1; }
-            50% { transform: scale(1); opacity: 0.7; }
-            100% { transform: scale(0.95); opacity: 1; }
+            0% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
         }
 
         @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .icon-float {
@@ -82,7 +107,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: 0.5s;
         }
 
@@ -95,6 +120,7 @@
             0% {
                 transform: translateX(0);
             }
+
             100% {
                 transform: translateX(-50%);
             }
@@ -196,10 +222,12 @@
                         <!-- Logo -->
                         <div class="flex items-center">
                             <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
-                                <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                                     <i class="fas fa-store text-white text-xl"></i>
                                 </div>
-                                <span class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">MartPlace</span>
+                                <span
+                                    class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">MartPlace</span>
                             </a>
                         </div>
 
@@ -242,7 +270,7 @@
                                 window.location.href = `/sellers/${sellerId}`;
                             },
                             selectCategory(categoryId) {
-                                window.location.href = `/?category=${categoryId}`;
+                                window.location.href = `/?category=${categoryId}#products`;
                             },
                             selectLocation(location) {
                                 window.location.href = `/products?search=${encodeURIComponent(location)}`;
@@ -444,7 +472,8 @@
 
                             @guest
                                 <!-- Login Button -->
-                                <a href="{{ route('login') }}" class="btn-glow text-gray-700 hover:text-cyan-600 transition font-semibold flex items-center">
+                                <a href="{{ route('login') }}"
+                                    class="btn-glow text-gray-700 hover:text-cyan-600 transition font-semibold flex items-center">
                                     <i class="fas fa-sign-in-alt mr-2"></i>Masuk
                                 </a>
 
@@ -491,22 +520,25 @@
     @endif
 
     <!-- Hero Banner -->
-    <section class="bg-gradient-to-r from-cyan-400 via-cyan-500 to-green-400 py-20 relative overflow-hidden gradient-animate">
+    <section
+        class="bg-gradient-to-r from-cyan-400 via-cyan-500 to-green-400 py-20 relative overflow-hidden gradient-animate">
         <!-- Decorative Elements -->
         <div class="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
-        
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
                 <div class="md:w-1/2 text-white mb-8 md:mb-0">
-                    <div class="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 animate-pulse">
+                    <div
+                        class="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 animate-pulse">
                         <span class="text-sm font-semibold">🎉 Platform Terpercaya</span>
                     </div>
                     <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
                         Belanja <span class="text-yellow-300">Hemat</span><br>
                         & Terpercaya
                     </h1>
-                    <p class="text-xl mb-8 text-white text-opacity-90">Temukan ribuan produk berkualitas dari seller terbaik dengan harga yang kompetitif!</p>
+                    <p class="text-xl mb-8 text-white text-opacity-90">Temukan ribuan produk berkualitas dari seller
+                        terbaik dengan harga yang kompetitif!</p>
                     <div class="flex flex-wrap gap-4">
                         <a href="#products"
                             class="btn-glow inline-flex items-center bg-white text-cyan-600 px-8 py-4 rounded-xl font-bold hover:shadow-2xl transition-all shadow-lg">
@@ -517,7 +549,7 @@
                             <i class="fas fa-store mr-2"></i>Daftar Toko
                         </a>
                     </div>
-                    
+
                     <!-- Stats -->
                     <div class="grid grid-cols-3 gap-6 mt-12">
                         <div class="text-center">
@@ -537,28 +569,37 @@
                 <div class="md:w-1/2 flex justify-center">
                     <div class="relative">
                         <div class="absolute inset-0 bg-cyan-400 opacity-20 rounded-full blur-3xl pulse-ring"></div>
-                        <div class="relative bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/40 shadow-2xl">
+                        <div
+                            class="relative bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/40 shadow-2xl">
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30">
-                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                <div
+                                    class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30">
+                                    <div
+                                        class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
                                         <i class="fas fa-truck text-3xl text-cyan-600"></i>
                                     </div>
                                     <p class="text-white text-sm font-bold drop-shadow-lg">Pengiriman Cepat</p>
                                 </div>
-                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30" style="animation-delay: 0.5s">
-                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30"
+                                    style="animation-delay: 0.5s">
+                                    <div
+                                        class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
                                         <i class="fas fa-shield-alt text-3xl text-green-600"></i>
                                     </div>
                                     <p class="text-white text-sm font-bold drop-shadow-lg">Pembayaran Aman</p>
                                 </div>
-                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30" style="animation-delay: 1s">
-                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30"
+                                    style="animation-delay: 1s">
+                                    <div
+                                        class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
                                         <i class="fas fa-star text-3xl text-yellow-500"></i>
                                     </div>
                                     <p class="text-white text-sm font-bold drop-shadow-lg">Produk Berkualitas</p>
                                 </div>
-                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30" style="animation-delay: 1.5s">
-                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30"
+                                    style="animation-delay: 1.5s">
+                                    <div
+                                        class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
                                         <i class="fas fa-headset text-3xl text-purple-600"></i>
                                     </div>
                                     <p class="text-white text-sm font-bold drop-shadow-lg">Support 24/7</p>
@@ -574,17 +615,23 @@
     <!-- Category Section - Horizontal Scroll -->
     <section class="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
         <!-- Decorative Background Elements -->
-        <div class="absolute top-0 left-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
-        <div class="absolute bottom-0 right-0 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30" style="animation: float 4s ease-in-out infinite;"></div>
-        
+        <div
+            class="absolute top-0 left-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float">
+        </div>
+        <div class="absolute bottom-0 right-0 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+            style="animation: float 4s ease-in-out infinite;"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="mb-12">
                 <div class="inline-block mb-3">
-                    <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg">
+                    <span
+                        class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg">
                         <i class="fas fa-tags mr-2"></i>Jelajahi Kategori
                     </span>
                 </div>
-                <h2 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent mb-3 leading-tight">Kategori Pilihan</h2>
+                <h2
+                    class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent mb-3 leading-tight">
+                    Kategori Pilihan</h2>
                 <p class="text-gray-700 text-lg">Temukan produk berdasarkan kategori favorit Anda</p>
             </div>
         </div>
@@ -652,13 +699,15 @@
                 style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;">
 
                 @forelse($categories as $category)
-                    <a href="{{ route('home', ['category' => $category->id]) }}"
+                    <a href="{{ route('home', ['category' => $category->id]) }}#products"
                         class="flex-shrink-0 scroll-snap-start group" style="scroll-snap-align: start;">
                         <div
                             class="category-card w-36 md:w-40 h-36 md:h-40 bg-white bg-opacity-60 backdrop-blur-sm rounded-2xl p-5 md:p-6 transition-all duration-300 border-2 {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50' : 'border-transparent hover:border-purple-300' }} flex flex-col relative overflow-hidden">
                             <!-- Glow Effect -->
-                            <div class="absolute inset-0 bg-gradient-to-br from-purple-100 to-pink-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-purple-100 to-pink-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+
                             <div class="flex flex-col items-center justify-center h-full relative z-10">
                                 <div
                                     class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-100 via-pink-100 to-rose-100 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 flex-shrink-0">
@@ -681,158 +730,197 @@
     </section>
 
     <!-- Products Section -->
-    <section id="products" class="bg-gradient-to-br from-white via-cyan-50 to-green-50 py-24 relative overflow-hidden">
+    <section id="products"
+        class="bg-gradient-to-br from-white via-cyan-50 to-green-50 py-24 relative overflow-hidden">
         <!-- Decorative Grid Pattern -->
         <div class="absolute inset-0 opacity-5">
-            <div class="absolute inset-0" style="background-image: radial-gradient(circle, #0891b2 1px, transparent 1px); background-size: 50px 50px;"></div>
+            <div class="absolute inset-0"
+                style="background-image: radial-gradient(circle, #0891b2 1px, transparent 1px); background-size: 50px 50px;">
+            </div>
         </div>
-        
+
         <!-- Decorative Shapes -->
-        <div class="absolute top-10 right-10 w-64 h-64 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        <div class="absolute bottom-10 left-10 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-        
+        <div
+            class="absolute top-10 right-10 w-64 h-64 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20">
+        </div>
+        <div
+            class="absolute bottom-10 left-10 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20">
+        </div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="text-center mb-16">
-            <div class="inline-block mb-4">
-                <span class="bg-gradient-to-r from-cyan-500 to-green-500 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg">
-                    <i class="fas fa-fire mr-2"></i>Produk Terpopuler
-                </span>
-            </div>
-            <h2 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-4 leading-tight px-2">
-                @if(isset($showAll) && $showAll)
-                    Katalog Semua Produk
-                @else
-                    Katalog Produk
-                @endif
-            </h2>
-            <p class="text-gray-700 text-lg max-w-2xl mx-auto px-2">
-                @if(isset($showAll) && $showAll)
-                    Menampilkan semua {{ $products->count() }} produk yang tersedia
-                @else
-                    Menampilkan produk terbaik dengan rating tertinggi dari {{ $totalProducts ?? 0 }} produk
-                @endif
-            </p>
-        </div>
-
-        @if ($products->isEmpty())
-            <!-- Empty State -->
-            <div class="text-center py-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border-2 border-gray-200">
-                <div class="w-32 h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-box-open text-5xl text-gray-400"></i>
+            <div class="text-center mb-16">
+                <div class="inline-block mb-4">
+                    <span
+                        class="bg-gradient-to-r from-cyan-500 to-green-500 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg">
+                        <i class="fas fa-fire mr-2"></i>Produk Terpopuler
+                    </span>
                 </div>
-                @if (isset($selectedCategory))
-                    <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">Belum ada produk di kategori {{ $selectedCategory }}</h3>
-                    <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">Silakan pilih kategori lain atau lihat semua produk yang tersedia.</p>
-                    <div class="mt-6">
-                        <a href="{{ route('home') }}"
-                            class="btn-glow inline-flex items-center bg-gradient-to-r from-cyan-500 to-green-500 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-bold">
-                            <i class="fas fa-th mr-2"></i>Lihat Semua Kategori
-                        </a>
+                <h2
+                    class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-4 leading-tight px-2">
+                    @if (isset($showAll) && $showAll)
+                        Katalog Semua Produk
+                    @else
+                        Katalog Produk
+                    @endif
+                </h2>
+                <p class="text-gray-700 text-lg max-w-2xl mx-auto px-2">
+                    @if (isset($showAll) && $showAll)
+                        Menampilkan semua {{ $products->count() }} produk yang tersedia
+                    @else
+                        Menampilkan produk terbaik dengan rating tertinggi dari {{ $totalProducts ?? 0 }} produk
+                    @endif
+                </p>
+            </div>
+
+            @if ($products->isEmpty())
+                <!-- Empty State -->
+                <div
+                    class="text-center py-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border-2 border-gray-200">
+                    <div
+                        class="w-32 h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-box-open text-5xl text-gray-400"></i>
                     </div>
-                @else
-                    <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">Belum ada produk</h3>
-                    <p class="text-gray-600 text-lg">Produk akan segera tersedia.</p>
-                @endif
-            </div>
-        @else
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                @foreach ($products as $product)
-                    <a href="{{ route('products.show', $product->id) }}"
-                        class="product-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden border-2 border-transparent hover:border-cyan-200 group">
-                        <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                                onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
-                                loading="lazy">
+                    @if (isset($selectedCategory))
+                        <h3
+                            class="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">
+                            Belum ada produk di kategori {{ $selectedCategory }}</h3>
+                        <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">Silakan pilih kategori lain atau lihat
+                            semua produk yang tersedia.</p>
+                        <div class="mt-6">
+                            <a href="{{ route('home') }}"
+                                class="btn-glow inline-flex items-center bg-gradient-to-r from-cyan-500 to-green-500 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-bold">
+                                <i class="fas fa-th mr-2"></i>Lihat Semua Kategori
+                            </a>
                         </div>
-                        <div class="p-4">
-                            <h3 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-green-600 group-hover:bg-clip-text transition-all">{{ $product->name }}</h3>
-                            <div class="flex items-baseline space-x-2 mb-3">
-                                <span class="text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
-                            </div>
-                            <div class="flex items-center space-x-2 mb-2">
-                                <div class="flex items-center">
-                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
-                                    <span class="ml-1 text-xs font-semibold text-gray-700">{{ number_format($product->average_rating, 1) }}</span>
-                                </div>
-                                <span class="text-gray-300">|</span>
-                                <span class="text-xs text-gray-600">{{ $product->total_reviews }} ulasan</span>
-                            </div>
-                            <div class="flex items-center text-xs text-gray-500">
-                                <i class="fas fa-map-marker-alt mr-1 text-cyan-500"></i>
-                                <span class="truncate">{{ $product->city }}</span>
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        @endif
-
-        <!-- Load More Button -->
-        <div class="text-center mt-12">
-            <div class="space-y-4">
-                <div class="inline-block bg-gradient-to-r from-cyan-50 to-green-50 px-8 py-4 rounded-2xl border-2 border-cyan-200 mb-6">
-                    <p class="text-gray-700 font-semibold">
-                        <i class="fas fa-box mr-2 text-cyan-600"></i>
-                        Menampilkan <span class="text-cyan-600 font-bold">{{ $products->count() }}</span> dari <span class="text-green-600 font-bold">{{ $totalProducts ?? 0 }}</span> produk
-                    </p>
+                    @else
+                        <h3
+                            class="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">
+                            Belum ada produk</h3>
+                        <p class="text-gray-600 text-lg">Produk akan segera tersedia.</p>
+                    @endif
                 </div>
-                <a href="{{ route('products.index') }}" 
-                   class="btn-glow inline-flex items-center bg-gradient-to-r from-cyan-500 to-green-500 text-white px-10 py-5 rounded-xl hover:shadow-2xl transition-all font-bold text-lg group">
-                    <i class="fas fa-th mr-3 group-hover:scale-110 transition-transform"></i>
-                    Lihat Semua Produk
-                    <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
-                </a>
+            @else
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                    @foreach ($products as $product)
+                        <a href="{{ route('products.show', $product->id) }}"
+                            class="product-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden border-2 border-transparent hover:border-cyan-200 group">
+                            <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                    class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                                    onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
+                                    loading="lazy">
+                            </div>
+                            <div class="p-4">
+                                <h3
+                                    class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-green-600 group-hover:bg-clip-text transition-all">
+                                    {{ $product->name }}</h3>
+                                <div class="flex items-baseline space-x-2 mb-3">
+                                    <span
+                                        class="text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
+                                </div>
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span
+                                            class="ml-1 text-xs font-semibold text-gray-700">{{ number_format($product->average_rating, 1) }}</span>
+                                    </div>
+                                    <span class="text-gray-300">|</span>
+                                    <span class="text-xs text-gray-600">{{ $product->total_reviews }} ulasan</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-500">
+                                    <i class="fas fa-map-marker-alt mr-1 text-cyan-500"></i>
+                                    <span class="truncate">{{ $product->city }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            @endif
+
+            <!-- Load More Button -->
+            <div class="text-center mt-12">
+                <div class="space-y-4">
+                    <div
+                        class="inline-block bg-gradient-to-r from-cyan-50 to-green-50 px-8 py-4 rounded-2xl border-2 border-cyan-200 mb-6">
+                        <p class="text-gray-700 font-semibold">
+                            <i class="fas fa-box mr-2 text-cyan-600"></i>
+                            Menampilkan <span class="text-cyan-600 font-bold">{{ $products->count() }}</span> dari
+                            <span class="text-green-600 font-bold">{{ $totalProducts ?? 0 }}</span> produk
+                        </p>
+                    </div>
+                    <a href="{{ route('products.index') }}"
+                        class="btn-glow inline-flex items-center bg-gradient-to-r from-cyan-500 to-green-500 text-white px-10 py-5 rounded-xl hover:shadow-2xl transition-all font-bold text-lg group">
+                        <i class="fas fa-th mr-3 group-hover:scale-110 transition-transform"></i>
+                        Lihat Semua Produk
+                        <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
     </section>
 
     <!-- Stats Section -->
     <section class="py-24 bg-gradient-to-br from-cyan-600 via-green-600 to-emerald-600 relative overflow-hidden">
         <!-- Decorative Elements -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-10 rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-yellow-300 opacity-10 rounded-full blur-3xl" style="animation: float 3s ease-in-out infinite 1.5s;"></div>
-        
+        <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+        </div>
+        <div
+            class="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-10 rounded-full blur-3xl animate-float">
+        </div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-yellow-300 opacity-10 rounded-full blur-3xl"
+            style="animation: float 3s ease-in-out infinite 1.5s;"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-16">
                 <div class="inline-block mb-4">
-                    <span class="bg-white bg-opacity-20 text-white px-6 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
+                    <span
+                        class="bg-white bg-opacity-20 text-white px-6 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
                         <i class="fas fa-chart-line mr-2"></i>Platform Terpercaya
                     </span>
                 </div>
-                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">Dipercaya Oleh Ribuan Pengguna</h2>
-                <p class="text-white text-opacity-90 text-lg max-w-2xl mx-auto">Statistik platform kami yang terus berkembang dan dipercaya oleh komunitas</p>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">Dipercaya Oleh Ribuan
+                    Pengguna</h2>
+                <p class="text-white text-opacity-90 text-lg max-w-2xl mx-auto">Statistik platform kami yang terus
+                    berkembang dan dipercaya oleh komunitas</p>
             </div>
-            
+
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <div
+                    class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-box-open text-4xl text-white"></i>
                     </div>
-                    <div class="text-5xl md:text-6xl font-bold text-white mb-2">{{ number_format($products->count()) }}+</div>
+                    <div class="text-5xl md:text-6xl font-bold text-white mb-2">
+                        {{ number_format($products->count()) }}+</div>
                     <div class="text-white text-opacity-90 font-semibold text-lg">Produk Tersedia</div>
                 </div>
-                
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+
+                <div
+                    class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-th-large text-4xl text-white"></i>
                     </div>
                     <div class="text-5xl md:text-6xl font-bold text-white mb-2">{{ $categories->count() }}+</div>
                     <div class="text-white text-opacity-90 font-semibold text-lg">Kategori Lengkap</div>
                 </div>
-                
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+
+                <div
+                    class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-store text-4xl text-white"></i>
                     </div>
                     <div class="text-5xl md:text-6xl font-bold text-white mb-2">500+</div>
                     <div class="text-white text-opacity-90 font-semibold text-lg">Seller Terpercaya</div>
                 </div>
-                
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
-                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+
+                <div
+                    class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                         <i class="fas fa-users text-4xl text-white"></i>
                     </div>
                     <div class="text-5xl md:text-6xl font-bold text-white mb-2">10K+</div>
@@ -845,202 +933,262 @@
     <!-- Testimonials Section -->
     <section class="py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-zinc-100 relative overflow-hidden">
         <!-- Decorative Elements -->
-        <div class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-200 to-transparent rounded-full blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-green-200 to-transparent rounded-full blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
-        <div class="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-gradient-to-br from-purple-100 to-pink-100 rounded-full blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2"></div>
-        
+        <div
+            class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-cyan-200 to-transparent rounded-full blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2">
+        </div>
+        <div
+            class="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-green-200 to-transparent rounded-full blur-3xl opacity-30 translate-x-1/2 translate-y-1/2">
+        </div>
+        <div
+            class="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-gradient-to-br from-purple-100 to-pink-100 rounded-full blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2">
+        </div>
+
         <!-- Subtle Pattern -->
-        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 1px 1px, #374151 1px, transparent 0); background-size: 40px 40px;"></div>
-        
+        <div class="absolute inset-0 opacity-[0.03]"
+            style="background-image: radial-gradient(circle at 1px 1px, #374151 1px, transparent 0); background-size: 40px 40px;">
+        </div>
+
         <div class="relative z-10">
             <!-- Section Header -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
-                <div class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/10 to-green-500/10 backdrop-blur-sm px-5 py-2.5 rounded-full mb-6 border border-cyan-200/50">
+                <div
+                    class="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500/10 to-green-500/10 backdrop-blur-sm px-5 py-2.5 rounded-full mb-6 border border-cyan-200/50">
                     <i class="fas fa-quote-left text-cyan-600"></i>
-                    <span class="text-sm font-semibold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">Testimoni Pelanggan</span>
+                    <span
+                        class="text-sm font-semibold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">Testimoni
+                        Pelanggan</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent mb-4 leading-tight">Apa Kata Mereka?</h2>
-                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Dengarkan pengalaman nyata dari pelanggan yang telah berbelanja di MartPlace</p>
+                <h2
+                    class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 bg-clip-text text-transparent mb-4 leading-tight">
+                    Apa Kata Mereka?</h2>
+                <p class="text-gray-600 text-lg max-w-2xl mx-auto">Dengarkan pengalaman nyata dari pelanggan yang telah
+                    berbelanja di MartPlace</p>
             </div>
-            
-            @if(isset($testimonials) && $testimonials->count() > 0)
-            <!-- Infinite Carousel Container -->
-            <div class="testimonial-container overflow-hidden">
-                <div class="testimonial-track gap-6 py-4">
-                    @php
-                        $colors = [
-                            ['from-cyan-400', 'to-cyan-600', 'border-cyan-200', 'from-cyan-50', 'to-cyan-100'],
-                            ['from-green-400', 'to-green-600', 'border-green-200', 'from-green-50', 'to-green-100'],
-                            ['from-purple-400', 'to-purple-600', 'border-purple-200', 'from-purple-50', 'to-purple-100'],
-                            ['from-pink-400', 'to-pink-600', 'border-pink-200', 'from-pink-50', 'to-pink-100'],
-                            ['from-amber-400', 'to-amber-600', 'border-amber-200', 'from-amber-50', 'to-amber-100'],
-                            ['from-blue-400', 'to-blue-600', 'border-blue-200', 'from-blue-50', 'to-blue-100'],
-                            ['from-rose-400', 'to-rose-600', 'border-rose-200', 'from-rose-50', 'to-rose-100'],
-                            ['from-teal-400', 'to-teal-600', 'border-teal-200', 'from-teal-50', 'to-teal-100'],
-                            ['from-indigo-400', 'to-indigo-600', 'border-indigo-200', 'from-indigo-50', 'to-indigo-100'],
-                            ['from-emerald-400', 'to-emerald-600', 'border-emerald-200', 'from-emerald-50', 'to-emerald-100'],
-                        ];
-                    @endphp
-                    
-                    {{-- First set of cards --}}
-                    @foreach($testimonials as $index => $testimonial)
+
+            @if (isset($testimonials) && $testimonials->count() > 0)
+                <!-- Infinite Carousel Container -->
+                <div class="testimonial-container overflow-hidden">
+                    <div class="testimonial-track gap-6 py-4">
                         @php
-                            $color = $colors[$index % count($colors)];
+                            $colors = [
+                                ['from-cyan-400', 'to-cyan-600', 'border-cyan-200', 'from-cyan-50', 'to-cyan-100'],
+                                ['from-green-400', 'to-green-600', 'border-green-200', 'from-green-50', 'to-green-100'],
+                                [
+                                    'from-purple-400',
+                                    'to-purple-600',
+                                    'border-purple-200',
+                                    'from-purple-50',
+                                    'to-purple-100',
+                                ],
+                                ['from-pink-400', 'to-pink-600', 'border-pink-200', 'from-pink-50', 'to-pink-100'],
+                                ['from-amber-400', 'to-amber-600', 'border-amber-200', 'from-amber-50', 'to-amber-100'],
+                                ['from-blue-400', 'to-blue-600', 'border-blue-200', 'from-blue-50', 'to-blue-100'],
+                                ['from-rose-400', 'to-rose-600', 'border-rose-200', 'from-rose-50', 'to-rose-100'],
+                                ['from-teal-400', 'to-teal-600', 'border-teal-200', 'from-teal-50', 'to-teal-100'],
+                                [
+                                    'from-indigo-400',
+                                    'to-indigo-600',
+                                    'border-indigo-200',
+                                    'from-indigo-50',
+                                    'to-indigo-100',
+                                ],
+                                [
+                                    'from-emerald-400',
+                                    'to-emerald-600',
+                                    'border-emerald-200',
+                                    'from-emerald-50',
+                                    'to-emerald-100',
+                                ],
+                            ];
                         @endphp
-                        <div class="testimonial-card w-[380px] mx-3">
-                            <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-gray-100/80 hover:border-{{ str_replace('border-', '', $color[2]) }} transition-all duration-500 h-full relative overflow-hidden group">
-                                <!-- Decorative Gradient Orb -->
-                                <div class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br {{ $color[3] }} {{ $color[4] }} rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
-                                
-                                <!-- Quote Icon -->
-                                <div class="absolute top-6 right-6 text-4xl text-gray-100 group-hover:text-{{ str_replace('from-', '', $color[0]) }}/20 transition-colors duration-300">
-                                    <i class="fas fa-quote-right"></i>
-                                </div>
-                                
-                                <!-- Rating Stars -->
-                                <div class="flex items-center gap-1 mb-5">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= $testimonial->rating)
-                                            <i class="fas fa-star text-amber-400 text-lg drop-shadow-sm"></i>
-                                        @else
-                                            <i class="fas fa-star text-gray-200 text-lg"></i>
-                                        @endif
-                                    @endfor
-                                    <span class="ml-2 text-sm font-medium text-gray-500">{{ $testimonial->rating }}.0</span>
-                                </div>
-                                
-                                <!-- Comment -->
-                                <p class="text-gray-600 leading-relaxed mb-8 relative z-10 line-clamp-4">"{{ $testimonial->comment }}"</p>
-                                
-                                <!-- Product Info -->
-                                @if($testimonial->product)
-                                <div class="mb-6 p-3 bg-gradient-to-r {{ $color[3] }} {{ $color[4] }}/50 rounded-xl border border-gray-100">
-                                    <p class="text-xs text-gray-500 mb-1">Review untuk:</p>
-                                    <p class="text-sm font-semibold text-gray-700 truncate">{{ $testimonial->product->name }}</p>
-                                </div>
-                                @endif
-                                
-                                <!-- Author Info -->
-                                <div class="flex items-center relative z-10">
-                                    <div class="w-14 h-14 bg-gradient-to-br {{ $color[0] }} {{ $color[1] }} rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-{{ str_replace('from-', '', $color[0]) }}/30">
-                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+
+                        {{-- First set of cards --}}
+                        @foreach ($testimonials as $index => $testimonial)
+                            @php
+                                $color = $colors[$index % count($colors)];
+                            @endphp
+                            <div class="testimonial-card w-[380px] mx-3">
+                                <div
+                                    class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-gray-100/80 hover:border-{{ str_replace('border-', '', $color[2]) }} transition-all duration-500 h-full relative overflow-hidden group">
+                                    <!-- Decorative Gradient Orb -->
+                                    <div
+                                        class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br {{ $color[3] }} {{ $color[4] }} rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500">
                                     </div>
-                                    <div class="ml-4 flex-1">
-                                        <div class="font-bold text-gray-800 text-lg">{{ $testimonial->name }}</div>
-                                        <div class="flex items-center gap-2 text-sm text-gray-500">
-                                            <i class="fas fa-map-marker-alt text-{{ str_replace('from-', '', $color[0]) }}"></i>
-                                            <span>{{ $testimonial->province ?? 'Indonesia' }}</span>
+
+                                    <!-- Quote Icon -->
+                                    <div
+                                        class="absolute top-6 right-6 text-4xl text-gray-100 group-hover:text-{{ str_replace('from-', '', $color[0]) }}/20 transition-colors duration-300">
+                                        <i class="fas fa-quote-right"></i>
+                                    </div>
+
+                                    <!-- Rating Stars -->
+                                    <div class="flex items-center gap-1 mb-5">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $testimonial->rating)
+                                                <i class="fas fa-star text-amber-400 text-lg drop-shadow-sm"></i>
+                                            @else
+                                                <i class="fas fa-star text-gray-200 text-lg"></i>
+                                            @endif
+                                        @endfor
+                                        <span
+                                            class="ml-2 text-sm font-medium text-gray-500">{{ $testimonial->rating }}.0</span>
+                                    </div>
+
+                                    <!-- Comment -->
+                                    <p class="text-gray-600 leading-relaxed mb-8 relative z-10 line-clamp-4">
+                                        "{{ $testimonial->comment }}"</p>
+
+                                    <!-- Product Info -->
+                                    @if ($testimonial->product)
+                                        <div
+                                            class="mb-6 p-3 bg-gradient-to-r {{ $color[3] }} {{ $color[4] }}/50 rounded-xl border border-gray-100">
+                                            <p class="text-xs text-gray-500 mb-1">Review untuk:</p>
+                                            <p class="text-sm font-semibold text-gray-700 truncate">
+                                                {{ $testimonial->product->name }}</p>
                                         </div>
-                                    </div>
-                                    <div class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
-                                        <i class="fas fa-check text-green-600"></i>
+                                    @endif
+
+                                    <!-- Author Info -->
+                                    <div class="flex items-center relative z-10">
+                                        <div
+                                            class="w-14 h-14 bg-gradient-to-br {{ $color[0] }} {{ $color[1] }} rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-{{ str_replace('from-', '', $color[0]) }}/30">
+                                            {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                        </div>
+                                        <div class="ml-4 flex-1">
+                                            <div class="font-bold text-gray-800 text-lg">{{ $testimonial->name }}
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm text-gray-500">
+                                                <i
+                                                    class="fas fa-map-marker-alt text-{{ str_replace('from-', '', $color[0]) }}"></i>
+                                                <span>{{ $testimonial->province ?? 'Indonesia' }}</span>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                                            <i class="fas fa-check text-green-600"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                    
-                    {{-- Duplicate set for seamless infinite scroll --}}
-                    @foreach($testimonials as $index => $testimonial)
-                        @php
-                            $color = $colors[$index % count($colors)];
-                        @endphp
-                        <div class="testimonial-card w-[380px] mx-3">
-                            <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-gray-100/80 hover:border-{{ str_replace('border-', '', $color[2]) }} transition-all duration-500 h-full relative overflow-hidden group">
-                                <!-- Decorative Gradient Orb -->
-                                <div class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br {{ $color[3] }} {{ $color[4] }} rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500"></div>
-                                
-                                <!-- Quote Icon -->
-                                <div class="absolute top-6 right-6 text-4xl text-gray-100 group-hover:text-{{ str_replace('from-', '', $color[0]) }}/20 transition-colors duration-300">
-                                    <i class="fas fa-quote-right"></i>
-                                </div>
-                                
-                                <!-- Rating Stars -->
-                                <div class="flex items-center gap-1 mb-5">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        @if($i <= $testimonial->rating)
-                                            <i class="fas fa-star text-amber-400 text-lg drop-shadow-sm"></i>
-                                        @else
-                                            <i class="fas fa-star text-gray-200 text-lg"></i>
-                                        @endif
-                                    @endfor
-                                    <span class="ml-2 text-sm font-medium text-gray-500">{{ $testimonial->rating }}.0</span>
-                                </div>
-                                
-                                <!-- Comment -->
-                                <p class="text-gray-600 leading-relaxed mb-8 relative z-10 line-clamp-4">"{{ $testimonial->comment }}"</p>
-                                
-                                <!-- Product Info -->
-                                @if($testimonial->product)
-                                <div class="mb-6 p-3 bg-gradient-to-r {{ $color[3] }} {{ $color[4] }}/50 rounded-xl border border-gray-100">
-                                    <p class="text-xs text-gray-500 mb-1">Review untuk:</p>
-                                    <p class="text-sm font-semibold text-gray-700 truncate">{{ $testimonial->product->name }}</p>
-                                </div>
-                                @endif
-                                
-                                <!-- Author Info -->
-                                <div class="flex items-center relative z-10">
-                                    <div class="w-14 h-14 bg-gradient-to-br {{ $color[0] }} {{ $color[1] }} rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-{{ str_replace('from-', '', $color[0]) }}/30">
-                                        {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                        @endforeach
+
+                        {{-- Duplicate set for seamless infinite scroll --}}
+                        @foreach ($testimonials as $index => $testimonial)
+                            @php
+                                $color = $colors[$index % count($colors)];
+                            @endphp
+                            <div class="testimonial-card w-[380px] mx-3">
+                                <div
+                                    class="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-gray-100/80 hover:border-{{ str_replace('border-', '', $color[2]) }} transition-all duration-500 h-full relative overflow-hidden group">
+                                    <!-- Decorative Gradient Orb -->
+                                    <div
+                                        class="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br {{ $color[3] }} {{ $color[4] }} rounded-full blur-2xl opacity-0 group-hover:opacity-60 transition-opacity duration-500">
                                     </div>
-                                    <div class="ml-4 flex-1">
-                                        <div class="font-bold text-gray-800 text-lg">{{ $testimonial->name }}</div>
-                                        <div class="flex items-center gap-2 text-sm text-gray-500">
-                                            <i class="fas fa-map-marker-alt text-{{ str_replace('from-', '', $color[0]) }}"></i>
-                                            <span>{{ $testimonial->province ?? 'Indonesia' }}</span>
+
+                                    <!-- Quote Icon -->
+                                    <div
+                                        class="absolute top-6 right-6 text-4xl text-gray-100 group-hover:text-{{ str_replace('from-', '', $color[0]) }}/20 transition-colors duration-300">
+                                        <i class="fas fa-quote-right"></i>
+                                    </div>
+
+                                    <!-- Rating Stars -->
+                                    <div class="flex items-center gap-1 mb-5">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($i <= $testimonial->rating)
+                                                <i class="fas fa-star text-amber-400 text-lg drop-shadow-sm"></i>
+                                            @else
+                                                <i class="fas fa-star text-gray-200 text-lg"></i>
+                                            @endif
+                                        @endfor
+                                        <span
+                                            class="ml-2 text-sm font-medium text-gray-500">{{ $testimonial->rating }}.0</span>
+                                    </div>
+
+                                    <!-- Comment -->
+                                    <p class="text-gray-600 leading-relaxed mb-8 relative z-10 line-clamp-4">
+                                        "{{ $testimonial->comment }}"</p>
+
+                                    <!-- Product Info -->
+                                    @if ($testimonial->product)
+                                        <div
+                                            class="mb-6 p-3 bg-gradient-to-r {{ $color[3] }} {{ $color[4] }}/50 rounded-xl border border-gray-100">
+                                            <p class="text-xs text-gray-500 mb-1">Review untuk:</p>
+                                            <p class="text-sm font-semibold text-gray-700 truncate">
+                                                {{ $testimonial->product->name }}</p>
                                         </div>
-                                    </div>
-                                    <div class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
-                                        <i class="fas fa-check text-green-600"></i>
+                                    @endif
+
+                                    <!-- Author Info -->
+                                    <div class="flex items-center relative z-10">
+                                        <div
+                                            class="w-14 h-14 bg-gradient-to-br {{ $color[0] }} {{ $color[1] }} rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-{{ str_replace('from-', '', $color[0]) }}/30">
+                                            {{ strtoupper(substr($testimonial->name, 0, 1)) }}
+                                        </div>
+                                        <div class="ml-4 flex-1">
+                                            <div class="font-bold text-gray-800 text-lg">{{ $testimonial->name }}
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm text-gray-500">
+                                                <i
+                                                    class="fas fa-map-marker-alt text-{{ str_replace('from-', '', $color[0]) }}"></i>
+                                                <span>{{ $testimonial->province ?? 'Indonesia' }}</span>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full">
+                                            <i class="fas fa-check text-green-600"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            
-            <!-- Trust Indicators -->
-            <div class="max-w-4xl mx-auto px-4 mt-16">
-                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
-                            <i class="fas fa-shield-alt text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-gray-800">100% Terverifikasi</p>
-                            <p class="text-sm text-gray-500">Semua review asli</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
-                            <i class="fas fa-star text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-gray-800">{{ $testimonials->count() }}+ Review</p>
-                            <p class="text-sm text-gray-500">Rating tinggi</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                            <i class="fas fa-users text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <p class="font-bold text-gray-800">Pelanggan Puas</p>
-                            <p class="text-sm text-gray-500">Kepuasan terjamin</p>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-            </div>
+
+                <!-- Trust Indicators -->
+                <div class="max-w-4xl mx-auto px-4 mt-16">
+                    <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
+                                <i class="fas fa-shield-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">100% Terverifikasi</p>
+                                <p class="text-sm text-gray-500">Semua review asli</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30">
+                                <i class="fas fa-star text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">{{ $testimonials->count() }}+ Review</p>
+                                <p class="text-sm text-gray-500">Rating tinggi</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                                <i class="fas fa-users text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Pelanggan Puas</p>
+                                <p class="text-sm text-gray-500">Kepuasan terjamin</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @else
-            <!-- Empty State -->
-            <div class="max-w-2xl mx-auto px-4 text-center py-16">
-                <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-comments text-4xl text-gray-400"></i>
+                <!-- Empty State -->
+                <div class="max-w-2xl mx-auto px-4 text-center py-16">
+                    <div
+                        class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-comments text-4xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-700 mb-3">Belum Ada Testimoni</h3>
+                    <p class="text-gray-500">Jadilah yang pertama memberikan ulasan untuk produk kami!</p>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-700 mb-3">Belum Ada Testimoni</h3>
-                <p class="text-gray-500">Jadilah yang pertama memberikan ulasan untuk produk kami!</p>
-            </div>
             @endif
         </div>
     </section>
@@ -1048,22 +1196,30 @@
     <section class="py-24 bg-gradient-to-br from-cyan-500 via-green-500 to-emerald-500 relative overflow-hidden">
         <!-- Diagonal Stripe Pattern -->
         <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);"></div>
+            <div class="absolute inset-0"
+                style="background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);">
+            </div>
         </div>
-        
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-300 opacity-20 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-300 opacity-20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s"></div>
-        
+
+        <div
+            class="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-300 opacity-20 rounded-full blur-3xl animate-pulse">
+        </div>
+        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-300 opacity-20 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl animate-pulse"
+            style="animation-delay: 1s"></div>
+
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div class="mb-8">
                 <div class="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
                     <span class="text-white font-bold text-lg">🚀 Mulai Sekarang!</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">Ingin Mulai Jualan Online?</h2>
-                <p class="text-xl text-white text-opacity-90 mb-10 leading-relaxed">Bergabunglah dengan ribuan seller sukses di MartPlace. Daftar gratis dan mulai berjualan dalam hitungan menit!</p>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">Ingin Mulai Jualan Online?
+                </h2>
+                <p class="text-xl text-white text-opacity-90 mb-10 leading-relaxed">Bergabunglah dengan ribuan seller
+                    sukses di MartPlace. Daftar gratis dan mulai berjualan dalam hitungan menit!</p>
             </div>
-            
+
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a href="{{ route('sellers.create') }}"
                     class="btn-glow inline-flex items-center bg-white text-cyan-600 px-10 py-5 rounded-xl font-bold hover:shadow-2xl transition-all shadow-lg text-lg">
@@ -1074,7 +1230,7 @@
                     <i class="fas fa-shopping-cart mr-3"></i>Mulai Belanja
                 </a>
             </div>
-            
+
             <div class="mt-12 flex flex-wrap justify-center items-center gap-8 text-white text-opacity-90">
                 <div class="flex items-center">
                     <i class="fas fa-check-circle text-2xl mr-2"></i>
@@ -1095,19 +1251,24 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-12 mt-20 @if ($isSeller) lg:ml-64 @endif relative overflow-hidden">
+    <footer
+        class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-12 mt-20 @if ($isSeller) lg:ml-64 @endif relative overflow-hidden">
         <!-- Decorative Elements -->
         <div class="absolute top-0 left-0 w-64 h-64 bg-cyan-500 opacity-5 rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-64 h-64 bg-green-500 opacity-5 rounded-full blur-3xl"></div>
-        
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">Marketplace terpercaya untuk belanja online dengan berbagai
+                    <h3
+                        class="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">
+                        MartPlace</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Marketplace terpercaya untuk belanja online dengan
+                        berbagai
                         pilihan produk berkualitas dari seller terbaik.</p>
                     <div class="mt-4 flex items-center gap-2">
-                        <div class="w-8 h-8 bg-gradient-to-r from-cyan-500 to-green-500 rounded-lg flex items-center justify-center">
+                        <div
+                            class="w-8 h-8 bg-gradient-to-r from-cyan-500 to-green-500 rounded-lg flex items-center justify-center">
                             <i class="fas fa-shield-alt text-white text-sm"></i>
                         </div>
                         <span class="text-sm text-gray-300 font-semibold">100% Aman & Terpercaya</span>
@@ -1116,35 +1277,56 @@
                 <div>
                     <h4 class="font-bold mb-4 text-lg">Tentang</h4>
                     <ul class="space-y-3 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Karir</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Blog</a></li>
-                        <li><a href="{{ route('sellers.create') }}" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Daftar Jadi Seller</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Tentang
+                                Kami</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Karir</a>
+                        </li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Blog</a>
+                        </li>
+                        <li><a href="{{ route('sellers.create') }}"
+                                class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Daftar
+                                Jadi Seller</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4 text-lg">Bantuan</h4>
                     <ul class="space-y-3 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pusat Bantuan</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Cara Belanja</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pengiriman</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pengembalian</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pusat
+                                Bantuan</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Cara
+                                Belanja</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pengiriman</a>
+                        </li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i
+                                    class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pengembalian</a>
+                        </li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold mb-4 text-lg">Ikuti Kami</h4>
                     <p class="text-gray-400 text-sm mb-4">Dapatkan update terbaru dan promo menarik</p>
                     <div class="flex space-x-3">
-                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                        <a href="#"
+                            class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
                             <i class="fab fa-facebook-f text-white"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-sky-500 to-sky-600 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                        <a href="#"
+                            class="w-10 h-10 bg-gradient-to-br from-sky-500 to-sky-600 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
                             <i class="fab fa-twitter text-white"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-pink-600 to-orange-600 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                        <a href="#"
+                            class="w-10 h-10 bg-gradient-to-br from-pink-600 to-orange-600 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
                             <i class="fab fa-instagram text-white"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                        <a href="#"
+                            class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
                             <i class="fab fa-whatsapp text-white"></i>
                         </a>
                     </div>
@@ -1152,7 +1334,9 @@
             </div>
             <div class="border-t border-gray-700 mt-8 pt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="text-sm text-gray-400">&copy; 2025 <span class="font-bold bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</span>. All rights reserved.</p>
+                    <p class="text-sm text-gray-400">&copy; 2025 <span
+                            class="font-bold bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</span>.
+                        All rights reserved.</p>
                     <div class="flex items-center gap-4 text-sm text-gray-400">
                         <a href="#" class="hover:text-cyan-400 transition-colors">Kebijakan Privasi</a>
                         <span>•</span>

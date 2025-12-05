@@ -48,7 +48,7 @@
                     window.location.href = `/sellers/${sellerId}`;
                 },
                 selectCategory(categoryId) {
-                    window.location.href = `/?category=${categoryId}`;
+                    window.location.href = `/?category=${categoryId}#products`;
                 },
                 selectLocation(location) {
                     window.location.href = `/products?search=${encodeURIComponent(location)}`;
