@@ -5,25 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Toko - MartPlace</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient-shift 3s ease infinite;
+        }
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-gray-50 via-cyan-50 to-green-50">
     
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{{ route('home') }}" class="flex items-center space-x-2 group">
+                        <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center shadow-md">
+                            <i class="fas fa-shopping-bag text-white text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">
+                            MartPlace
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-8">
+                    <div class="relative w-full">
+                        <input type="text" 
+                               placeholder="Cari produk, toko, kategori, atau lokasi..."
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+                        <button class="absolute right-0 top-0 h-full px-4 text-gray-400 hover:text-cyan-600">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Side Buttons -->
+                <div class="flex items-center space-x-3">
+                    <a href="{{ route('login') }}" 
+                       class="flex items-center px-5 py-2.5 text-gray-700 hover:text-cyan-600 font-semibold transition-all">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Masuk
+                    </a>
+                    <a href="{{ route('sellers.create') }}" 
+                       class="flex items-center px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-green-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all">
+                        <i class="fas fa-store mr-2"></i>
+                        Daftar Toko
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-cyan-400 to-green-300 py-12">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl font-bold text-white mb-3">Daftar Sebagai Seller</h1>
-            <p class="text-lg text-white">Bergabunglah dengan ribuan seller sukses di MartPlace</p>
+    <div class="bg-gradient-to-r from-cyan-500 via-green-500 to-emerald-500 py-16 relative overflow-hidden gradient-animate">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-yellow-300 opacity-10 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+                <span class="text-white font-bold text-lg flex items-center justify-center">
+                    <i class="fas fa-store mr-2"></i>Registrasi Seller
+                </span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">Daftar Sebagai Seller</h1>
+            <p class="text-xl text-white text-opacity-90">Bergabunglah dengan ribuan seller sukses di MartPlace dan mulai raih kesuksesan bersama kami!</p>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-4">
-        <div class="bg-white rounded-xl shadow-lg p-8 -mt-8 relative z-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 -mt-16 relative z-10">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border border-gray-100">
             <!-- Header -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">Formulir Registrasi Data Penjual</h2>
-                <p class="text-gray-600">Lengkapi data berikut untuk mendaftar sebagai seller</p>
+            <div class="mb-8 text-center">
+                <div class="inline-block bg-gradient-to-r from-cyan-500 to-green-500 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg mb-4">
+                    <i class="fas fa-file-alt mr-2"></i>Formulir Pendaftaran
+                </div>
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-3">Formulir Registrasi Data Penjual</h2>
+                <p class="text-gray-600 text-lg">Lengkapi data berikut untuk mendaftar sebagai seller</p>
             </div>
 
             @if ($errors->any())
@@ -65,11 +139,11 @@
                 @csrf
 
                 <!-- Data Toko Section -->
-                <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
-                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
+                <div class="mb-8 p-6 bg-gradient-to-br from-cyan-50 to-green-50 rounded-2xl border-2 border-cyan-200">
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-6 flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center mr-3">
+                            <i class="fas fa-store text-white"></i>
+                        </div>
                         Data Toko
                     </h2>
                     
@@ -100,11 +174,11 @@
                 </div>
 
                 <!-- Data PIC Section -->
-                <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
-                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
+                <div class="mb-8 p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl border-2 border-purple-200">
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mr-3">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
                         Data PIC
                     </h2>
                     
@@ -385,11 +459,11 @@
                         this.openVillage = false;
                     }
                 }" @click.away="openProvince = false; openCity = false; openDistrict = false; openVillage = false">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
-                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
+                <div class="mb-8 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200">
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6 flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mr-3">
+                            <i class="fas fa-map-marker-alt text-white"></i>
+                        </div>
                         Alamat PIC
                     </h2>
                     
@@ -610,16 +684,16 @@
                         </div>
                     </div>
                 </div>
+                </div>
 
                 <!-- Dokumen Identitas PIC Section -->
-                <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b-2 border-green-500 flex items-center">
-                        <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
-                        </svg>
+                <div class="mb-8 p-6 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border-2 border-orange-200">
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent mb-6 flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center mr-3">
+                            <i class="fas fa-id-card text-white"></i>
+                        </div>
                         Dokumen Identitas PIC
                     </h2>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -669,19 +743,15 @@
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4 pt-8 mt-8 border-t-2 border-gray-200">
                     <button type="submit" 
-                            class="bg-gradient-to-r from-green-500 to-green-600 text-white px-10 py-3 rounded-lg font-semibold hover:from-green-600 hover:to-green-700 transition shadow-md hover:shadow-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                            class="bg-gradient-to-r from-cyan-500 to-green-500 text-white px-12 py-4 rounded-xl font-bold hover:shadow-2xl transition-all shadow-lg flex items-center justify-center text-lg group">
+                        <i class="fas fa-check-circle mr-2 text-xl group-hover:scale-110 transition-transform"></i>
                         Registrasi Penjual
                     </button>
                     <a href="{{ route('home') }}" 
-                       class="bg-gray-100 text-gray-700 px-10 py-3 rounded-lg font-semibold hover:bg-gray-200 transition border border-gray-300 flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+                       class="bg-white text-gray-700 px-12 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all border-2 border-gray-300 flex items-center justify-center text-lg group">
+                        <i class="fas fa-times-circle mr-2 text-xl group-hover:scale-110 transition-transform"></i>
                         Batal
                     </a>
                 </div>
@@ -690,50 +760,65 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-12 mt-20 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-64 h-64 bg-cyan-500 opacity-5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-64 h-64 bg-green-500 opacity-5 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">MartPlace</h3>
-                    <p class="text-gray-400 text-sm">Marketplace terpercaya untuk belanja online dengan berbagai pilihan produk berkualitas.</p>
+                    <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Marketplace terpercaya untuk belanja online dengan berbagai pilihan produk berkualitas dari seller terbaik.</p>
+                    <div class="mt-4 flex items-center gap-2">
+                        <span class="bg-gradient-to-r from-cyan-500 to-green-500 text-white text-xs px-3 py-1 rounded-full font-semibold">Terpercaya</span>
+                    </div>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Tentang</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-white">Karir</a></li>
-                        <li><a href="#" class="hover:text-white">Blog</a></li>
-                        <li><a href="{{ route('sellers.create') }}" class="hover:text-white">Daftar Jadi Seller</a></li>
+                    <h4 class="font-bold mb-4 text-lg">Tentang</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Tentang Kami</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Karir</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Blog</a></li>
+                        <li><a href="{{ route('sellers.create') }}" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Daftar Jadi Seller</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Bantuan</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Pusat Bantuan</a></li>
-                        <li><a href="#" class="hover:text-white">Cara Belanja</a></li>
-                        <li><a href="#" class="hover:text-white">Pengiriman</a></li>
-                        <li><a href="#" class="hover:text-white">Pengembalian</a></li>
+                    <h4 class="font-bold mb-4 text-lg">Bantuan</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Pusat Bantuan</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Cara Belanja</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Pengiriman</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center"><i class="fas fa-angle-right mr-2"></i>Pengembalian</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Ikuti Kami</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <h4 class="font-bold mb-4 text-lg">Ikuti Kami</h4>
+                    <p class="text-gray-400 text-sm mb-4">Dapatkan update terbaru dan promo menarik</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-gradient-to-br hover:from-cyan-500 hover:to-green-500 rounded-lg flex items-center justify-center text-gray-300 hover:text-white transition-all">
+                            <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-gradient-to-br hover:from-cyan-500 hover:to-green-500 rounded-lg flex items-center justify-center text-gray-300 hover:text-white transition-all">
+                            <i class="fab fa-twitter"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-gradient-to-br hover:from-cyan-500 hover:to-green-500 rounded-lg flex items-center justify-center text-gray-300 hover:text-white transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 hover:bg-gradient-to-br hover:from-cyan-500 hover:to-green-500 rounded-lg flex items-center justify-center text-gray-300 hover:text-white transition-all">
+                            <i class="fab fa-youtube"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-                <p>&copy; 2025 MartPlace. All rights reserved.</p>
+            <div class="border-t border-gray-700 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-sm text-gray-400">&copy; 2025 <span class="font-bold bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</span>. All rights reserved.</p>
+                    <div class="flex items-center gap-4 text-sm text-gray-400">
+                        <a href="#" class="hover:text-cyan-400 transition">Kebijakan Privasi</a>
+                        <span>•</span>
+                        <a href="#" class="hover:text-cyan-400 transition">Syarat & Ketentuan</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
-</body>
-</html>

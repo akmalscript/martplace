@@ -18,30 +18,21 @@ class HomeController extends Controller
         // Filter by category if provided
         if ($request->has('category') && !empty($request->category)) {
             $query->where('category_id', $request->category);
-        }
-
-        // Filter by type (untuk_anda, mall, terlaris, semua)
-        $filterType = $request->get('filter', 'untuk_anda'); // Default: untuk_anda
-
-        if ($filterType === 'untuk_anda') {
-            // Untuk Anda: Produk terbaru dengan rating tinggi, limit 12
-            $products = $query->where('average_rating', '>=', 4.0)
-                ->latest()
-                ->limit(12)
-                ->get();
-        } elseif ($filterType === 'mall') {
-            // Mall: Produk dengan badge Mall
-            $products = $query->where('badge', 'Mall')
-                ->latest()
-                ->get();
-        } elseif ($filterType === 'semua') {
-            // Semua: Tampilkan semua produk, urutkan terbaru
-            $products = $query->latest()->get();
+            $selectedCategory = Category::find($request->category)->name ?? null;
         } else {
-            $products = $query->get();
+            $selectedCategory = null;
         }
-        $selectedCategory = $request->get('category');
-        $selectedFilter = $filterType;
+
+        // Show top 12 products with highest rating (default for home page)
+        $products = $query->orderBy('average_rating', 'desc')
+            ->orderBy('total_reviews', 'desc')
+            ->limit(12)
+            ->get();
+        
+        $selectedFilter = 'untuk_anda';
+
+        // Get total count for display
+        $totalProducts = Product::active()->count();
 
         // Fetch active categories for display
         $categories = Category::where('is_active', true)
@@ -49,6 +40,6 @@ class HomeController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('home', compact('products', 'selectedCategory', 'selectedFilter', 'categories'));
+        return view('home', compact('products', 'selectedCategory', 'selectedFilter', 'categories', 'totalProducts'));
     }
 }

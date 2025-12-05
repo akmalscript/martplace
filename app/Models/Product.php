@@ -38,6 +38,10 @@ class Product extends Model
         'deleted_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'formatted_price',
+    ];
+
     /**
      * Relationship: Product belongs to a Seller
      */
@@ -147,18 +151,59 @@ class Product extends Model
      */
     public function getImageUrlAttribute($value)
     {
-        if ($value) {
-            return $value;
+        // Check if images are already loaded (eager loading)
+        if ($this->relationLoaded('images') && $this->images->isNotEmpty()) {
+            $primaryImage = $this->images->where('is_primary', true)->first();
+            if ($primaryImage) {
+                $imagePath = $primaryImage->image_path;
+                // Check if it's already a full URL (like from picsum.photos)
+                if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                    return $imagePath;
+                }
+                // If it's a relative path, prepend asset storage
+                return asset('storage/' . $imagePath);
+            }
+
+            $firstImage = $this->images->first();
+            if ($firstImage) {
+                $imagePath = $firstImage->image_path;
+                // Check if it's already a full URL
+                if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                    return $imagePath;
+                }
+                return asset('storage/' . $imagePath);
+            }
+        } else {
+            // Fallback to query if not eager loaded
+            $primaryImage = $this->images()->where('is_primary', true)->first();
+            if ($primaryImage) {
+                $imagePath = $primaryImage->image_path;
+                if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                    return $imagePath;
+                }
+                return asset('storage/' . $imagePath);
+            }
+
+            $firstImage = $this->images()->first();
+            if ($firstImage) {
+                $imagePath = $firstImage->image_path;
+                if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                    return $imagePath;
+                }
+                return asset('storage/' . $imagePath);
+            }
         }
 
-        $primaryImage = $this->images()->where('is_primary', true)->first();
-        if ($primaryImage) {
-            return $primaryImage->image_path;
-        }
-
-        $firstImage = $this->images()->first();
-        if ($firstImage) {
-            return $firstImage->image_path;
+        // If database column has value, use it as last resort
+        if (!empty($value) && $value !== null) {
+            // Clean up double URL issue
+            if (strpos($value, 'http://localhost/storage/https://') !== false) {
+                return str_replace('http://localhost/storage/', '', $value);
+            }
+            if (filter_var($value, FILTER_VALIDATE_URL)) {
+                return $value;
+            }
+            return asset('storage/' . $value);
         }
 
         return 'https://placehold.co/600x600/E5E5E5/999999?text=No+Image';

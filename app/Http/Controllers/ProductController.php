@@ -14,11 +14,15 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::active();
+        $query = Product::active()->with(['seller:id,store_name,city,province', 'images']);
 
         // Search functionality
         if ($request->has('search') && !empty($request->search)) {
-            $query->search($request->search);
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
         }
 
         // Filter by category
@@ -27,22 +31,34 @@ class ProductController extends Controller
         }
 
         // Sorting
-        $sortBy = $request->get('sort', 'latest');
-        switch ($sortBy) {
-            case 'popular':
-                $query->popular();
+        $sort = $request->get('sort', 'latest');
+        switch ($sort) {
+            case 'rating':
+                $query->orderBy('average_rating', 'desc')->orderBy('total_reviews', 'desc');
                 break;
-            case 'price_asc':
+            case 'price_low':
                 $query->orderBy('price', 'asc');
                 break;
-            case 'price_desc':
+            case 'price_high':
                 $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'popular':
+                $query->orderBy('total_reviews', 'desc');
                 break;
             default:
                 $query->latest();
         }
 
         $products = $query->paginate(24);
+
+        // Get all categories for filter
+        $categories = Category::where('is_active', true)
+            ->orderBy('order')
+            ->orderBy('name')
+            ->get();
 
         if ($request->ajax()) {
             return response()->json([
@@ -55,7 +71,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'categories'));
     }
 
     /**

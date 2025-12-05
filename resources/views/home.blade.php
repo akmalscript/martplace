@@ -24,6 +24,71 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 1; }
+            50% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(0.95); opacity: 1; }
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .icon-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .category-card {
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 
@@ -91,13 +156,16 @@
         <main class="lg:ml-64 pt-16">
         @else
             <!-- Regular Navbar -->
-            <nav class="bg-white shadow-sm sticky top-0 z-50">
+            <nav class="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between items-center h-16">
+                    <div class="flex justify-between items-center h-20">
                         <!-- Logo -->
                         <div class="flex items-center">
-                            <a href="{{ route('home') }}" class="text-2xl font-bold text-green-600">
-                                MartPlace
+                            <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
+                                <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-store text-white text-xl"></i>
+                                </div>
+                                <span class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">MartPlace</span>
                             </a>
                         </div>
 
@@ -342,14 +410,14 @@
 
                             @guest
                                 <!-- Login Button -->
-                                <a href="{{ route('login') }}" class="text-gray-700 hover:text-green-600 transition">
-                                    Masuk
+                                <a href="{{ route('login') }}" class="btn-glow text-gray-700 hover:text-cyan-600 transition font-semibold flex items-center">
+                                    <i class="fas fa-sign-in-alt mr-2"></i>Masuk
                                 </a>
 
                                 <!-- Register Seller Button -->
                                 <a href="{{ route('sellers.create') }}"
-                                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                                    Daftar Toko
+                                    class="btn-glow bg-gradient-to-r from-cyan-500 to-green-500 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-bold">
+                                    <i class="fas fa-store mr-2"></i>Daftar Toko
                                 </a>
                             @else
                                 <!-- User Dropdown -->
@@ -389,30 +457,101 @@
     @endif
 
     <!-- Hero Banner -->
-    <section class="bg-gradient-to-r from-cyan-400 to-green-300 py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between">
+    <section class="bg-gradient-to-r from-cyan-400 via-cyan-500 to-green-400 py-20 relative overflow-hidden gradient-animate">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
                 <div class="md:w-1/2 text-white mb-8 md:mb-0">
-                    <h1 class="text-4xl font-bold mb-4">Mau transaksi lebih hemat?</h1>
-                    <p class="text-lg mb-6">Cek promo asyik MartPlace!</p>
-                    <a href="#promo"
-                        class="inline-block bg-white text-cyan-500 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                        Cek Sekarang
-                    </a>
+                    <div class="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 animate-pulse">
+                        <span class="text-sm font-semibold">🎉 Platform Terpercaya</span>
+                    </div>
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                        Belanja <span class="text-yellow-300">Hemat</span><br>
+                        & Terpercaya
+                    </h1>
+                    <p class="text-xl mb-8 text-white text-opacity-90">Temukan ribuan produk berkualitas dari seller terbaik dengan harga yang kompetitif!</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#products"
+                            class="btn-glow inline-flex items-center bg-white text-cyan-600 px-8 py-4 rounded-xl font-bold hover:shadow-2xl transition-all shadow-lg">
+                            <i class="fas fa-shopping-bag mr-2"></i>Mulai Belanja
+                        </a>
+                        <a href="{{ route('sellers.create') }}"
+                            class="btn-glow inline-flex items-center bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-cyan-600 transition-all">
+                            <i class="fas fa-store mr-2"></i>Daftar Toko
+                        </a>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 mt-12">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-1">{{ number_format($products->count()) }}+</div>
+                            <div class="text-sm text-white text-opacity-80">Produk</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-1">{{ $categories->count() }}+</div>
+                            <div class="text-sm text-white text-opacity-80">Kategori</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-1">100%</div>
+                            <div class="text-sm text-white text-opacity-80">Terpercaya</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="md:w-1/2">
-                    <img src="{{ asset('images/hero-illustration.png') }}" alt="Hero Illustration"
-                        class="w-full h-auto" onerror="this.style.display='none'">
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-cyan-400 opacity-20 rounded-full blur-3xl pulse-ring"></div>
+                        <div class="relative bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-xl rounded-3xl p-8 border-2 border-white/40 shadow-2xl">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30">
+                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                        <i class="fas fa-truck text-3xl text-cyan-600"></i>
+                                    </div>
+                                    <p class="text-white text-sm font-bold drop-shadow-lg">Pengiriman Cepat</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30" style="animation-delay: 0.5s">
+                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                        <i class="fas fa-shield-alt text-3xl text-green-600"></i>
+                                    </div>
+                                    <p class="text-white text-sm font-bold drop-shadow-lg">Pembayaran Aman</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30" style="animation-delay: 1s">
+                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                        <i class="fas fa-star text-3xl text-yellow-500"></i>
+                                    </div>
+                                    <p class="text-white text-sm font-bold drop-shadow-lg">Produk Berkualitas</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-white/40 to-white/20 backdrop-blur-md rounded-2xl p-6 icon-float shadow-lg border border-white/30" style="animation-delay: 1.5s">
+                                    <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center mb-3 shadow-lg">
+                                        <i class="fas fa-headset text-3xl text-purple-600"></i>
+                                    </div>
+                                    <p class="text-white text-sm font-bold drop-shadow-lg">Support 24/7</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Category Section - Horizontal Scroll -->
-    <section class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Kategori Pilihan</h2>
+    <section class="py-20 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+        <!-- Decorative Background Elements -->
+        <div class="absolute top-0 left-0 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+        <div class="absolute bottom-0 right-0 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30" style="animation: float 4s ease-in-out infinite;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="mb-12">
+                <div class="inline-block mb-3">
+                    <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg">
+                        <i class="fas fa-tags mr-2"></i>Jelajahi Kategori
+                    </span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent mb-3 leading-tight">Kategori Pilihan</h2>
+                <p class="text-gray-700 text-lg">Temukan produk berdasarkan kategori favorit Anda</p>
             </div>
         </div>
 
@@ -464,13 +603,13 @@
             <!-- Left Fade Gradient -->
             <div x-show="canScrollLeft" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none">
+                class="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-purple-50 to-transparent z-10 pointer-events-none">
             </div>
 
             <!-- Right Fade Gradient -->
             <div x-show="canScrollRight" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none">
+                class="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-purple-50 to-transparent z-10 pointer-events-none">
             </div>
 
             <!-- Scrollable Category Container -->
@@ -482,15 +621,18 @@
                     <a href="{{ route('home', ['category' => $category->id]) }}"
                         class="flex-shrink-0 scroll-snap-start group" style="scroll-snap-align: start;">
                         <div
-                            class="w-36 md:w-40 h-36 md:h-40 bg-white rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-green-200 flex flex-col {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'ring-2 ring-green-500 shadow-green-100' : '' }}">
-                            <div class="flex flex-col items-center justify-center h-full">
+                            class="category-card w-36 md:w-40 h-36 md:h-40 bg-white bg-opacity-60 backdrop-blur-sm rounded-2xl p-5 md:p-6 transition-all duration-300 border-2 {{ isset($selectedCategory) && $selectedCategory == $category->id ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-pink-50' : 'border-transparent hover:border-purple-300' }} flex flex-col relative overflow-hidden">
+                            <!-- Glow Effect -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-purple-100 to-pink-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            
+                            <div class="flex flex-col items-center justify-center h-full relative z-10">
                                 <div
-                                    class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex items-center justify-center mb-3 group-hover:from-green-100 group-hover:to-green-200 group-hover:scale-105 transition-all duration-300 shadow-sm flex-shrink-0">
+                                    class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-100 via-pink-100 to-rose-100 rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 flex-shrink-0">
                                     <i
-                                        class="fas {{ $category->icon ?? 'fa-tag' }} text-xl md:text-2xl text-green-600"></i>
+                                        class="fas {{ $category->icon ?? 'fa-tag' }} text-xl md:text-2xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"></i>
                                 </div>
                                 <span
-                                    class="text-sm font-medium text-gray-700 text-center line-clamp-2 group-hover:text-green-700 transition-colors duration-200 h-10 flex items-center">{{ $category->name }}</span>
+                                    class="text-sm font-bold text-gray-800 text-center line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-pink-600 group-hover:bg-clip-text transition-all duration-200 h-10 flex items-center">{{ $category->name }}</span>
                             </div>
                         </div>
                     </a>
@@ -505,149 +647,371 @@
     </section>
 
     <!-- Products Section -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                @if (isset($selectedCategory))
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Produk {{ $selectedCategory }}</h2>
-                    <p class="text-gray-600">Menampilkan {{ $products->count() }} produk</p>
-                @else
-                    <div class="flex space-x-6">
-                        <a href="{{ route('home', ['filter' => 'untuk_anda']) }}"
-                            class="pb-2 {{ !isset($selectedFilter) || $selectedFilter == 'untuk_anda' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
-                            Untuk Anda
-                        </a>
-                        <a href="{{ route('home', ['filter' => 'mall']) }}"
-                            class="pb-2 {{ isset($selectedFilter) && $selectedFilter == 'mall' ? 'text-green-600 font-semibold border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700' }}">
-                            Mall
-                        </a>
-                    </div>
-                @endif
+    <section id="products" class="bg-gradient-to-br from-white via-cyan-50 to-green-50 py-24 relative overflow-hidden">
+        <!-- Decorative Grid Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle, #0891b2 1px, transparent 1px); background-size: 50px 50px;"></div>
+        </div>
+        
+        <!-- Decorative Shapes -->
+        <div class="absolute top-10 right-10 w-64 h-64 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute bottom-10 left-10 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16">
+            <div class="inline-block mb-4">
+                <span class="bg-gradient-to-r from-cyan-500 to-green-500 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg">
+                    <i class="fas fa-fire mr-2"></i>Produk Terpopuler
+                </span>
             </div>
-            @if (isset($selectedCategory) || (isset($selectedFilter) && $selectedFilter != 'semua'))
-                <a href="{{ route('home', ['filter' => 'semua']) }}"
-                    class="text-green-600 hover:text-green-700 font-medium">Lihat Semua</a>
-            @endif
+            <h2 class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-4 leading-tight px-2">
+                @if(isset($showAll) && $showAll)
+                    Katalog Semua Produk
+                @else
+                    Katalog Produk
+                @endif
+            </h2>
+            <p class="text-gray-700 text-lg max-w-2xl mx-auto px-2">
+                @if(isset($showAll) && $showAll)
+                    Menampilkan semua {{ $products->count() }} produk yang tersedia
+                @else
+                    Menampilkan produk terbaik dengan rating tertinggi dari {{ $totalProducts ?? 0 }} produk
+                @endif
+            </p>
         </div>
 
         @if ($products->isEmpty())
             <!-- Empty State -->
-            <div class="text-center py-12">
-                <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
-                    </path>
-                </svg>
+            <div class="text-center py-20 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border-2 border-gray-200">
+                <div class="w-32 h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-box-open text-5xl text-gray-400"></i>
+                </div>
                 @if (isset($selectedCategory))
-                    <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk di kategori
-                        {{ $selectedCategory }}</h3>
-                    <p class="mt-2 text-gray-500">Silakan pilih kategori lain atau lihat semua produk.</p>
+                    <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">Belum ada produk di kategori {{ $selectedCategory }}</h3>
+                    <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">Silakan pilih kategori lain atau lihat semua produk yang tersedia.</p>
                     <div class="mt-6">
                         <a href="{{ route('home') }}"
-                            class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
-                            Lihat Semua Kategori
+                            class="btn-glow inline-flex items-center bg-gradient-to-r from-cyan-500 to-green-500 text-white px-8 py-4 rounded-xl hover:shadow-xl transition-all font-bold">
+                            <i class="fas fa-th mr-2"></i>Lihat Semua Kategori
                         </a>
                     </div>
                 @else
-                    <h3 class="mt-4 text-xl font-medium text-gray-900">Belum ada produk</h3>
-                    <p class="mt-2 text-gray-500">Produk akan segera tersedia.</p>
+                    <h3 class="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3">Belum ada produk</h3>
+                    <p class="text-gray-600 text-lg">Produk akan segera tersedia.</p>
                 @endif
             </div>
         @else
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                 @foreach ($products as $product)
                     <a href="{{ route('products.show', $product->id) }}"
-                        class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
-                        <div class="relative bg-gray-200">
+                        class="product-card bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all overflow-hidden border-2 border-transparent hover:border-cyan-200 group">
+                        <div class="relative bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                             <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                class="w-full h-48 object-cover"
+                                class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/E5E5E5/999999?text=No+Image'"
                                 loading="lazy">
+                            @if($product->average_rating >= 4.5)
+                            <div class="absolute top-2 right-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-2 py-1 rounded-lg text-xs font-bold shadow-lg">
+                                <i class="fas fa-crown mr-1"></i>Best
+                            </div>
+                            @endif
                         </div>
-                        <div class="p-3">
-                            <h3 class="text-sm text-gray-800 mb-2 line-clamp-2">{{ $product->name }}</h3>
-                            <div class="flex items-baseline space-x-2 mb-2">
-                                <span class="text-lg font-bold text-gray-900">{{ $product->formatted_price }}</span>
+                        <div class="p-4">
+                            <h3 class="text-sm font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-600 group-hover:to-green-600 group-hover:bg-clip-text transition-all">{{ $product->name }}</h3>
+                            <div class="flex items-baseline space-x-2 mb-3">
+                                <span class="text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{{ $product->formatted_price }}</span>
                             </div>
-                            <div class="flex items-center space-x-1 mb-2">
-                                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                    </path>
-                                </svg>
-                                <span
-                                    class="text-xs text-gray-600">{{ number_format($product->average_rating, 1) }}</span>
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center bg-gradient-to-r from-yellow-50 to-orange-50 px-2 py-1 rounded-lg">
+                                    <i class="fas fa-star text-yellow-500 text-xs mr-1"></i>
+                                    <span class="text-xs font-bold text-gray-800">{{ number_format($product->average_rating, 1) }}</span>
+                                </div>
                             </div>
-                            <p class="text-xs text-gray-500">{{ $product->city }}, {{ $product->province }}</p>
+                            <div class="flex items-center text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-lg">
+                                <i class="fas fa-map-marker-alt mr-1 text-cyan-500"></i>
+                                <span class="truncate">{{ $product->city }}</span>
+                            </div>
                         </div>
                     </a>
                 @endforeach
             </div>
         @endif
 
-        <!-- Load More -->
-        <div class="text-center mt-8">
-            <p class="text-gray-600">Menampilkan {{ $products->count() }} produk</p>
+        <!-- Load More Button -->
+        <div class="text-center mt-12">
+            <div class="space-y-4">
+                <div class="inline-block bg-gradient-to-r from-cyan-50 to-green-50 px-8 py-4 rounded-2xl border-2 border-cyan-200 mb-6">
+                    <p class="text-gray-700 font-semibold">
+                        <i class="fas fa-box mr-2 text-cyan-600"></i>
+                        Menampilkan <span class="text-cyan-600 font-bold">{{ $products->count() }}</span> dari <span class="text-green-600 font-bold">{{ $totalProducts ?? 0 }}</span> produk
+                    </p>
+                </div>
+                <a href="{{ route('products.index') }}" 
+                   class="btn-glow inline-flex items-center bg-gradient-to-r from-cyan-500 to-green-500 text-white px-10 py-5 rounded-xl hover:shadow-2xl transition-all font-bold text-lg group">
+                    <i class="fas fa-th mr-3 group-hover:scale-110 transition-transform"></i>
+                    Lihat Semua Produk
+                    <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-24 bg-gradient-to-br from-cyan-600 via-green-600 to-emerald-600 relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white opacity-10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-yellow-300 opacity-10 rounded-full blur-3xl" style="animation: float 3s ease-in-out infinite 1.5s;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-block mb-4">
+                    <span class="bg-white bg-opacity-20 text-white px-6 py-2 rounded-full text-sm font-semibold backdrop-blur-sm">
+                        <i class="fas fa-chart-line mr-2"></i>Platform Terpercaya
+                    </span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">Dipercaya Oleh Ribuan Pengguna</h2>
+                <p class="text-white text-opacity-90 text-lg max-w-2xl mx-auto">Statistik platform kami yang terus berkembang dan dipercaya oleh komunitas</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-box-open text-4xl text-white"></i>
+                    </div>
+                    <div class="text-5xl md:text-6xl font-bold text-white mb-2">{{ number_format($products->count()) }}+</div>
+                    <div class="text-white text-opacity-90 font-semibold text-lg">Produk Tersedia</div>
+                </div>
+                
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-th-large text-4xl text-white"></i>
+                    </div>
+                    <div class="text-5xl md:text-6xl font-bold text-white mb-2">{{ $categories->count() }}+</div>
+                    <div class="text-white text-opacity-90 font-semibold text-lg">Kategori Lengkap</div>
+                </div>
+                
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-store text-4xl text-white"></i>
+                    </div>
+                    <div class="text-5xl md:text-6xl font-bold text-white mb-2">500+</div>
+                    <div class="text-white text-opacity-90 font-semibold text-lg">Seller Terpercaya</div>
+                </div>
+                
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl p-8 text-center border-2 border-white border-opacity-20 hover:scale-105 hover:bg-opacity-20 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-users text-4xl text-white"></i>
+                    </div>
+                    <div class="text-5xl md:text-6xl font-bold text-white mb-2">10K+</div>
+                    <div class="text-white text-opacity-90 font-semibold text-lg">Pembeli Aktif</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gradient-to-br from-gray-100 via-gray-50 to-white relative overflow-hidden">
+        <!-- Decorative Wave Pattern -->
+        <div class="absolute top-0 left-0 right-0 opacity-5">
+            <svg viewBox="0 0 1440 120" class="w-full h-24">
+                <path fill="currentColor" class="text-gray-300" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+            </svg>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-3">Apa Kata Mereka?</h2>
+                <p class="text-gray-600 text-lg">Testimoni dari pelanggan setia MartPlace</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-cyan-200">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 text-lg">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6 leading-relaxed italic">"Belanja di MartPlace sangat menyenangkan! Produknya lengkap, harga kompetitif, dan pengiriman cepat. Highly recommended!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            A
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-800">Aditya Pratama</div>
+                            <div class="text-sm text-gray-500">Jakarta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-green-200">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 text-lg">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6 leading-relaxed italic">"Sebagai seller, saya sangat puas dengan platform ini. Mudah digunakan dan customer support sangat responsif!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            S
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-800">Siti Nurhaliza</div>
+                            <div class="text-sm text-gray-500">Bandung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-purple-200">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400 text-lg">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6 leading-relaxed italic">"Sistem pembayaran sangat aman dan proses checkout-nya mudah. Tidak perlu khawatir saat berbelanja online!"</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            B
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-bold text-gray-800">Budi Santoso</div>
+                            <div class="text-sm text-gray-500">Surabaya</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- CTA Section -->
+    <section class="py-24 bg-gradient-to-br from-cyan-500 via-green-500 to-emerald-500 relative overflow-hidden">
+        <!-- Diagonal Stripe Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);"></div>
+        </div>
+        
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-300 opacity-20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-300 opacity-20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="mb-8">
+                <div class="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
+                    <span class="text-white font-bold text-lg">🚀 Mulai Sekarang!</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">Ingin Mulai Jualan Online?</h2>
+                <p class="text-xl text-white text-opacity-90 mb-10 leading-relaxed">Bergabunglah dengan ribuan seller sukses di MartPlace. Daftar gratis dan mulai berjualan dalam hitungan menit!</p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="{{ route('sellers.create') }}"
+                    class="btn-glow inline-flex items-center bg-white text-cyan-600 px-10 py-5 rounded-xl font-bold hover:shadow-2xl transition-all shadow-lg text-lg">
+                    <i class="fas fa-store mr-3"></i>Daftar Sebagai Seller
+                </a>
+                <a href="#products"
+                    class="btn-glow inline-flex items-center bg-transparent border-3 border-white text-white px-10 py-5 rounded-xl font-bold hover:bg-white hover:text-cyan-600 transition-all text-lg">
+                    <i class="fas fa-shopping-cart mr-3"></i>Mulai Belanja
+                </a>
+            </div>
+            
+            <div class="mt-12 flex flex-wrap justify-center items-center gap-8 text-white text-opacity-90">
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-2xl mr-2"></i>
+                    <span class="font-semibold">Gratis Pendaftaran</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-2xl mr-2"></i>
+                    <span class="font-semibold">Mudah Digunakan</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle text-2xl mr-2"></i>
+                    <span class="font-semibold">Support 24/7</span>
+                </div>
+            </div>
         </div>
     </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12 @if ($isSeller) lg:ml-64 @endif">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-12 mt-20 @if ($isSeller) lg:ml-64 @endif relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-cyan-500 opacity-5 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-64 h-64 bg-green-500 opacity-5 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">MartPlace</h3>
-                    <p class="text-gray-400 text-sm">Marketplace terpercaya untuk belanja online dengan berbagai
-                        pilihan produk berkualitas.</p>
+                    <h3 class="text-2xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Marketplace terpercaya untuk belanja online dengan berbagai
+                        pilihan produk berkualitas dari seller terbaik.</p>
+                    <div class="mt-4 flex items-center gap-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-cyan-500 to-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-white text-sm"></i>
+                        </div>
+                        <span class="text-sm text-gray-300 font-semibold">100% Aman & Terpercaya</span>
+                    </div>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Tentang</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:text-white">Karir</a></li>
-                        <li><a href="#" class="hover:text-white">Blog</a></li>
-                        <li><a href="{{ route('sellers.create') }}" class="hover:text-white">Daftar Jadi Seller</a>
-                        </li>
+                    <h4 class="font-bold mb-4 text-lg">Tentang</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Tentang Kami</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Karir</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Blog</a></li>
+                        <li><a href="{{ route('sellers.create') }}" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Daftar Jadi Seller</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Bantuan</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white">Pusat Bantuan</a></li>
-                        <li><a href="#" class="hover:text-white">Cara Belanja</a></li>
-                        <li><a href="#" class="hover:text-white">Pengiriman</a></li>
-                        <li><a href="#" class="hover:text-white">Pengembalian</a></li>
+                    <h4 class="font-bold mb-4 text-lg">Bantuan</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pusat Bantuan</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Cara Belanja</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pengiriman</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition-colors flex items-center group"><i class="fas fa-angle-right mr-2 group-hover:translate-x-1 transition-transform"></i>Pengembalian</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Ikuti Kami</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                            </svg>
+                    <h4 class="font-bold mb-4 text-lg">Ikuti Kami</h4>
+                    <p class="text-gray-400 text-sm mb-4">Dapatkan update terbaru dan promo menarik</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                            <i class="fab fa-facebook-f text-white"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                            </svg>
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-sky-500 to-sky-600 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                            <i class="fab fa-twitter text-white"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
-                            </svg>
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-pink-600 to-orange-600 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                            <i class="fab fa-instagram text-white"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center hover:scale-110 hover:shadow-lg transition-all">
+                            <i class="fab fa-whatsapp text-white"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-                <p>&copy; 2025 MartPlace. All rights reserved.</p>
+            <div class="border-t border-gray-700 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-sm text-gray-400">&copy; 2025 <span class="font-bold bg-gradient-to-r from-cyan-400 to-green-400 bg-clip-text text-transparent">MartPlace</span>. All rights reserved.</p>
+                    <div class="flex items-center gap-4 text-sm text-gray-400">
+                        <a href="#" class="hover:text-cyan-400 transition-colors">Kebijakan Privasi</a>
+                        <span>•</span>
+                        <a href="#" class="hover:text-cyan-400 transition-colors">Syarat & Ketentuan</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
