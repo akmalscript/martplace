@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\AdminCategoryController;
-use App\Http\Controllers\AdminDashboardController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SellerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SellerController;
-use App\Http\Controllers\SellerDashboardController;
 use App\Http\Controllers\WilayahController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\SellerDashboardController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -77,6 +78,11 @@ Route::prefix('products')->name('products.')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('index');
     Route::get('/search', [ProductController::class, 'search'])->name('search');
     Route::get('/{id}', [ProductController::class, 'show'])->name('show');
+});
+
+// Review Routes
+Route::prefix('reviews')->name('reviews.')->group(function () {
+    Route::post('/{id}', [ReviewController::class, 'store'])->name('store');
 });
 
 // Seller Routes
