@@ -173,6 +173,12 @@ class Seller extends Model
         return $this->hasMany(Product::class, 'seller_id');
     }
 
+    // Get total reviews from all seller's products
+    public function getTotalReviewsAttribute()
+    {
+        return $this->products()->sum('total_reviews');
+    }
+
     // Scope for searching sellers
     public function scopeSearch($query, $keyword)
     {

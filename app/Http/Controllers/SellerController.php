@@ -135,7 +135,9 @@ class SellerController extends Controller
      */
     public function publicShow(string $id)
     {
-        $seller = Seller::active()->findOrFail($id);
+        $seller = Seller::active()
+            ->with(['products.images'])
+            ->findOrFail($id);
         return view('sellers.show', compact('seller'));
     }
 
@@ -167,12 +169,12 @@ class SellerController extends Controller
         if ($seller->approve()) {
             try {
                 Mail::to($seller->pic_email)->send(new SellerApproved($seller));
-                
+
                 return redirect()->back()
                     ->with('success', 'Seller berhasil disetujui dan email notifikasi telah dikirim.');
             } catch (\Exception $e) {
                 \Log::error('Failed to send approval email: ' . $e->getMessage());
-                
+
                 return redirect()->back()
                     ->with('warning', 'Seller berhasil disetujui, namun email notifikasi gagal dikirim.');
             }
@@ -188,22 +190,22 @@ class SellerController extends Controller
     public function reject(Request $request, string $id)
     {
         $seller = Seller::findOrFail($id);
-        
+
         $request->validate([
             'reason' => 'nullable|string|max:1000'
         ]);
-        
+
         $reason = $request->input('reason', 'Dokumen atau data yang Anda kirimkan tidak memenuhi persyaratan kami.');
 
         if ($seller->batal()) {
             try {
                 Mail::to($seller->pic_email)->send(new SellerRejected($seller, $reason));
-                
+
                 return redirect()->back()
                     ->with('success', 'Seller berhasil ditolak dan email notifikasi telah dikirim.');
             } catch (\Exception $e) {
                 \Log::error('Failed to send rejection email: ' . $e->getMessage());
-                
+
                 return redirect()->back()
                     ->with('warning', 'Seller berhasil ditolak, namun email notifikasi gagal dikirim.');
             }
