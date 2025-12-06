@@ -38,9 +38,9 @@ class AdminDashboardController extends Controller
         ])->count();
 
         // 4. Jumlah pengunjung yang memberikan komentar dan rating
-        $totalReviews = DB::table('product_reviews')->count();
-        $totalRatings = DB::table('product_reviews')->count();
-        $uniqueReviewers = DB::table('product_reviews')->distinct('visitor_email')->count('visitor_email');
+        $totalReviews = DB::table('reviews')->count();
+        $totalRatings = DB::table('reviews')->count();
+        $uniqueReviewers = DB::table('reviews')->distinct('email')->count('email');
 
         // Additional useful statistics
         $totalProducts = Product::count();

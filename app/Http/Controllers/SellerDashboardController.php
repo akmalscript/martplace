@@ -46,11 +46,11 @@ class SellerDashboardController extends Controller
             });
 
         // 3. Sebaran pemberi rating berdasarkan provinsi
-        $ratingByProvince = DB::table('product_reviews')
-            ->join('products', 'product_reviews.product_id', '=', 'products.id')
+        $ratingByProvince = DB::table('reviews')
+            ->join('products', 'reviews.product_id', '=', 'products.id')
             ->where('products.seller_id', $seller->id)
-            ->select('product_reviews.visitor_province as province', DB::raw('count(*) as total'))
-            ->groupBy('product_reviews.visitor_province')
+            ->select('reviews.province', DB::raw('count(*) as total'))
+            ->groupBy('reviews.province')
             ->orderBy('total', 'desc')
             ->get();
 

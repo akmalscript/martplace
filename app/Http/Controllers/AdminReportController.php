@@ -109,7 +109,7 @@ class AdminReportController extends Controller
     {
         // Get all products with reviews, including visitor province
         $products = DB::table('products')
-            ->leftJoin('product_reviews', 'products.id', '=', 'product_reviews.product_id')
+            ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('sellers', 'products.seller_id', '=', 'sellers.id')
             ->select(
@@ -118,8 +118,8 @@ class AdminReportController extends Controller
                 'categories.name as category_name',
                 'products.price',
                 'sellers.store_name',
-                DB::raw('COALESCE(AVG(product_reviews.rating), 0) as avg_rating'),
-                DB::raw('GROUP_CONCAT(DISTINCT product_reviews.visitor_province SEPARATOR ", ") as provinces')
+                DB::raw('COALESCE(AVG(reviews.rating), 0) as avg_rating'),
+                DB::raw('GROUP_CONCAT(DISTINCT reviews.province SEPARATOR ", ") as provinces')
             )
             ->groupBy(
                 'products.id',
@@ -128,7 +128,7 @@ class AdminReportController extends Controller
                 'products.price',
                 'sellers.store_name'
             )
-            ->orderByRaw('COALESCE(AVG(product_reviews.rating), 0) DESC')
+            ->orderByRaw('COALESCE(AVG(reviews.rating), 0) DESC')
             ->orderBy('products.name', 'asc')
             ->get();
 

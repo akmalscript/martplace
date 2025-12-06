@@ -33,8 +33,8 @@ class VisitorLog extends Model
     /**
      * Get the review associated with the log
      */
-    public function productReview(): BelongsTo
+    public function review(): BelongsTo
     {
-        return $this->belongsTo(ProductReview::class);
+        return $this->belongsTo(Review::class, 'product_review_id');
     }
 }

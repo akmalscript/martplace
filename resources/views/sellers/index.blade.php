@@ -16,21 +16,41 @@
         .seller-card:hover {
             transform: translateY(-5px);
         }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 
 <body class="bg-gray-50">
 
     <!-- Navigation Bar -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-cyan-400">
+    <nav class="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <div class="flex-shrink-0">
+                <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
                         <div
-                            class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-green-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                            <i class="fas fa-store text-white text-2xl"></i>
+                            class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                            <i class="fas fa-store text-white text-xl"></i>
                         </div>
                         <span
                             class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">MartPlace</span>
@@ -38,7 +58,7 @@
                 </div>
 
                 <!-- Search Bar -->
-                <div class="hidden md:flex flex-1 max-w-2xl mx-8" x-data="{
+                <div class="hidden md:flex flex-1 max-w-md mx-8" x-data="{
                     search: '{{ request('search') }}',
                     products: [],
                     sellers: [],
@@ -90,22 +110,24 @@
                         return 'Rp' + Number(price).toLocaleString('id-ID');
                     }
                 }">
-                    <form @submit.prevent="submitSearch" class="relative w-full" @click.away="showSuggestions = false">
+                    <form @submit.prevent="submitSearch" class="relative w-full"
+                        @click.away="showSuggestions = false">
                         <input type="text" x-model="search" @input.debounce.300ms="getSuggestions"
                             @focus="showSuggestions = (products.length > 0 || sellers.length > 0 || categories.length > 0 || locations.length > 0)"
                             placeholder="Cari produk, toko, kategori, atau lokasi..."
-                            class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200 transition-all duration-300">
-                        <button type="submit"
-                            class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-cyan-600 transition-colors">
-                            <i class="fas fa-search"></i>
-                        </button>
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
 
                         <!-- Search Suggestions Dropdown with Tabs -->
                         <div x-show="showSuggestions || loading" x-transition @click.stop
                             class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-96 overflow-hidden">
                             <template x-if="loading">
                                 <div class="p-6 text-center text-gray-500">
-                                    <svg class="animate-spin h-5 w-5 mx-auto mb-2 text-cyan-600"
+                                    <svg class="animate-spin h-5 w-5 mx-auto mb-2 text-green-600"
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10"
                                             stroke="currentColor" stroke-width="4"></circle>
@@ -122,27 +144,31 @@
                                     <!-- Tabs -->
                                     <div class="flex border-b bg-gray-50">
                                         <button type="button" @click="activeTab = 'products'"
-                                            :class="activeTab === 'products' ? 'border-b-2 border-cyan-600 text-cyan-600' :
+                                            :class="activeTab === 'products' ?
+                                                'border-b-2 border-green-600 text-green-600' :
                                                 'text-gray-600'"
-                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-cyan-600 transition">
+                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                             Produk (<span x-text="products.length"></span>)
                                         </button>
                                         <button type="button" @click="activeTab = 'sellers'"
-                                            :class="activeTab === 'sellers' ? 'border-b-2 border-cyan-600 text-cyan-600' :
+                                            :class="activeTab === 'sellers' ?
+                                                'border-b-2 border-green-600 text-green-600' :
                                                 'text-gray-600'"
-                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-cyan-600 transition">
+                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                             Toko (<span x-text="sellers.length"></span>)
                                         </button>
                                         <button type="button" @click="activeTab = 'categories'"
-                                            :class="activeTab === 'categories' ? 'border-b-2 border-cyan-600 text-cyan-600' :
+                                            :class="activeTab === 'categories' ?
+                                                'border-b-2 border-green-600 text-green-600' :
                                                 'text-gray-600'"
-                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-cyan-600 transition">
+                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                             Kategori (<span x-text="categories.length"></span>)
                                         </button>
                                         <button type="button" @click="activeTab = 'locations'"
-                                            :class="activeTab === 'locations' ? 'border-b-2 border-cyan-600 text-cyan-600' :
+                                            :class="activeTab === 'locations' ?
+                                                'border-b-2 border-green-600 text-green-600' :
                                                 'text-gray-600'"
-                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-cyan-600 transition">
+                                            class="flex-1 px-3 py-3 text-xs font-medium hover:text-green-600 transition">
                                             Lokasi (<span x-text="locations.length"></span>)
                                         </button>
                                     </div>
@@ -159,7 +185,7 @@
                                                     <div class="flex-1 min-w-0">
                                                         <p class="text-sm font-medium text-gray-900 truncate"
                                                             x-text="product.name"></p>
-                                                        <p class="text-sm text-cyan-600 font-semibold"
+                                                        <p class="text-sm text-green-600 font-semibold"
                                                             x-text="formatPrice(product.price)"></p>
                                                     </div>
                                                     <svg class="w-5 h-5 text-gray-400" fill="none"
@@ -177,9 +203,9 @@
                                                 <button type="button" @click="selectSeller(seller.id)"
                                                     class="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center gap-3 transition">
                                                     <div
-                                                        class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center">
-                                                        <svg class="w-6 h-6 text-cyan-600" fill="currentColor"
-                                                            viewBox="0 0 20 20">
+                                                        class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                                        <svg class="w-6 h-6 text-green-600"
+                                                            fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd"
                                                                 d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
                                                                 clip-rule="evenodd"></path>
@@ -266,23 +292,50 @@
                     </form>
                 </div>
 
-                <!-- Auth Buttons -->
+                <!-- Right Side Buttons -->
                 <div class="flex items-center space-x-4">
-                    @auth
-                        <a href="{{ route('dashboard') }}"
-                            class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-green-500 text-white font-semibold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300">
-                            <i class="fas fa-user mr-2"></i>Dashboard
-                        </a>
-                    @else
+
+                    @guest
+                        <!-- Login Button -->
                         <a href="{{ route('login') }}"
-                            class="px-6 py-2.5 text-gray-700 font-semibold hover:text-cyan-600 transition-colors duration-300">
+                            class="btn-glow text-gray-700 hover:text-cyan-600 transition font-semibold flex items-center">
                             <i class="fas fa-sign-in-alt mr-2"></i>Masuk
                         </a>
-                        <a href="{{ route('register') }}"
-                            class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-green-500 text-white font-semibold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300">
-                            <i class="fas fa-user-plus mr-2"></i>Daftar
+
+                        <!-- Register Seller Button -->
+                        <a href="{{ route('sellers.create') }}"
+                            class="btn-glow bg-gradient-to-r from-cyan-500 to-green-500 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-bold">
+                            <i class="fas fa-store mr-2"></i>Daftar Toko
                         </a>
-                    @endauth
+                    @else
+                        <!-- User Dropdown -->
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open"
+                                class="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition">
+                                <span>Hai, {{ Auth::user()->name }}</span>
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+
+                            <div x-show="open" @click.away="open = false" x-transition
+                                class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                                <a href="{{ route('dashboard') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                <a href="{{ route('profile.edit') }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profil</a>
+                                <hr class="my-2">
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                        class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        Keluar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @endguest
                 </div>
             </div>
         </div>
