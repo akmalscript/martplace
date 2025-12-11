@@ -629,9 +629,9 @@
                         <i class="fas fa-tags mr-2"></i>Jelajahi Kategori
                     </span>
                 </div>
-                <h2
-                    class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent mb-3 leading-tight">
-                    Kategori Pilihan</h2>
+                <h2 class="mb-3">
+                    <span class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 bg-clip-text text-transparent inline-block pb-2">Kategori Pilihan</span>
+                </h2>
                 <p class="text-gray-700 text-lg">Temukan produk berdasarkan kategori favorit Anda</p>
             </div>
         </div>
@@ -755,13 +755,14 @@
                         <i class="fas fa-fire mr-2"></i>Produk Terpopuler
                     </span>
                 </div>
-                <h2
-                    class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent mb-4 leading-tight px-2">
+                <h2 class="mb-4 px-2">
+                    <span class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent inline-block pb-2">
                     @if (isset($showAll) && $showAll)
                         Katalog Semua Produk
                     @else
                         Katalog Produk
                     @endif
+                    </span>
                 </h2>
                 <p class="text-gray-700 text-lg max-w-2xl mx-auto px-2">
                     @if (isset($showAll) && $showAll)
