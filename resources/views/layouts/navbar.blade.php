@@ -1,11 +1,16 @@
 <!-- Navbar -->
-<nav class="bg-white shadow-sm sticky top-0 z-50">
+<nav class="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+        <div class="flex justify-between items-center h-20">
             <!-- Logo -->
             <div class="flex items-center">
-                <a href="{{ route('home') }}" class="text-2xl font-bold text-green-600">
-                    MartPlace
+                <a href="{{ route('home') }}" class="flex items-center space-x-3 group">
+                    <div
+                        class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="fas fa-store text-white text-xl"></i>
+                    </div>
+                    <span
+                        class="text-2xl font-bold bg-gradient-to-r from-cyan-600 to-green-600 bg-clip-text text-transparent">MartPlace</span>
                 </a>
             </div>
 
@@ -239,59 +244,37 @@
                 </form>
             </div>
 
-            <!-- Right Side Icons & Buttons -->
+            <!-- Right Side Buttons -->
             <div class="flex items-center space-x-4">
-                <!-- Direktori Toko Link -->
-                <a href="{{ route('sellers.index') }}"
-                    class="text-gray-700 hover:text-green-600 transition flex items-center gap-1">
-                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="text-sm font-medium hidden lg:inline">Toko</span>
-                </a>
-
-                <!-- Cart Icon -->
-                <a href="#" class="text-gray-700 hover:text-green-600 transition">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                        </path>
-                    </svg>
-                </a>
-
-                <!-- Notification Icon -->
-                <a href="#" class="text-gray-700 hover:text-green-600 transition">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                        </path>
-                    </svg>
-                </a>
 
                 @guest
                     <!-- Login Button -->
-                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-green-600 transition">
-                        Masuk
+                    <a href="{{ route('login') }}"
+                        class="btn-glow text-gray-700 hover:text-cyan-600 transition font-semibold flex items-center">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Masuk
                     </a>
 
                     <!-- Register Seller Button -->
                     <a href="{{ route('sellers.create') }}"
-                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                        Daftar Toko
+                        class="btn-glow bg-gradient-to-r from-cyan-500 to-green-500 text-white px-6 py-3 rounded-xl hover:shadow-xl transition-all font-bold">
+                        <i class="fas fa-store mr-2"></i>Daftar Toko
                     </a>
                 @else
                     <!-- User Dropdown -->
-                    <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open" class="flex items-center text-gray-700 hover:text-green-600">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open"
+                            class="flex items-center space-x-2 text-gray-700 hover:text-green-600 transition">
+                            <span>Hai, {{ Auth::user()->name }}</span>
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                                </path>
                             </svg>
                         </button>
 
                         <div x-show="open" @click.away="open = false" x-transition
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                            <a href="{{ route('dashboard') }}"
+                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
                             <a href="{{ route('profile.edit') }}"
                                 class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profil</a>
                             <hr class="my-2">

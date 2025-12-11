@@ -28,13 +28,33 @@
             border-bottom: 3px solid #10B981;
             color: #10B981;
         }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
     </style>
 </head>
 
 <body class="bg-gray-50">
     @include('layouts.navbar')
 
-    <div class="mt-16">
+    <div class="mt-20">
         <!-- Store Header Section -->
         <div class="bg-gradient-to-r from-cyan-500 to-green-500 py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,7 +129,7 @@
         </div>
 
         <!-- Tab Navigation -->
-        <div class="bg-white border-b sticky top-16 z-40">
+        <div class="bg-white border-b sticky top-20 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex gap-8" x-data="{ activeTab: 'beranda' }">
                     <button @click="activeTab = 'beranda'"

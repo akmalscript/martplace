@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -173,7 +174,7 @@ class SellerController extends Controller
                 return redirect()->back()
                     ->with('success', 'Seller berhasil disetujui dan email notifikasi telah dikirim.');
             } catch (\Exception $e) {
-                \Log::error('Failed to send approval email: ' . $e->getMessage());
+                Log::error('Failed to send approval email: ' . $e->getMessage());
 
                 return redirect()->back()
                     ->with('warning', 'Seller berhasil disetujui, namun email notifikasi gagal dikirim.');
@@ -204,7 +205,7 @@ class SellerController extends Controller
                 return redirect()->back()
                     ->with('success', 'Seller berhasil ditolak dan email notifikasi telah dikirim.');
             } catch (\Exception $e) {
-                \Log::error('Failed to send rejection email: ' . $e->getMessage());
+                Log::error('Failed to send rejection email: ' . $e->getMessage());
 
                 return redirect()->back()
                     ->with('warning', 'Seller berhasil ditolak, namun email notifikasi gagal dikirim.');
