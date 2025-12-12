@@ -201,107 +201,11 @@
                     </div>
                 </div>
 
-                <!-- 4. Varian Produk -->
+                <!-- 4. Harga & Stok -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
                     <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-6 py-4">
                         <h2 class="text-xl font-bold text-white flex items-center">
-                            <i class="fas fa-sitemap mr-3"></i>4. Varian Produk
-                        </h2>
-                    </div>
-                    <div class="p-6 space-y-4">
-                        <!-- Toggle Varian -->
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <div>
-                                <p class="font-semibold text-gray-900">Aktifkan Varian Produk</p>
-                                <p class="text-sm text-gray-600">Produk memiliki pilihan warna, ukuran, atau variasi lain</p>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="has_variants" value="1" class="sr-only peer" x-model="hasVariants" {{ old('has_variants', $product->has_variants) ? 'checked' : '' }}>
-                                <div class="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"></div>
-                            </label>
-                        </div>
-
-                        <!-- Form Varian (Tampil jika toggle aktif) -->
-                        <div x-show="hasVariants" x-transition class="space-y-4">
-                            <!-- Tipe Varian -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tipe Varian 1</label>
-                                    <input type="text" x-model="variantType1" placeholder="Contoh: Warna"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Tipe Varian 2 (Opsional)</label>
-                                    <input type="text" x-model="variantType2" placeholder="Contoh: Ukuran"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                                </div>
-                            </div>
-
-                            <!-- Nilai Varian -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Varian 1</label>
-                                    <input type="text" x-model="variantValues1Input" placeholder="Pisahkan dengan koma: Merah, Biru, Hijau"
-                                           @blur="parseVariantValues1"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                                </div>
-                                <div x-show="variantType2">
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nilai Varian 2</label>
-                                    <input type="text" x-model="variantValues2Input" placeholder="Pisahkan dengan koma: S, M, L, XL"
-                                           @blur="parseVariantValues2"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
-                                </div>
-                            </div>
-
-                            <button type="button" @click="generateVariants" 
-                                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                                <i class="fas fa-sync mr-2"></i>Generate Tabel Varian
-                            </button>
-
-                            <!-- Tabel Varian -->
-                            <div x-show="variants.length > 0" class="overflow-x-auto">
-                                <table class="w-full border border-gray-300">
-                                    <thead class="bg-gray-50">
-                                        <tr>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType1 || variants.some(v => v.value1)" x-text="variantType1 || 'Varian 1'"></th>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b" x-show="variantType2 || variants.some(v => v.value2)" x-text="variantType2 || 'Varian 2'"></th>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">Harga (Rp)</th>
-                                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 border-b">Stok</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template x-for="(variant, index) in variants" :key="index">
-                                            <tr class="border-b hover:bg-gray-50">
-                                                <td class="px-4 py-3" x-show="variantType1 || variant.value1" x-text="variant.value1"></td>
-                                                <input type="hidden" :name="'variants[' + index + '][variant_type_1]'" x-model="variantType1">
-                                                <input type="hidden" :name="'variants[' + index + '][variant_value_1]'" x-model="variant.value1">
-                                                
-                                                <td class="px-4 py-3" x-show="variantType2 || variant.value2" x-text="variant.value2"></td>
-                                                <input type="hidden" :name="'variants[' + index + '][variant_type_2]'" x-model="variantType2">
-                                                <input type="hidden" :name="'variants[' + index + '][variant_value_2]'" x-model="variant.value2">
-                                                
-                                                <td class="px-4 py-3">
-                                                    <input type="number" x-model="variant.price" :name="'variants[' + index + '][price]'"
-                                                           class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500" min="0" required>
-                                                </td>
-                                                <td class="px-4 py-3">
-                                                    <input type="number" x-model="variant.stock" :name="'variants[' + index + '][stock]'"
-                                                           class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500" min="0" required>
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. Harga (Jika tidak pakai Varian) -->
-                <div x-show="!hasVariants" class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-6 py-4">
-                        <h2 class="text-xl font-bold text-white flex items-center">
-                            <i class="fas fa-tags mr-3"></i>5. Harga & Stok
+                            <i class="fas fa-tags mr-3"></i>4. Harga & Stok
                         </h2>
                     </div>
                     <div class="p-6 space-y-4">
@@ -314,7 +218,7 @@
                                 <div class="relative">
                                     <span class="absolute left-4 top-3 text-gray-600">Rp</span>
                                     <input type="number" name="price" value="{{ old('price', $product->price) }}" min="0"
-                                           :required="!hasVariants"
+                                           required
                                            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                            placeholder="50000">
                                 </div>
@@ -323,10 +227,10 @@
                             <!-- Stok -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Stok Awal <span class="text-red-500">*</span>
+                                    Stok <span class="text-red-500">*</span>
                                 </label>
                                 <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" min="0"
-                                       :required="!hasVariants"
+                                       required
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                        placeholder="100">
                             </div>
@@ -348,11 +252,11 @@
                     </div>
                 </div>
 
-                <!-- 6. Pengelolaan Stok -->
+                <!-- 5. Pengelolaan Stok -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
                     <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-6 py-4">
                         <h2 class="text-xl font-bold text-white flex items-center">
-                            <i class="fas fa-warehouse mr-3"></i>6. Pengelolaan Stok
+                            <i class="fas fa-warehouse mr-3"></i>5. Pengelolaan Stok
                         </h2>
                     </div>
                     <div class="p-6">
@@ -388,23 +292,8 @@
     <script>
         function productForm() {
             return {
-                hasVariants: {{ old('has_variants', $product->has_variants) ? 'true' : 'false' }},
                 primaryPreview: null,
                 additionalPreviews: {},
-                variantType1: {!! json_encode($product->variants->first()->variant_type_1 ?? '') !!},
-                variantType2: {!! json_encode($product->variants->first()->variant_type_2 ?? '') !!},
-                variantValues1Input: {!! json_encode($product->variants->pluck('variant_value_1')->unique()->implode(', ')) !!},
-                variantValues2Input: {!! json_encode($product->variants->pluck('variant_value_2')->unique()->filter()->implode(', ')) !!},
-                variantValues1: {!! json_encode($product->variants->pluck('variant_value_1')->unique()->values()) !!},
-                variantValues2: {!! json_encode($product->variants->pluck('variant_value_2')->unique()->filter()->values()) !!},
-                variants: {!! json_encode($product->variants->map(function($v) {
-                    return [
-                        'value1' => $v->variant_value_1,
-                        'value2' => $v->variant_value_2,
-                        'price' => $v->price,
-                        'stock' => $v->stock
-                    ];
-                })->values()) !!},
 
                 previewImage(event, type) {
                     const file = event.target.files[0];
@@ -418,53 +307,6 @@
                             }
                         };
                         reader.readAsDataURL(file);
-                    }
-                },
-
-                parseVariantValues1() {
-                    this.variantValues1 = this.variantValues1Input
-                        .split(',')
-                        .map(v => v.trim())
-                        .filter(v => v.length > 0);
-                },
-
-                parseVariantValues2() {
-                    this.variantValues2 = this.variantValues2Input
-                        .split(',')
-                        .map(v => v.trim())
-                        .filter(v => v.length > 0);
-                },
-
-                generateVariants() {
-                    this.variants = [];
-                    
-                    if (this.variantValues1.length === 0) {
-                        alert('Masukkan nilai varian 1 terlebih dahulu');
-                        return;
-                    }
-
-                    if (this.variantType2 && this.variantValues2.length > 0) {
-                        // Generate kombinasi 2 varian
-                        this.variantValues1.forEach(val1 => {
-                            this.variantValues2.forEach(val2 => {
-                                this.variants.push({
-                                    value1: val1,
-                                    value2: val2,
-                                    price: '',
-                                    stock: ''
-                                });
-                            });
-                        });
-                    } else {
-                        // Generate 1 varian saja
-                        this.variantValues1.forEach(val1 => {
-                            this.variants.push({
-                                value1: val1,
-                                value2: '',
-                                price: '',
-                                stock: ''
-                            });
-                        });
                     }
                 }
             }

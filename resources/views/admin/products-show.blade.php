@@ -234,25 +234,6 @@
                 </div>
                 @endif
 
-                <!-- Variants -->
-                @if($product->variants && $product->variants->count() > 0)
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="bg-gradient-to-r from-cyan-400 to-green-300 px-6 py-4">
-                        <h3 class="text-lg font-bold text-white">
-                            <i class="fas fa-layer-group mr-2"></i>Varian ({{ $product->variants->count() }})
-                        </h3>
-                    </div>
-                    <div class="p-6 space-y-2">
-                        @foreach($product->variants as $variant)
-                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
-                            <span class="text-sm text-gray-700">{{ $variant->name }}</span>
-                            <span class="text-sm font-semibold text-gray-900">Rp{{ number_format($variant->price, 0, ',', '.') }}</span>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-
                 <!-- Action Buttons -->
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="p-6 space-y-3">

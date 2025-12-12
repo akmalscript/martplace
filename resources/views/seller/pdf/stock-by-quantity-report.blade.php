@@ -106,20 +106,7 @@
                 <td class="product-name">{{ $product->name }}</td>
                 <td>{{ $product->category ? $product->category->name : '-' }}</td>
                 <td>
-                    @if($product->variants && $product->variants->count() > 0)
-                        @php
-                            $variantPrices = $product->variants->pluck('price');
-                            $minPrice = $variantPrices->min();
-                            $maxPrice = $variantPrices->max();
-                        @endphp
-                        @if($minPrice != $maxPrice)
-                            Rp {{ number_format($minPrice, 0, ',', '.') }} - {{ number_format($maxPrice, 0, ',', '.') }}
-                        @else
-                            Rp {{ number_format($product->price, 0, ',', '.') }}
-                        @endif
-                    @else
-                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                    @endif
+                    Rp {{ number_format($product->price, 0, ',', '.') }}
                 </td>
                 <td>{{ number_format($product->average_rating, 1) }}</td>
                 <td>{{ number_format($product->stock, 0, ',', '.') }}</td>

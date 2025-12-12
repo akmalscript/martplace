@@ -377,24 +377,9 @@
 
                             <!-- Price -->
                             <div class="mb-3">
-                                @if($product->has_variants && $product->variants->isNotEmpty())
-                                    @php
-                                        $minPrice = $product->variants->min('price');
-                                        $maxPrice = $product->variants->max('price');
-                                    @endphp
-                                    <div class="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                                        @if($minPrice == $maxPrice)
-                                            Rp{{ number_format($minPrice, 0, ',', '.') }}
-                                        @else
-                                            Rp{{ number_format($minPrice, 0, ',', '.') }} - Rp{{ number_format($maxPrice, 0, ',', '.') }}
-                                        @endif
-                                    </div>
-                                    <p class="text-xs text-gray-500 mt-1 font-semibold">{{ $product->variants->count() }} varian tersedia</p>
-                                @else
-                                    <div class="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                                        Rp{{ number_format($product->price, 0, ',', '.') }}
-                                    </div>
-                                @endif
+                                <div class="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                                    Rp{{ number_format($product->price, 0, ',', '.') }}
+                                </div>
                             </div>
 
                             <div class="flex items-center bg-gradient-to-r from-yellow-50 to-orange-50 px-3 py-1.5 rounded-lg mb-3 w-fit">
@@ -404,24 +389,12 @@
 
                             <!-- Stock -->
                             <div class="mb-4 pb-4 border-b border-gray-200">
-                                @if($product->has_variants && $product->variants->isNotEmpty())
-                                    @php
-                                        $totalStock = $product->variants->sum('stock');
-                                    @endphp
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-600 font-medium"><i class="fas fa-box mr-1"></i>Total Stok</span>
-                                        <span class="text-sm font-bold px-3 py-1 rounded-lg {{ $totalStock > 10 ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-700' : 'bg-gradient-to-r from-red-50 to-pink-50 text-red-700' }}">
-                                            {{ $totalStock }} unit
-                                        </span>
-                                    </div>
-                                @else
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-sm text-gray-600 font-medium"><i class="fas fa-box mr-1"></i>Stok</span>
-                                        <span class="text-sm font-bold px-3 py-1 rounded-lg {{ $product->stock > 10 ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-700' : 'bg-gradient-to-r from-red-50 to-pink-50 text-red-700' }}">
-                                            {{ $product->stock }} unit
-                                        </span>
-                                    </div>
-                                @endif
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600 font-medium"><i class="fas fa-box mr-1"></i>Stok</span>
+                                    <span class="text-sm font-bold px-3 py-1 rounded-lg {{ $product->stock > 10 ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-700' : 'bg-gradient-to-r from-red-50 to-pink-50 text-red-700' }}">
+                                        {{ $product->stock }} unit
+                                    </span>
+                                </div>
                             </div>
 
                             <!-- Action Buttons -->
