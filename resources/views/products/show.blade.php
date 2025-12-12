@@ -533,7 +533,8 @@
             </div>
         </div>
 
-        <!-- Review Form Section -->
+        <!-- Review Form Section - Hidden for Admin and Seller -->
+        @if(!Auth::check() || (Auth::check() && !Auth::user()->isAdmin() && !Auth::user()->isSeller()))
         <div class="mt-12 glass-effect rounded-2xl p-6 shadow-2xl border-2 border-white relative overflow-hidden"
              x-data="reviewForm()">
              
@@ -649,6 +650,7 @@
                 </form>
             </div>
         </div>
+        @endif
 
         <!-- Reviews Display Section -->
         <div class="mt-12">

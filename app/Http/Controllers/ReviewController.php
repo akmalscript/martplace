@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use App\Mail\ReviewSubmittedMail;
 
 class ReviewController extends Controller
@@ -14,6 +15,14 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if user is admin or seller - they cannot submit reviews
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->isAdmin() || $user->isSeller()) {
+                return back()->with('error', 'Admin dan Seller tidak dapat memberikan ulasan.');
+            }
+        }
+
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|min:1|max:5',
