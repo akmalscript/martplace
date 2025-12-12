@@ -87,7 +87,7 @@ class Seller extends Model
                 'name' => $data['pic_name'],
                 'email' => $data['pic_email'],
                 'password' => Hash::make($data['password']),
-                // 'role' => 'seller', // Uncomment if you use a role column
+                'role' => 'seller',
             ]);
 
             // 2. Add user_id to seller data for relationship
@@ -122,6 +122,17 @@ class Seller extends Model
     {
         try {
             $this->status = SellerStatus::ACTIVE;
+            return $this->save();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    // Set seller back to pending
+    public function setPending(): bool
+    {
+        try {
+            $this->status = SellerStatus::PENDING;
             return $this->save();
         } catch (\Exception $e) {
             return false;

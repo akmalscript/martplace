@@ -23,6 +23,13 @@
         .icon-float {
             animation: float 3s ease-in-out infinite;
         }
+        /* Hide browser default password reveal button */
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear,
+        input[type="password"]::-webkit-credentials-auto-fill-button,
+        input[type="password"]::-webkit-clear-button {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-cyan-50 to-green-50">

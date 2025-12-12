@@ -468,7 +468,7 @@ class SellerDashboardController extends Controller
         }
 
         // Get all products for this seller ordered by stock (descending)
-        $products = Product::with('category')
+        $products = Product::with(['category', 'variants'])
             ->where('seller_id', $seller->id)
             ->orderBy('stock', 'desc')
             ->get();
@@ -499,7 +499,7 @@ class SellerDashboardController extends Controller
         }
 
         // Get all products for this seller ordered by rating (descending)
-        $products = Product::with('category')
+        $products = Product::with(['category', 'variants'])
             ->where('seller_id', $seller->id)
             ->orderBy('average_rating', 'desc')
             ->get();
@@ -530,7 +530,7 @@ class SellerDashboardController extends Controller
         }
 
         // Get all products for this seller with stock < 2, ordered by category and product name
-        $products = Product::with('category')
+        $products = Product::with(['category', 'variants'])
             ->where('seller_id', $seller->id)
             ->where('stock', '<', 2)
             ->join('categories', 'products.category_id', '=', 'categories.id')

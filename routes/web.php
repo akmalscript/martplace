@@ -32,6 +32,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/sellers/{id}', [SellerController::class, 'show'])->name('sellers.show');
     Route::post('/sellers/{id}/approve', [SellerController::class, 'approve'])->name('sellers.approve');
     Route::post('/sellers/{id}/reject', [SellerController::class, 'reject'])->name('sellers.reject');
+    Route::post('/sellers/{id}/pending', [SellerController::class, 'setPending'])->name('sellers.pending');
 
     // Category Management (Kelola Kategori)
     Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');

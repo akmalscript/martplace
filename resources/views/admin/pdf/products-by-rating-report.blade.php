@@ -102,7 +102,13 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $product->product_name }}</td>
                 <td>{{ $product->category_name ?? '-' }}</td>
-                <td>{{ number_format($product->price, 0, ',', '.') }}</td>
+                <td>
+                    @if($product->min_variant_price && $product->max_variant_price && $product->min_variant_price != $product->max_variant_price)
+                        Rp {{ number_format($product->min_variant_price, 0, ',', '.') }} - {{ number_format($product->max_variant_price, 0, ',', '.') }}
+                    @else
+                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                    @endif
+                </td>
                 <td>{{ number_format($product->avg_rating ?? 0, 1) }}</td>
                 <td>{{ $product->store_name ?? '-' }}</td>
                 <td>{{ $product->provinces ?? '-' }}</td>

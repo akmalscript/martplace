@@ -432,7 +432,7 @@
                     
                     <script>
                         let currentImageIndex = 0;
-                        const images = @json($product->images->pluck('image_path')->values());
+                        const images = @json($product->images->pluck('image_url')->values());
                         const totalImages = images.length;
                         
                         function changeImage(index, imageUrl) {

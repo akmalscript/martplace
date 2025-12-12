@@ -157,7 +157,13 @@ class SellerController extends Controller
     public function index()
     {
         $sellers = Seller::latest()->paginate(15);
-        return view('admin.sellers-index', compact('sellers'));
+        
+        // Get counts for all sellers (not just paginated)
+        $pendingCount = Seller::where('status', \App\Enums\SellerStatus::PENDING)->count();
+        $activeCount = Seller::where('status', \App\Enums\SellerStatus::ACTIVE)->count();
+        $rejectedCount = Seller::where('status', \App\Enums\SellerStatus::REJECTED)->count();
+        
+        return view('admin.sellers-index', compact('sellers', 'pendingCount', 'activeCount', 'rejectedCount'));
     }
 
     /**
@@ -214,6 +220,22 @@ class SellerController extends Controller
 
         return redirect()->back()
             ->with('error', 'Gagal menolak seller.');
+    }
+
+    /**
+     * Set seller status to pending (admin only).
+     */
+    public function setPending(string $id)
+    {
+        $seller = Seller::findOrFail($id);
+
+        if ($seller->setPending()) {
+            return redirect()->back()
+                ->with('success', 'Status seller berhasil diubah menjadi Menunggu Verifikasi.');
+        }
+
+        return redirect()->back()
+            ->with('error', 'Gagal mengubah status seller.');
     }
 
     /**

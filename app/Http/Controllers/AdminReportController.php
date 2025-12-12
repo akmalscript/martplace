@@ -107,11 +107,12 @@ class AdminReportController extends Controller
      */
     public function productsByRatingReport()
     {
-        // Get all products with reviews, including visitor province
+        // Get all products with reviews, including visitor province and variant prices
         $products = DB::table('products')
             ->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('sellers', 'products.seller_id', '=', 'sellers.id')
+            ->leftJoin('product_variants', 'products.id', '=', 'product_variants.product_id')
             ->select(
                 'products.id',
                 'products.name as product_name',
@@ -119,7 +120,9 @@ class AdminReportController extends Controller
                 'products.price',
                 'sellers.store_name',
                 DB::raw('COALESCE(AVG(reviews.rating), 0) as avg_rating'),
-                DB::raw('GROUP_CONCAT(DISTINCT reviews.province SEPARATOR ", ") as provinces')
+                DB::raw('GROUP_CONCAT(DISTINCT reviews.province SEPARATOR ", ") as provinces'),
+                DB::raw('MIN(product_variants.price) as min_variant_price'),
+                DB::raw('MAX(product_variants.price) as max_variant_price')
             )
             ->groupBy(
                 'products.id',

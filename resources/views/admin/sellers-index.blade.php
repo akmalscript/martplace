@@ -143,7 +143,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-gray-600 text-sm">Menunggu Verifikasi</p>
-                        <p class="text-2xl font-bold text-gray-800">{{ $sellers->where('status', App\Enums\SellerStatus::PENDING)->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ $pendingCount }}</p>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-gray-600 text-sm">Seller Aktif</p>
-                        <p class="text-2xl font-bold text-gray-800">{{ $sellers->where('status', App\Enums\SellerStatus::ACTIVE)->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ $activeCount }}</p>
                     </div>
                 </div>
             </div>
@@ -167,7 +167,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-gray-600 text-sm">Ditolak</p>
-                        <p class="text-2xl font-bold text-gray-800">{{ $sellers->where('status', App\Enums\SellerStatus::REJECTED)->count() }}</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ $rejectedCount }}</p>
                     </div>
                 </div>
             </div>
@@ -278,6 +278,8 @@
                                             showRejectReason = true;
                                         } else if (newStatus === 'ACTIVE') {
                                             document.getElementById('approve-form-{{ $seller->id }}').submit();
+                                        } else if (newStatus === 'PENDING') {
+                                            document.getElementById('pending-form-{{ $seller->id }}').submit();
                                         } else {
                                             showStatusChange = false;
                                         }
@@ -296,6 +298,12 @@
                                 <!-- Hidden Forms -->
                                 <form id="approve-form-{{ $seller->id }}" 
                                     action="{{ route('admin.sellers.approve', $seller->id) }}" 
+                                    method="POST" class="hidden">
+                                    @csrf
+                                </form>
+
+                                <form id="pending-form-{{ $seller->id }}" 
+                                    action="{{ route('admin.sellers.pending', $seller->id) }}" 
                                     method="POST" class="hidden">
                                     @csrf
                                 </form>

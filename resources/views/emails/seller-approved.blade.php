@@ -32,11 +32,10 @@
             margin: 0 auto 20px;
             background: #10b981;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 50px;
             color: white;
+            text-align: center;
+            line-height: 80px;
         }
         .info-box {
             background: #f0fdf4;
