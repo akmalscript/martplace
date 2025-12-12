@@ -27,7 +27,18 @@ class ReviewController extends Controller
             'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|min:1|max:5',
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => [
+                'required',
+                'email',
+                function ($attribute, $value, $fail) use ($request) {
+                    $exists = Review::where('product_id', $request->product_id)
+                        ->where('email', $value)
+                        ->exists();
+                    if ($exists) {
+                        $fail('Email ini sudah pernah digunakan untuk memberikan ulasan pada produk ini.');
+                    }
+                },
+            ],
             'phone' => 'required|string|max:20',
             'province' => 'required|string|max:255',
             'comment' => 'nullable|string',
