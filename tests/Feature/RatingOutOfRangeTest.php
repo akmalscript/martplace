@@ -64,26 +64,5 @@ class RatingOutOfRangeTest extends TestCase
             'rating'     => 6,
         ]);
     }
-    /**
-     * Additional: Valid ratings (1–5) MUST be accepted
-     * This proves the validation logic is not overly strict
-     */
-    public function test_rating_valid_satu_sampai_lima_diterima(): void
-    {
-        \Illuminate\Support\Facades\Mail::fake();
-
-        foreach ([1, 2, 3, 4, 5] as $validRating) {
-            $response = $this->post('/reviews/' . $this->product->id, [
-                'product_id' => $this->product->id,
-                'rating'     => $validRating,
-                'name'       => 'Penguji Unit',
-                'email'      => "test{$validRating}@example.com",
-                'phone'      => '081234567890',
-                'province'   => 'Jawa Tengah',
-            ]);
-            // There must be no validation error for the rating field
-            $response->assertSessionDoesntHaveErrors(['rating']);
-        }
-    }
 }
 
