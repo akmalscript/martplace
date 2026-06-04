@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Seller;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -61,5 +63,41 @@ class CatalogAndSearchTest extends TestCase
                 'total' => 0,
             ]
         ]);
+    }
+
+    /**
+     * Test case: DUPL-06-24
+     * Melakukan pencarian dengan input huruf kapital/kecil (case insensitive)
+     */
+    public function test_search_is_case_insensitive(): void
+    {
+        // --- ARRANGE ---
+        $user = User::factory()->create(['role' => 'seller']);
+        $seller = Seller::factory()->create(['user_id' => $user->id]);
+        $category = Category::factory()->create();
+
+        // Membuat produk target dengan nama campuran huruf besar-kecil
+        Product::factory()->create([
+            'seller_id' => $seller->id,
+            'category_id' => $category->id,
+            'name' => 'Kaos Polos Cotton',
+            'is_active' => true,
+        ]);
+
+        // --- ACT ---
+        // Skenario 1: Pencarian menggunakan huruf kecil semua
+        $responseLower = $this->get('/products?search=kaos+polos');
+
+        // Skenario 2: Pencarian menggunakan huruf besar semua
+        $responseUpper = $this->get('/products?search=KAOS+POLOS');
+
+        // --- ASSERT ---
+        // Program terbukti mengeksekusi Jalur Pencarian Case Insensitive.
+        // Asersi status respons 200 dan konten teks "Kaos Polos Cotton" harus bernilai True
+        $responseLower->assertStatus(200);
+        $responseLower->assertSee('Kaos Polos Cotton');
+
+        $responseUpper->assertStatus(200);
+        $responseUpper->assertSee('Kaos Polos Cotton');
     }
 }
